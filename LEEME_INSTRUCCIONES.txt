@@ -1,0 +1,6 @@
+# Proyecto Independiente: Proyecto_Netflix_Dramas
+Fecha de creación: 2026-09-29 00:16:57
+
+Este directorio es 100% exclusivo y auto-contenido.
+Todo script, código y entregable de esta sesión pertenece aquí.
+Archivos auxiliares o de prueba van en '_temp/'.

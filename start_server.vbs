@@ -1,0 +1,1 @@
+' Lanzador desprendido de DramiaStream\nSet WshShell = CreateObject("WScript.Shell")\nWshShell.CurrentDirectory = "C:\\Users\\USER\\Downloads\\Proyecto_Netflix_Dramas"\nWshShell.Run "python server.py", 0, False\nWScript.Sleep 300\nWScript.Quit\n
