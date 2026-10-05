@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 echo "=== Iniciando DramaPe (Producción) ==="
@@ -13,7 +13,7 @@ sleep 2
 
 # 2. Arrancar el Frontend Next.js en el puerto asignado por Railway ($PORT o 3000)
 APP_PORT=${PORT:-3000}
-echo "[2/2] Iniciando Frontend Next.js en puerto :$APP_PORT..."
+echo "[2/2] Iniciando Frontend Next.js en 0.0.0.0:$APP_PORT..."
 
 # Función para apagar ambos procesos al recibir señal de término
 cleanup() {
@@ -21,7 +21,7 @@ cleanup() {
   kill -TERM "$BACKEND_PID" 2>/dev/null || true
   exit 0
 }
-trap cleanup SIGINT SIGTERM
+trap cleanup INT TERM
 
 cd web-next
-exec node_modules/.bin/next start -p "$APP_PORT"
+exec ./node_modules/.bin/next start -H 0.0.0.0 -p "$APP_PORT"
