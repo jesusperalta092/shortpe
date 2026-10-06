@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { trackVideoPlay, trackAdClick } from '../lib/analytics';
+import { trackVideoPlay, trackAdClick, trackLiveHeartbeat } from '../lib/analytics';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -444,6 +444,47 @@ export default function Player({ slug, ep, title, total }) {
       fetch('/proxy/episode?slug=' + encodeURIComponent(slug) + '&ep=' + encodeURIComponent(nextEp)).catch(() => {});
     }
   }, [loading, error, n, total, slug]);
+
+  // Telemetría en tiempo real: registra espectadores activos mientras el video se reproduce
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let heartbeatTimer = null;
+
+    const pingWatching = () => {
+      if (!video.paused && !video.ended && video.readyState >= 2) {
+        trackLiveHeartbeat(true, slug, ep, title);
+      }
+    };
+
+    const onPlayStart = () => {
+      pingWatching();
+      if (!heartbeatTimer) {
+        heartbeatTimer = setInterval(pingWatching, 20000);
+      }
+    };
+
+    const onPlayStop = () => {
+      if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
+    };
+
+    video.addEventListener('play', onPlayStart);
+    video.addEventListener('playing', onPlayStart);
+    video.addEventListener('pause', onPlayStop);
+    video.addEventListener('ended', onPlayStop);
+
+    return () => {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      video.removeEventListener('play', onPlayStart);
+      video.removeEventListener('playing', onPlayStart);
+      video.removeEventListener('pause', onPlayStop);
+      video.removeEventListener('ended', onPlayStop);
+    };
+  }, [slug, ep, title]);
 
   const handleBack = (e) => {
     if (e) e.preventDefault();

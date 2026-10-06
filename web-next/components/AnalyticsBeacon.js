@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { trackPageView } from '../lib/analytics';
+import { trackPageView, trackLiveHeartbeat } from '../lib/analytics';
 
 export default function AnalyticsBeacon() {
   const pathname = usePathname();
@@ -12,6 +12,14 @@ export default function AnalyticsBeacon() {
     if (pathname && !pathname.startsWith('/admin')) {
       const fullPath = pathname + (searchParams?.toString() ? '?' + searchParams.toString() : '');
       trackPageView(fullPath);
+      trackLiveHeartbeat(false);
+
+      // Enviar pulso de presencia cada 25s
+      const timer = setInterval(() => {
+        trackLiveHeartbeat(false);
+      }, 25000);
+
+      return () => clearInterval(timer);
     }
   }, [pathname, searchParams]);
 

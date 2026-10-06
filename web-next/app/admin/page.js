@@ -1,725 +1,679 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { authenticateAdmin, fetchAdminDashboard } from '../../lib/analytics';
 
 export default function AdminDashboardPage() {
-  const [authKey, setAuthKey] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [passInput, setPassInput] = useState('');
+  const [sessionToken, setSessionToken] = useState(null);
+  const [pinInput, setPinInput] = useState('');
   const [authError, setAuthError] = useState('');
-  
+  const [authLoading, setAuthLoading] = useState(false);
+
   const [timeRange, setTimeRange] = useState(7);
-  const [loading, setLoading] = useState(true);
-  const [metrics, setMetrics] = useState(null);
-  const [lastRefreshed, setLastRefreshed] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
-  // Clave de acceso administrativa por defecto
-  const MASTER_KEY = 'dramape2026';
-
+  // Cargar token previo de sessionStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem('dramape_admin_token');
-      if (saved === MASTER_KEY) {
-        setIsAuthenticated(true);
+      if (saved) {
+        setSessionToken(saved);
       }
     }
   }, []);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (passInput.trim() === MASTER_KEY) {
-      setIsAuthenticated(true);
-      setAuthError('');
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('dramape_admin_token', MASTER_KEY);
+  // Cargar datos cuando haya token de sesión
+  useEffect(() => {
+    if (!sessionToken) return;
+
+    let isMounted = true;
+    const loadMetrics = async () => {
+      setLoading(true);
+      const res = await fetchAdminDashboard(timeRange, sessionToken);
+      if (!isMounted) return;
+
+      if (res.unauthorized) {
+        sessionStorage.removeItem('dramape_admin_token');
+        setSessionToken(null);
+        setAuthError('Tu sesión ha expirado o el PIN es inválido. Ingresa nuevamente.');
+      } else if (res.ok) {
+        setData(res);
+        setLastUpdated(new Date().toLocaleTimeString());
       }
+      setLoading(false);
+    };
+
+    loadMetrics();
+
+    // Auto-actualización en vivo cada 10 segundos
+    const interval = setInterval(loadMetrics, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [sessionToken, timeRange]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!pinInput.trim()) return;
+    setAuthLoading(true);
+    setAuthError('');
+
+    const res = await authenticateAdmin(pinInput);
+    setAuthLoading(false);
+
+    if (res.ok && res.token) {
+      sessionStorage.setItem('dramape_admin_token', res.token);
+      setSessionToken(res.token);
+      setPinInput('');
     } else {
-      setAuthError('Clave de acceso incorrecta');
+      setAuthError(res.error || 'PIN de acceso incorrecto');
     }
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('dramape_admin_token');
-    }
+    sessionStorage.removeItem('dramape_admin_token');
+    setSessionToken(null);
+    setData(null);
   };
 
-  const fetchMetrics = async (days = timeRange) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/analytics/dashboard?days=${days}`, { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.ok) {
-          setMetrics(data);
-          setLastRefreshed(new Date().toLocaleTimeString());
-        }
-      }
-    } catch (e) {
-      console.error('Error fetching analytics metrics:', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchMetrics(timeRange);
-      const interval = setInterval(() => fetchMetrics(timeRange), 30000); // Refresco auto cada 30s
-      return () => clearInterval(interval);
-    }
-  }, [isAuthenticated, timeRange]);
-
-  // Pantalla de Bloqueo / Login PIN
-  if (!isAuthenticated) {
+  // ==========================================
+  // 🔒 PANTALLA DE ACCESO CON PIN CRIPTOGRÁFICO
+  // ==========================================
+  if (!sessionToken) {
     return (
-      <div style={styles.loginWrapper}>
-        <div style={styles.loginCard}>
-          <div style={styles.logoBadge}>
-            <span style={{ color: '#E50914', fontWeight: 900, fontSize: 26, letterSpacing: -1 }}>Drama<span style={{ color: '#fff' }}>Pe</span></span>
-            <span style={styles.adminTag}>PANEL ADMIN</span>
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#07070a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div style={{
+          width: '100%',
+          maxWidth: '420px',
+          background: 'linear-gradient(135deg, rgba(24, 24, 32, 0.95), rgba(12, 12, 16, 0.98))',
+          borderRadius: '24px',
+          padding: '36px 30px',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(229, 9, 20, 0.15)',
+          textAlign: 'center',
+          backdropFilter: 'blur(16px)'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            margin: '0 auto 20px',
+            borderRadius: '20px',
+            background: 'linear-gradient(135deg, #e50914, #990000)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '28px',
+            boxShadow: '0 10px 25px rgba(229, 9, 20, 0.4)'
+          }}>
+            🛡️
           </div>
-          <h2 style={{ fontSize: 20, color: '#fff', margin: '16px 0 6px', fontWeight: 700 }}>Acceso a Estadísticas</h2>
-          <p style={{ color: '#8c8c99', fontSize: 13, marginBottom: 24, lineHeight: 1.4 }}>
-            Ingresa tu clave de administración para visualizar el tráfico y métricas en vivo.
+
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: '0 0 8px' }}>
+            Panel de Control <span style={{ color: '#e50914' }}>DramaPe</span>
+          </h1>
+          <p style={{ color: '#888899', fontSize: '14px', margin: '0 0 28px' }}>
+            Sistema privado de métricas y telemetría en tiempo real.
           </p>
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <input
-              type="password"
-              placeholder="Clave de acceso (ej: dramape2026)"
-              value={passInput}
-              onChange={(e) => setPassInput(e.target.value)}
-              style={styles.loginInput}
-              autoFocus
-            />
-            {authError && <div style={styles.errorText}>⚠️ {authError}</div>}
-            <button type="submit" style={styles.loginBtn}>
-              Desbloquear Dashboard 🚀
+
+          <form onSubmit={handleLogin}>
+            <div style={{ marginBottom: '18px', textAlign: 'left' }}>
+              <label style={{ display: 'block', color: '#aaaaee', fontSize: '12px', fontWeight: '600', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                PIN Maestro de Seguridad
+              </label>
+              <input
+                type="password"
+                placeholder="Ingresa el PIN de seguridad"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '14px 16px',
+                  borderRadius: '12px',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#fff',
+                  fontSize: '16px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  textAlign: 'center',
+                  letterSpacing: '0.2em'
+                }}
+                autoFocus
+              />
+            </div>
+
+            {authError && (
+              <div style={{
+                background: 'rgba(229, 9, 20, 0.15)',
+                border: '1px solid rgba(229, 9, 20, 0.4)',
+                color: '#ff6b6b',
+                padding: '10px 14px',
+                borderRadius: '10px',
+                fontSize: '13px',
+                marginBottom: '18px',
+                textAlign: 'left'
+              }}>
+                ⚠️ {authError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={authLoading}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '12px',
+                background: authLoading ? '#666' : 'linear-gradient(135deg, #e50914, #b20710)',
+                color: '#fff',
+                fontWeight: '700',
+                fontSize: '15px',
+                border: 'none',
+                cursor: authLoading ? 'not-allowed' : 'pointer',
+                boxShadow: '0 8px 20px rgba(229, 9, 20, 0.35)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {authLoading ? 'Verificando con Servidor...' : 'Desbloquear Panel'}
             </button>
           </form>
-          <div style={{ marginTop: 24, fontSize: 12, color: '#555', textAlign: 'center' }}>
-            DramaPe Analytics Engine v1.0 · SQLite Embedded
+
+          <div style={{ marginTop: '24px' }}>
+            <Link href="/" style={{ color: '#666677', fontSize: '13px', textDecoration: 'none' }}>
+              ← Volver al sitio web principal
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
-  const overview = metrics?.overview || {
-    unique_visitors: 0,
-    today_visitors: 0,
-    pageviews: 0,
-    video_plays: 0,
-    today_plays: 0,
-    ad_clicks: 0,
-    today_ad_clicks: 0,
-    live_users: 1
-  };
+  // ==========================================
+  // 📊 DASHBOARD PRINCIPAL
+  // ==========================================
+  const realtime = data?.realtime || { online_now: 0, watching_now: 0, active_streams: [] };
+  const overview = data?.overview || {};
+  const timeline = data?.timeline || [];
+  const topDramas = data?.top_dramas || [];
+  const devices = data?.devices || { mobile: 0, desktop: 0, tablet: 0 };
+  const totalDevices = (devices.mobile || 0) + (devices.desktop || 0) + (devices.tablet || 0) || 1;
 
-  const devices = metrics?.devices || { mobile: 0, desktop: 0, tablet: 0 };
-  const totalDevices = (devices.mobile + devices.desktop + devices.tablet) || 1;
-  const mobilePct = Math.round((devices.mobile / totalDevices) * 100);
-  const desktopPct = Math.round((devices.desktop / totalDevices) * 100);
-  const tabletPct = Math.round((devices.tablet / totalDevices) * 100);
-
-  const topDramas = metrics?.top_dramas || [];
-  const timeline = metrics?.timeline || [];
-  const maxViews = Math.max(...timeline.map(t => Math.max(t.views || 0, t.plays || 0)), 1);
+  const maxTimelineViews = Math.max(...timeline.map(t => Math.max(t.views || 0, t.visitors || 0, t.plays || 0)), 1);
 
   return (
-    <div style={styles.container}>
-      {/* Header Superior */}
-      <header style={styles.header}>
-        <div style={styles.headerLeft}>
-          <Link href="/" style={styles.backHomeBtn}>
-            ← Volver a DramaPe
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ color: '#E50914', fontWeight: 900, fontSize: 24, letterSpacing: -1 }}>
-              Drama<span style={{ color: '#fff' }}>Pe</span>
-            </span>
-            <span style={styles.badgeLive}>
-              <span style={styles.livePulse} /> EN VIVO ({overview.live_users} online)
-            </span>
-          </div>
-        </div>
-
-        <div style={styles.headerRight}>
-          <div style={styles.rangeSelector}>
-            {[
-              { label: 'Hoy', days: 1 },
-              { label: '7 Días', days: 7 },
-              { label: '30 Días', days: 30 }
-            ].map(tab => (
-              <button
-                key={tab.days}
-                onClick={() => setTimeRange(tab.days)}
-                style={{
-                  ...styles.rangeBtn,
-                  ...(timeRange === tab.days ? styles.rangeBtnActive : {})
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <button onClick={() => fetchMetrics(timeRange)} style={styles.refreshBtn} title="Refrescar métricas">
-            🔄 {lastRefreshed ? `Actualizado ${lastRefreshed}` : 'Refrescar'}
-          </button>
-
-          <button onClick={handleLogout} style={styles.logoutBtn} title="Cerrar sesión">
-            🔒 Salir
-          </button>
-        </div>
-      </header>
-
-      {/* Grid de Métricas Principales */}
-      <div style={styles.statsGrid}>
-        {/* Tarjeta 1: Visitantes Únicos */}
-        <div style={{ ...styles.card, ...styles.cardGlowRed }}>
-          <div style={styles.cardHeader}>
-            <span style={styles.cardTitle}>👥 VISITANTES ÚNICOS</span>
-            <span style={styles.pillGreen}>+{overview.today_visitors} hoy</span>
-          </div>
-          <div style={styles.cardValue}>{overview.unique_visitors.toLocaleString()}</div>
-          <div style={styles.cardSub}>Personas individuales registradas</div>
-        </div>
-
-        {/* Tarjeta 2: Reproducciones de Video */}
-        <div style={{ ...styles.card, ...styles.cardGlowPurple }}>
-          <div style={styles.cardHeader}>
-            <span style={styles.cardTitle}>🎬 REPRODUCCIONES DE VIDEO</span>
-            <span style={styles.pillGreen}>+{overview.today_plays} hoy</span>
-          </div>
-          <div style={styles.cardValue}>{overview.video_plays.toLocaleString()}</div>
-          <div style={styles.cardSub}>Episodios reproducidos con éxito</div>
-        </div>
-
-        {/* Tarjeta 3: Vistas de Página (Pageviews) */}
-        <div style={{ ...styles.card, ...styles.cardGlowBlue }}>
-          <div style={styles.cardHeader}>
-            <span style={styles.cardTitle}>👁️ PÁGINAS VISTAS</span>
-            <span style={styles.pillMuted}>Total acumulado</span>
-          </div>
-          <div style={styles.cardValue}>{overview.pageviews.toLocaleString()}</div>
-          <div style={styles.cardSub}>Navegación en catálogo y secciones</div>
-        </div>
-
-        {/* Tarjeta 4: Monetización y Clics en Ads */}
-        <div style={{ ...styles.card, ...styles.cardGlowAmber }}>
-          <div style={styles.cardHeader}>
-            <span style={styles.cardTitle}>💰 CLICS EN ANUNCIOS</span>
-            <span style={styles.pillGreen}>+{overview.today_ad_clicks} hoy</span>
-          </div>
-          <div style={styles.cardValue}>{overview.ad_clicks.toLocaleString()}</div>
-          <div style={styles.cardSub}>Adsterra & Monetag activaciones</div>
-        </div>
-      </div>
-
-      {/* Sección Central: Gráfica de Tráfico + Distribución de Dispositivos */}
-      <div style={styles.middleGrid}>
-        {/* Gráfica de Líneas / Barras Diarias */}
-        <div style={{ ...styles.card, flex: 2 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <div>
-              <h3 style={styles.sectionHeading}>📈 Evolución de Tráfico y Streaming</h3>
-              <p style={{ color: '#888', fontSize: 13 }}>Visitantes vs Reproducciones por día</p>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0a0a0f',
+      color: '#f0f0f5',
+      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      padding: '24px 16px',
+      boxSizing: 'border-box'
+    }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        
+        {/* ENCABEZADO SUPERIOR */}
+        <header style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          paddingBottom: '24px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          marginBottom: '28px'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{
+                background: '#e50914',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: '900',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                letterSpacing: '0.05em'
+              }}>PRO</span>
+              <h1 style={{ fontSize: '26px', fontWeight: '900', margin: 0, letterSpacing: '-0.02em' }}>
+                Panel de Analíticas <span style={{ color: '#e50914' }}>DramaPe</span>
+              </h1>
             </div>
-            <div style={{ display: 'flex', gap: 12, fontSize: 12 }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#4ade80' }}>
-                <span style={{ width: 10, height: 10, borderRadius: 2, background: '#4ade80' }} /> Visitas
+            <p style={{ color: '#888899', fontSize: '13px', margin: '6px 0 0' }}>
+              Telemetría en tiempo real y métricas internas sin dependencias externas.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            {/* SELECTOR DE RANGO DE TIEMPO */}
+            <div style={{
+              display: 'inline-flex',
+              background: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '10px',
+              padding: '4px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              {[
+                { label: 'Hoy', value: 1 },
+                { label: '7 Días', value: 7 },
+                { label: '30 Días', value: 30 },
+                { label: '90 Días', value: 90 }
+              ].map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => setTimeRange(opt.value)}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: timeRange === opt.value ? '700' : '500',
+                    background: timeRange === opt.value ? '#e50914' : 'transparent',
+                    color: timeRange === opt.value ? '#fff' : '#aaa',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                padding: '8px 14px',
+                borderRadius: '8px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: '#ccc',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                fontSize: '13px',
+                cursor: 'pointer',
+                fontWeight: '600'
+              }}
+            >
+              🔒 Salir
+            </button>
+          </div>
+        </header>
+
+        {/* 🔴 SECCIÓN PRINCIPAL DE TIEMPO REAL (EN VIVO AHORA) */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '18px',
+          marginBottom: '28px'
+        }}>
+          {/* TARJETA: MIRANDO VIDEO EN VIVO */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(229, 9, 20, 0.18), rgba(20, 10, 15, 0.9))',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(229, 9, 20, 0.4)',
+            boxShadow: '0 10px 30px rgba(229, 9, 20, 0.2)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span style={{ color: '#ff8888', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Reproducción Activa
               </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#e50914' }}>
-                <span style={{ width: 10, height: 10, borderRadius: 2, background: '#e50914' }} /> Reproducciones
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(229, 9, 20, 0.3)',
+                color: '#ff4d4d',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '800'
+              }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ff4d4d', animation: 'pulse 1.5s infinite' }}></span>
+                EN VIVO
               </span>
+            </div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#fff', letterSpacing: '-0.03em' }}>
+              {realtime.watching_now}
+            </div>
+            <div style={{ color: '#ffcccc', fontSize: '13px', marginTop: '6px' }}>
+              {realtime.watching_now === 1 ? '1 persona mirando un video en este momento' : `${realtime.watching_now} personas mirando videos en este momento`}
             </div>
           </div>
 
-          {timeline.length === 0 ? (
-            <div style={styles.emptyBox}>No hay suficiente historial de eventos aún. Los datos se graficarán conforme entren visitantes.</div>
-          ) : (
-            <div style={styles.chartContainer}>
-              {timeline.map((item, idx) => {
-                const viewsHeight = Math.max(12, Math.round(((item.views || 0) / maxViews) * 160));
-                const playsHeight = Math.max(8, Math.round(((item.plays || 0) / maxViews) * 160));
-                return (
-                  <div key={idx} style={styles.chartCol}>
-                    <div style={styles.barsWrap}>
-                      <div
-                        style={{ ...styles.barViews, height: `${viewsHeight}px` }}
-                        title={`${item.date_str}: ${item.views || 0} visitas`}
-                      />
-                      <div
-                        style={{ ...styles.barPlays, height: `${playsHeight}px` }}
-                        title={`${item.date_str}: ${item.plays || 0} reproducciones`}
-                      />
+          {/* TARJETA: PERSONAS NAVEGANDO EN LÍNEA */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(10, 25, 18, 0.9))',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(34, 197, 94, 0.35)',
+            boxShadow: '0 10px 30px rgba(34, 197, 94, 0.12)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span style={{ color: '#86efac', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Visitantes Online
+              </span>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(34, 197, 94, 0.25)',
+                color: '#4ade80',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '800'
+              }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#4ade80' }}></span>
+                EN LÍNEA
+              </span>
+            </div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#fff', letterSpacing: '-0.03em' }}>
+              {realtime.online_now}
+            </div>
+            <div style={{ color: '#bbf7d0', fontSize: '13px', marginTop: '6px' }}>
+              Personas explorando o navegando el catálogo
+            </div>
+          </div>
+
+          {/* TARJETA: VISITAS ÚNICAS HOY */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <div style={{ color: '#8888aa', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', marginBottom: '12px' }}>
+              Visitas Únicas de Hoy
+            </div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#fff' }}>
+              {overview.today_visitors || 0}
+            </div>
+            <div style={{ color: '#888899', fontSize: '13px', marginTop: '6px' }}>
+              {overview.today_plays || 0} episodios reproducidos hoy
+            </div>
+          </div>
+
+          {/* TARJETA: TOTAL REPRODUCCIONES (PERIODO) */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <div style={{ color: '#8888aa', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', marginBottom: '12px' }}>
+              Total Plays ({timeRange}d)
+            </div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#fff' }}>
+              {overview.video_plays || 0}
+            </div>
+            <div style={{ color: '#888899', fontSize: '13px', marginTop: '6px' }}>
+              {overview.unique_visitors || 0} visitantes únicos en el periodo
+            </div>
+          </div>
+        </div>
+
+        {/* 🎬 TRANSMISIONES ACTIVAS EN VIVO AHORA (QUÉ ESTÁN VIENDO EXACTAMENTE) */}
+        <div style={{
+          background: 'rgba(20, 20, 28, 0.6)',
+          borderRadius: '18px',
+          padding: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          marginBottom: '28px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>👁️</span> ¿Qué están mirando en tiempo real?
+            </h2>
+            <span style={{ fontSize: '12px', color: '#888' }}>
+              Actualizado: {lastUpdated || 'Cargando...'}
+            </span>
+          </div>
+
+          {realtime.active_streams && realtime.active_streams.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '12px' }}>
+              {realtime.active_streams.map((stream, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(229, 9, 20, 0.2)',
+                    borderRadius: '12px',
+                    padding: '14px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <div style={{ overflow: 'hidden', paddingRight: '12px' }}>
+                    <div style={{ fontWeight: '700', color: '#fff', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {stream.title}
                     </div>
-                    <span style={styles.barLabel}>{item.date_str.slice(5)}</span>
+                    <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px', display: 'flex', gap: '8px' }}>
+                      <span style={{ color: '#e50914', fontWeight: '700' }}>Ep. {stream.ep || '1'}</span>
+                      <span>•</span>
+                      <span>{stream.device === 'mobile' ? '📱 Móvil' : stream.device === 'tablet' ? '📟 Tablet' : '💻 PC'}</span>
+                    </div>
                   </div>
-                );
-              })}
+                  <div style={{
+                    fontSize: '11px',
+                    color: '#86efac',
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    whiteSpace: 'nowrap',
+                    fontWeight: '600'
+                  }}>
+                    hace {stream.seconds_ago}s
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '30px 20px', color: '#777', fontSize: '14px' }}>
+              No hay reproducciones de video activas en este instante exacto. Los usuarios están navegando el catálogo.
             </div>
           )}
         </div>
 
-        {/* Distribución por Dispositivo */}
-        <div style={{ ...styles.card, flex: 1 }}>
-          <h3 style={styles.sectionHeading}>📱 Dispositivos de Usuarios</h3>
-          <p style={{ color: '#888', fontSize: 13, marginBottom: 20 }}>Porcentaje según el navegador</p>
+        {/* 📈 GRÁFICO HISTÓRICO Y RANKING DE DORAMAS */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+          gap: '24px',
+          marginBottom: '28px'
+        }}>
+          {/* LÍNEA DE TIEMPO / TENDENCIA */}
+          <div style={{
+            background: 'rgba(20, 20, 28, 0.6)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>📈</span> Tendencia Diaria (Visitas vs Reproducciones)
+            </h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Móvil */}
-            <div>
-              <div style={styles.deviceRow}>
-                <span>📱 Celulares (Móvil)</span>
-                <span style={{ fontWeight: 700, color: '#fff' }}>{mobilePct}% ({devices.mobile})</span>
+            {timeline.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {timeline.slice(-7).map((day, idx) => {
+                  const viewPct = Math.round(((day.views || 0) / maxTimelineViews) * 100);
+                  const playPct = Math.round(((day.plays || 0) / maxTimelineViews) * 100);
+                  return (
+                    <div key={idx}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#aaa', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: '600', color: '#ddd' }}>{day.date_str}</span>
+                        <span>
+                          <strong style={{ color: '#fff' }}>{day.visitors || 0}</strong> visitas • <strong style={{ color: '#e50914' }}>{day.plays || 0}</strong> plays
+                        </span>
+                      </div>
+                      <div style={{ width: '100%', height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden', display: 'flex', gap: '2px' }}>
+                        <div style={{ width: `${Math.min(viewPct, 100)}%`, background: '#3b82f6', borderRadius: '4px' }}></div>
+                        <div style={{ width: `${Math.min(playPct, 100)}%`, background: '#e50914', borderRadius: '4px' }}></div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <div style={styles.progressBarBg}>
-                <div style={{ ...styles.progressBarFill, width: `${mobilePct}%`, background: '#E50914' }} />
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#666' }}>
+                Esperando registro de tráfico histórico...
               </div>
-            </div>
-
-            {/* Computadora */}
-            <div>
-              <div style={styles.deviceRow}>
-                <span>💻 Computadoras (Desktop)</span>
-                <span style={{ fontWeight: 700, color: '#fff' }}>{desktopPct}% ({devices.desktop})</span>
-              </div>
-              <div style={styles.progressBarBg}>
-                <div style={{ ...styles.progressBarFill, width: `${desktopPct}%`, background: '#3b82f6' }} />
-              </div>
-            </div>
-
-            {/* Tablet */}
-            <div>
-              <div style={styles.deviceRow}>
-                <span>📟 Tablets / iPads</span>
-                <span style={{ fontWeight: 700, color: '#fff' }}>{tabletPct}% ({devices.tablet})</span>
-              </div>
-              <div style={styles.progressBarBg}>
-                <div style={{ ...styles.progressBarFill, width: `${tabletPct}%`, background: '#a855f7' }} />
-              </div>
-            </div>
+            )}
           </div>
 
-          <div style={styles.infoPillBox}>
-            ⚡ <b>Optimización activa:</b> El 100% de los streams y posters están enrutados por Cloudflare Edge Cache.
-          </div>
-        </div>
-      </div>
+          {/* TOP 10 DORAMAS MÁS VISTOS */}
+          <div style={{
+            background: 'rgba(20, 20, 28, 0.6)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>🏆</span> Top 10 Doramas Más Vistos
+            </h2>
 
-      {/* Top 10 Doramas Más Vistos */}
-      <div style={{ ...styles.card, marginTop: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <div>
-            <h3 style={styles.sectionHeading}>🔥 Top 10 Doramas Más Reproducidos</h3>
-            <p style={{ color: '#888', fontSize: 13 }}>Los títulos con mayor audiencia en la plataforma</p>
-          </div>
-          <span style={styles.pillMuted}>{topDramas.length} títulos rankeados</span>
-        </div>
-
-        {topDramas.length === 0 ? (
-          <div style={styles.emptyBox}>Aún no hay reproducciones registradas. En cuanto los usuarios vean episodios, aparecerán en el ranking.</div>
-        ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={styles.table}>
-              <thead>
-                <tr style={styles.tableHeaderRow}>
-                  <th style={styles.th}>RANK</th>
-                  <th style={styles.th}>DORAMA</th>
-                  <th style={styles.th}>SLUG / ID</th>
-                  <th style={{ ...styles.th, textAlign: 'right' }}>REPRODUCCIONES</th>
-                  <th style={{ ...styles.th, textAlign: 'center' }}>ACCIONES</th>
-                </tr>
-              </thead>
-              <tbody>
+            {topDramas.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {topDramas.map((drama, idx) => (
-                  <tr key={drama.slug} style={styles.tableRow}>
-                    <td style={{ ...styles.td, fontWeight: 900, color: idx === 0 ? '#facc15' : idx === 1 ? '#e2e8f0' : idx === 2 ? '#f97316' : '#666' }}>
-                      #{idx + 1}
-                    </td>
-                    <td style={{ ...styles.td, fontWeight: 600, color: '#fff' }}>
-                      {drama.display_title}
-                    </td>
-                    <td style={{ ...styles.td, color: '#888', fontFamily: 'monospace', fontSize: 12 }}>
-                      {drama.slug}
-                    </td>
-                    <td style={{ ...styles.td, textAlign: 'right', fontWeight: 700, color: '#4ade80' }}>
-                      {drama.play_count.toLocaleString()} plays
-                    </td>
-                    <td style={{ ...styles.td, textAlign: 'center' }}>
-                      <Link href={`/ver/${drama.slug}/1`} target="_blank" style={styles.viewDramaBtn}>
-                        ▶ Ver Stream
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                  <div
+                    key={drama.slug}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 12px',
+                      background: idx === 0 ? 'rgba(229, 9, 20, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                      borderRadius: '10px',
+                      border: idx === 0 ? '1px solid rgba(229, 9, 20, 0.3)' : '1px solid rgba(255, 255, 255, 0.04)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+                      <span style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '6px',
+                        background: idx === 0 ? '#e50914' : 'rgba(255, 255, 255, 0.1)',
+                        color: '#fff',
+                        fontSize: '12px',
+                        fontWeight: '800',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        {idx + 1}
+                      </span>
+                      <span style={{ fontSize: '14px', fontWeight: '600', color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {drama.display_title}
+                      </span>
+                    </div>
 
-      <footer style={styles.footer}>
-        <span>DramaPe Analytics Engine · Persistencia Local SQLite · Cero dependencias externas</span>
-      </footer>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                      <span style={{ fontSize: '13px', fontWeight: '700', color: '#ff4d4d' }}>
+                        {drama.play_count} plays
+                      </span>
+                      <Link
+                        href={`/ver/${encodeURIComponent(drama.slug)}/1`}
+                        target="_blank"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          color: '#fff',
+                          fontSize: '11px',
+                          padding: '4px 8px',
+                          borderRadius: '6px',
+                          textDecoration: 'none',
+                          fontWeight: '600'
+                        }}
+                      >
+                        Ver ▶
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#666' }}>
+                No hay reproducciones registradas en este periodo.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 📱 DISPOSITIVOS Y MONETIZACIÓN */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '24px'
+        }}>
+          {/* DISPOSITIVOS */}
+          <div style={{
+            background: 'rgba(20, 20, 28, 0.6)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '800', margin: '0 0 16px' }}>
+              📱 Tráfico por Dispositivo
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {[
+                { name: 'Móvil', count: devices.mobile || 0, icon: '📱', color: '#e50914' },
+                { name: 'Desktop / PC', count: devices.desktop || 0, icon: '💻', color: '#3b82f6' },
+                { name: 'Tablet', count: devices.tablet || 0, icon: '📟', color: '#10b981' }
+              ].map(dev => {
+                const pct = Math.round((dev.count / totalDevices) * 100);
+                return (
+                  <div key={dev.name}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
+                      <span>{dev.icon} {dev.name}</span>
+                      <span style={{ fontWeight: '700' }}>{pct}% ({dev.count})</span>
+                    </div>
+                    <div style={{ width: '100%', height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: dev.color, borderRadius: '4px' }}></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* MONETIZACIÓN Y ADS */}
+          <div style={{
+            background: 'rgba(20, 20, 28, 0.6)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '800', margin: '0 0 16px' }}>
+              💰 Telemetría de Anuncios
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '10px' }}>
+                <span style={{ color: '#aaa', fontSize: '14px' }}>Clics en Anuncios Hoy</span>
+                <span style={{ fontWeight: '800', color: '#4ade80', fontSize: '16px' }}>{overview.today_ad_clicks || 0}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '10px' }}>
+                <span style={{ color: '#aaa', fontSize: '14px' }}>Clics Totales ({timeRange}d)</span>
+                <span style={{ fontWeight: '800', color: '#4ade80', fontSize: '16px' }}>{overview.ad_clicks || 0}</span>
+              </div>
+              <div style={{ fontSize: '12px', color: '#777', marginTop: '4px' }}>
+                ℹ️ Rueda de 4 clics activa: Adsterra ⇄ Monetag alternados.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: '#0a0a0f',
-    color: '#e4e4e7',
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    padding: '24px 32px 48px',
-    maxWidth: 1400,
-    margin: '0 auto',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 16,
-    paddingBottom: 24,
-    borderBottom: '1px solid rgba(255,255,255,0.08)',
-    marginBottom: 28,
-  },
-  headerLeft: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-  },
-  backHomeBtn: {
-    color: '#888',
-    textDecoration: 'none',
-    fontSize: 13,
-    transition: 'color 0.2s',
-  },
-  badgeLive: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    background: 'rgba(34, 197, 94, 0.15)',
-    border: '1px solid rgba(34, 197, 94, 0.3)',
-    color: '#4ade80',
-    padding: '4px 10px',
-    borderRadius: 20,
-    fontSize: 12,
-    fontWeight: 700,
-  },
-  livePulse: {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    background: '#22c55e',
-    boxShadow: '0 0 8px #22c55e',
-  },
-  headerRight: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    flexWrap: 'wrap',
-  },
-  rangeSelector: {
-    display: 'flex',
-    background: 'rgba(255,255,255,0.05)',
-    borderRadius: 8,
-    padding: 3,
-    border: '1px solid rgba(255,255,255,0.1)',
-  },
-  rangeBtn: {
-    background: 'transparent',
-    border: 'none',
-    color: '#aaa',
-    padding: '6px 14px',
-    fontSize: 13,
-    fontWeight: 600,
-    borderRadius: 6,
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-  },
-  rangeBtnActive: {
-    background: '#E50914',
-    color: '#fff',
-    boxShadow: '0 2px 8px rgba(229,9,20,0.4)',
-  },
-  refreshBtn: {
-    background: 'rgba(255,255,255,0.08)',
-    border: '1px solid rgba(255,255,255,0.12)',
-    color: '#ddd',
-    padding: '8px 14px',
-    fontSize: 13,
-    borderRadius: 8,
-    cursor: 'pointer',
-    fontWeight: 600,
-  },
-  logoutBtn: {
-    background: 'rgba(239, 68, 68, 0.12)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
-    color: '#f87171',
-    padding: '8px 14px',
-    fontSize: 13,
-    borderRadius: 8,
-    cursor: 'pointer',
-    fontWeight: 600,
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-    gap: 20,
-    marginBottom: 28,
-  },
-  card: {
-    background: 'rgba(18, 18, 26, 0.85)',
-    backdropFilter: 'blur(16px)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: 14,
-    padding: 22,
-    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-  },
-  cardGlowRed: {
-    borderLeft: '4px solid #E50914',
-  },
-  cardGlowPurple: {
-    borderLeft: '4px solid #a855f7',
-  },
-  cardGlowBlue: {
-    borderLeft: '4px solid #3b82f6',
-  },
-  cardGlowAmber: {
-    borderLeft: '4px solid #f59e0b',
-  },
-  cardHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  cardTitle: {
-    fontSize: 11,
-    fontWeight: 800,
-    letterSpacing: 1.1,
-    color: '#888',
-  },
-  cardValue: {
-    fontSize: 32,
-    fontWeight: 900,
-    color: '#fff',
-    letterSpacing: -0.5,
-  },
-  cardSub: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  pillGreen: {
-    background: 'rgba(34,197,94,0.15)',
-    color: '#4ade80',
-    fontSize: 11,
-    fontWeight: 700,
-    padding: '2px 8px',
-    borderRadius: 12,
-  },
-  pillMuted: {
-    background: 'rgba(255,255,255,0.08)',
-    color: '#aaa',
-    fontSize: 11,
-    fontWeight: 600,
-    padding: '2px 8px',
-    borderRadius: 12,
-  },
-  middleGrid: {
-    display: 'flex',
-    gap: 20,
-    flexWrap: 'wrap',
-  },
-  sectionHeading: {
-    fontSize: 17,
-    fontWeight: 700,
-    color: '#fff',
-    margin: 0,
-  },
-  chartContainer: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    gap: 12,
-    height: 190,
-    paddingTop: 10,
-    borderBottom: '1px solid rgba(255,255,255,0.08)',
-  },
-  chartCol: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 6,
-    flex: 1,
-  },
-  barsWrap: {
-    display: 'flex',
-    gap: 4,
-    alignItems: 'flex-end',
-    height: 160,
-  },
-  barViews: {
-    width: 14,
-    background: 'linear-gradient(180deg, #4ade80, #16a34a)',
-    borderRadius: '4px 4px 0 0',
-    transition: 'height 0.3s ease',
-  },
-  barPlays: {
-    width: 14,
-    background: 'linear-gradient(180deg, #E50914, #991b1b)',
-    borderRadius: '4px 4px 0 0',
-    transition: 'height 0.3s ease',
-  },
-  barLabel: {
-    fontSize: 11,
-    color: '#777',
-    fontWeight: 600,
-  },
-  deviceRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: 13,
-    marginBottom: 6,
-    color: '#ccc',
-  },
-  progressBarBg: {
-    height: 8,
-    background: 'rgba(255,255,255,0.08)',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: 4,
-    transition: 'width 0.4s ease',
-  },
-  infoPillBox: {
-    marginTop: 24,
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: 8,
-    padding: '12px 14px',
-    fontSize: 12,
-    color: '#aaa',
-    lineHeight: 1.4,
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    fontSize: 13,
-  },
-  tableHeaderRow: {
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-  },
-  th: {
-    padding: '10px 12px',
-    textAlign: 'left',
-    color: '#888',
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: 0.5,
-  },
-  tableRow: {
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
-    transition: 'background 0.2s',
-  },
-  td: {
-    padding: '12px',
-  },
-  viewDramaBtn: {
-    display: 'inline-block',
-    background: 'rgba(229, 9, 20, 0.15)',
-    border: '1px solid rgba(229, 9, 20, 0.3)',
-    color: '#E50914',
-    textDecoration: 'none',
-    fontSize: 12,
-    fontWeight: 700,
-    padding: '4px 10px',
-    borderRadius: 6,
-    transition: 'all 0.2s',
-  },
-  emptyBox: {
-    padding: '36px 16px',
-    textAlign: 'center',
-    color: '#777',
-    fontSize: 13,
-  },
-  footer: {
-    marginTop: 40,
-    textAlign: 'center',
-    color: '#555',
-    fontSize: 12,
-    borderTop: '1px solid rgba(255,255,255,0.05)',
-    paddingTop: 20,
-  },
-  loginWrapper: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'radial-gradient(circle at center, #1a0808 0%, #08080c 100%)',
-    padding: 20,
-  },
-  loginCard: {
-    width: '100%',
-    maxWidth: 400,
-    background: 'rgba(18, 18, 26, 0.95)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: 16,
-    padding: 32,
-    boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
-    textAlign: 'center',
-  },
-  logoBadge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  adminTag: {
-    background: '#E50914',
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 900,
-    padding: '2px 6px',
-    borderRadius: 4,
-    letterSpacing: 0.5,
-  },
-  loginInput: {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.15)',
-    borderRadius: 8,
-    padding: '12px 16px',
-    fontSize: 14,
-    color: '#fff',
-    outline: 'none',
-    textAlign: 'center',
-    letterSpacing: 1,
-  },
-  loginBtn: {
-    background: 'linear-gradient(135deg, #E50914, #B81D24)',
-    border: 'none',
-    borderRadius: 8,
-    color: '#fff',
-    padding: '12px 16px',
-    fontSize: 14,
-    fontWeight: 700,
-    cursor: 'pointer',
-    boxShadow: '0 4px 16px rgba(229,9,20,0.4)',
-    transition: 'opacity 0.2s',
-  },
-  errorText: {
-    color: '#f87171',
-    fontSize: 12,
-    fontWeight: 600,
-  },
-};
