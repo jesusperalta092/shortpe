@@ -96,8 +96,8 @@ export default function Header({ stats }) {
           )}
         </button>
 
-        <Link href="/" className="logo">
-          <div className="logo-mark">🎬</div>
+        <Link href="/" className="logo" aria-label="DramaPe — Inicio">
+          <img src="/logo.png" alt="DramaPe" className="logo-img" width="34" height="34" />
           <span className="logo-text">DramaPe</span>
         </Link>
 

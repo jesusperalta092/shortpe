@@ -1511,6 +1511,29 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if path == '/api/version':
             return self._send(200,'application/json; charset=utf-8', json.dumps({'build':BUILD_ID}).encode())
 
+        # Sirve archivos estáticos de marca / favicon / OG / manifest
+        static_files = {
+            '/favicon.ico': ('favicon.ico', 'image/x-icon'),
+            '/favicon-16x16.png': ('web-next/public/favicon-16x16.png', 'image/png'),
+            '/favicon-32x32.png': ('web-next/public/favicon-32x32.png', 'image/png'),
+            '/apple-touch-icon.png': ('apple-touch-icon.png', 'image/png'),
+            '/logo.png': ('logo.png', 'image/png'),
+            '/og-image.jpg': ('og-image.jpg', 'image/jpeg'),
+            '/og-image.png': ('og-image.png', 'image/png'),
+            '/icon-192.png': ('web-next/public/icon-192.png', 'image/png'),
+            '/icon-512.png': ('web-next/public/icon-512.png', 'image/png'),
+            '/manifest.json': ('web-next/public/manifest.json', 'application/manifest+json; charset=utf-8'),
+        }
+        if path in static_files:
+            rel_path, ctype = static_files[path]
+            fp = os.path.join(ROOT, rel_path.replace('/', os.sep))
+            if os.path.exists(fp) and os.path.isfile(fp):
+                try:
+                    data = open(fp, 'rb').read()
+                    return self._send(200, ctype, data, cache_header='public, max-age=86400')
+                except Exception as e:
+                    return self._send(500, 'text/plain', str(e).encode())
+
         # Sirve /posters/* con headers CORS y cache
         if path.startswith('/posters/'):
             fp=os.path.join(ROOT, path.lstrip('/').replace('/',os.sep))

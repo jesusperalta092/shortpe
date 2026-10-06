@@ -82,7 +82,10 @@ export default async function TituloPage({ params }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header>
-        <Link href="/" className="logo"><div className="logo-mark">🎬</div><span className="logo-text">DramaPe</span></Link>
+        <Link href="/" className="logo" aria-label="DramaPe — Inicio">
+          <img src="/logo.png" alt="DramaPe" className="logo-img" width="34" height="34" />
+          <span className="logo-text">DramaPe</span>
+        </Link>
         <nav><Link href="/">← Inicio</Link></nav>
       </header>
 

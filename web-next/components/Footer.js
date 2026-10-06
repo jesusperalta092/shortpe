@@ -6,8 +6,8 @@ export default function Footer({ catalogCount = 2220 }) {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <Link href="/" className="footer-logo">
-            <div className="logo-mark">🎬</div>
+          <Link href="/" className="footer-logo" aria-label="DramaPe — Inicio">
+            <img src="/logo.png" alt="DramaPe" className="logo-img" width="32" height="32" />
             <span className="logo-text">DramaPe</span>
           </Link>
           <p className="footer-tagline">
