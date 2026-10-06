@@ -1,0 +1,304 @@
+
+        (function () {
+            var currentOrigin = window.location.origin;
+            var userGestureWindowMs = 2500;
+            var lastUserGestureAt = 0;
+            var allowedSchemes = { 'http:': true, 'https:': true };
+            var ignoredSchemes = {
+                '': true,
+                'about:': true,
+                'blob:': true,
+                'data:': true,
+                'file:': true,
+                'javascript:': true,
+                'mailto:': true,
+                'tel:': true,
+            };
+
+            function now() {
+                return Date.now();
+            }
+
+            function markUserGesture() {
+                lastUserGestureAt = now();
+            }
+
+            function hasFreshUserGesture() {
+                return (now() - lastUserGestureAt) <= userGestureWindowMs;
+            }
+
+            function toUrl(value) {
+                if (typeof value !== 'string' || value.trim() === '') {
+                    return null;
+                }
+                try {
+                    return new URL(value, window.location.href);
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function isExternalUrl(url) {
+                if (!url) {
+                    return false;
+                }
+                if (ignoredSchemes[url.protocol]) {
+                    return false;
+                }
+                if (!allowedSchemes[url.protocol]) {
+                    return true;
+                }
+                return url.origin !== currentOrigin;
+            }
+
+            function openInNewTab(url, source) {
+                try {
+                    window.open(url.href, '_blank', 'noopener,noreferrer');
+                    console.warn('[NavGuard] forced-new-tab', source, url.href);
+                    return true;
+                } catch (error) {
+                    console.warn('[NavGuard] open-failed', source, url.href, error);
+                    return false;
+                }
+            }
+
+            function guardNavigation(rawUrl, source, options) {
+                var url = rawUrl instanceof URL ? rawUrl : toUrl(String(rawUrl || ''));
+                if (!url) {
+                    return true;
+                }
+                if (!isExternalUrl(url)) {
+                    return true;
+                }
+
+                var sourceName = String(source || 'unknown');
+                var userInitiated = Boolean(options && options.userInitiated);
+                if (userInitiated) {
+                    openInNewTab(url, sourceName);
+                } else {
+                    console.warn('[NavGuard] blocked-same-tab', sourceName, url.href);
+                }
+                return false;
+            }
+
+            function guardAnchor(anchor, source, event) {
+                if (!anchor) {
+                    return true;
+                }
+                var href = anchor.getAttribute('href') || anchor.href || '';
+                var allowed = guardNavigation(href, source, {
+                    userInitiated: !!(event && event.isTrusted),
+                });
+                if (!allowed && event) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    event.stopPropagation();
+                }
+                if (!allowed) {
+                    return false;
+                }
+                if (anchor.target !== '_blank' && isExternalUrl(toUrl(href))) {
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener noreferrer';
+                }
+                return true;
+            }
+
+            function guardForm(form, source, event) {
+                if (!form) {
+                    return true;
+                }
+                var action = form.getAttribute('action') || window.location.href;
+                var allowed = guardNavigation(action, source, {
+                    userInitiated: !!(event && event.isTrusted),
+                });
+                if (!allowed && event) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    event.stopPropagation();
+                }
+                return allowed;
+            }
+
+            ['click', 'mousedown', 'mouseup', 'touchstart', 'pointerdown', 'keydown'].forEach(function (type) {
+                document.addEventListener(type, markUserGesture, true);
+            });
+
+            document.addEventListener('click', function (event) {
+                var anchor = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+                if (anchor) {
+                    guardAnchor(anchor, 'document-click', event);
+                    return;
+                }
+                var form = event.target && event.target.closest ? event.target.closest('form[action]') : null;
+                if (form) {
+                    guardForm(form, 'document-click-form', event);
+                }
+            }, true);
+
+            document.addEventListener('submit', function (event) {
+                guardForm(event.target, 'document-submit', event);
+            }, true);
+
+            var originalWindowOpen = window.open;
+            // Forensik anti-wrapper (log-only): apakah window.open masih native SAAT kita capture?
+            // false = ada script (injeksi app wrapper di onPageStarted / scriptlet adblock) yang menimpanya SEBELUM kita.
+            var openWasNative = true;
+            try { openWasNative = /\[native code\]/.test(Function.prototype.toString.call(originalWindowOpen)); } catch (e) {}
+            window.open = function (url, target, features) {
+                var resolved = toUrl(String(url || ''));
+                if (resolved && isExternalUrl(resolved)) {
+                    if (!hasFreshUserGesture()) {
+                        console.warn('[NavGuard] blocked-window-open', resolved.href);
+                        return null;
+                    }
+                    return originalWindowOpen.call(window, resolved.href, '_blank', 'noopener,noreferrer');
+                }
+                return originalWindowOpen.call(window, url, target, features);
+            };
+            try {
+                // Referensi wrapper NavGuard (non-enumerable) → probe anti-wrapper bisa tahu bila window.open ditimpa SESUDAH kita.
+                Object.defineProperty(window, '__ndOpenRef', { value: window.open, enumerable: false, configurable: false, writable: false });
+                Object.defineProperty(window, '__ndOpenNative', { value: openWasNative, enumerable: false, configurable: false, writable: false });
+            } catch (e) {}
+
+            function wrapLocationMethod(locationLike, methodName, sourceName) {
+                if (!locationLike || typeof locationLike[methodName] !== 'function') {
+                    return;
+                }
+                var original = locationLike[methodName].bind(locationLike);
+                locationLike[methodName] = function (url) {
+                    if (!guardNavigation(url, sourceName, { userInitiated: false })) {
+                        return;
+                    }
+                    return original(url);
+                };
+            }
+
+            wrapLocationMethod(window.location, 'assign', 'location.assign');
+            wrapLocationMethod(window.location, 'replace', 'location.replace');
+
+            if (window.top && window.top.location && window.top.location !== window.location) {
+                wrapLocationMethod(window.top.location, 'assign', 'top.location.assign');
+                wrapLocationMethod(window.top.location, 'replace', 'top.location.replace');
+            }
+
+            var originalAnchorClick = HTMLAnchorElement.prototype.click;
+            HTMLAnchorElement.prototype.click = function () {
+                if (!guardAnchor(this, 'anchor.click')) {
+                    return;
+                }
+                return originalAnchorClick.call(this);
+            };
+
+            var originalFormSubmit = HTMLFormElement.prototype.submit;
+            HTMLFormElement.prototype.submit = function () {
+                if (!guardForm(this, 'form.submit')) {
+                    return;
+                }
+                return originalFormSubmit.call(this);
+            };
+
+            if (typeof HTMLFormElement.prototype.requestSubmit === 'function') {
+                var originalRequestSubmit = HTMLFormElement.prototype.requestSubmit;
+                HTMLFormElement.prototype.requestSubmit = function () {
+                    if (!guardForm(this, 'form.requestSubmit')) {
+                        return;
+                    }
+                    return originalRequestSubmit.apply(this, arguments);
+                };
+            }
+
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    mutation.addedNodes.forEach(function (node) {
+                        if (!(node instanceof Element)) {
+                            return;
+                        }
+                        if (node.matches && node.matches('meta[http-equiv="refresh"][content]')) {
+                            var content = String(node.getAttribute('content') || '');
+                            var match = content.match(/url\s*=\s*(.+)$/i);
+                            if (match && !guardNavigation(match[1], 'meta-refresh', { userInitiated: false })) {
+                                node.remove();
+                            }
+                        }
+                        if (node.matches && node.matches('a[href]')) {
+                            guardAnchor(node, 'anchor-added');
+                        }
+                        if (node.querySelectorAll) {
+                            node.querySelectorAll('a[href]').forEach(function (anchor) {
+                                guardAnchor(anchor, 'anchor-added');
+                            });
+                            node.querySelectorAll('meta[http-equiv="refresh"][content]').forEach(function (meta) {
+                                var content = String(meta.getAttribute('content') || '');
+                                var match = content.match(/url\s*=\s*(.+)$/i);
+                                if (match && !guardNavigation(match[1], 'meta-refresh', { userInitiated: false })) {
+                                    meta.remove();
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true,
+            });
+
+            window.ndCreateSandboxedAdsterraFrame = function (options) {
+                var slot = options && options.slot ? options.slot : null;
+                var key = String(options && options.key ? options.key : '').trim();
+                var width = Math.max(1, Number(options && options.width ? options.width : 0));
+                var height = Math.max(1, Number(options && options.height ? options.height : 0));
+                var query = String(options && options.query ? options.query : '').trim();
+                var bodyStyle = String(options && options.bodyStyle ? options.bodyStyle : 'margin:0;padding:0;overflow:hidden;background:transparent;');
+                if (!slot || key === '' || width <= 0 || height <= 0) {
+                    return null;
+                }
+
+                var iframe = document.createElement('iframe');
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms');
+                iframe.setAttribute('scrolling', 'no');
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('loading', String(options && options.loading ? options.loading : 'lazy'));
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                iframe.style.display = 'block';
+                iframe.style.width = String(width) + 'px';
+                iframe.style.height = String(height) + 'px';
+                iframe.style.border = '0';
+                iframe.style.background = 'transparent';
+
+                // Infra BARU Adsterra 2026: invokeUrl = <base><key> (base dari config, mis.
+                // https://bancadeltempoidea.org/22/). Infra LAMA highperformanceformat.com dimatikan
+                // Adsterra → dipakai hanya fallback bila base kosong. Ganti base via ADSTERRA_BANNER_INVOKE_BASE.
+                var invokeBase = "https:\/\/bancadeltempoidea.org\/22\/";
+                // options.invokeUrl = override penuh (dipakai player utk balik ke infra lama); else base+key.
+                var ovUrl = (options && options.invokeUrl) ? String(options.invokeUrl).trim() : '';
+                var invokeUrl = ovUrl !== ''
+                    ? ovUrl
+                    : (invokeBase !== ''
+                        ? invokeBase + encodeURIComponent(key)
+                        : 'https://www.highperformanceformat.com/' + encodeURIComponent(key) + '/invoke.js');
+                if (query !== '') {
+                    invokeUrl += (invokeUrl.indexOf('?') === -1 ? '?' : '&') + query.replace(/^\?+/, '');
+                }
+
+                iframe.srcdoc =
+                    '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+                    + '<base target="_blank">'
+                    + '<style>html,body{margin:0;padding:0;overflow:hidden;background:transparent;width:100%;height:100%;}body>*:not(script){display:block!important;max-width:100%!important;}iframe{border:0!important;}</style>'
+                    + '</head><body style="' + bodyStyle.replace(/"/g, '&quot;') + '">'
+                    + '<script>var atOptions={key:' + JSON.stringify(key) + ',format:"iframe",height:' + String(height) + ',width:' + String(width) + ',params:{}};<\/script>'
+                    + '<script>(function(){'
+                    + 'var open=window.open;window.open=function(url,target,features){return open.call(window,url,\"_blank\",features||\"noopener,noreferrer\");};'
+                    + 'try{if(window.location&&typeof window.location.assign===\"function\"){var oa=window.location.assign.bind(window.location);window.location.assign=function(url){if(/^https?:/i.test(String(url||\"\"))){window.open(url,\"_blank\",\"noopener,noreferrer\");return;}return oa(url);};}}catch(e){}'
+                    + 'try{if(window.location&&typeof window.location.replace===\"function\"){var or=window.location.replace.bind(window.location);window.location.replace=function(url){if(/^https?:/i.test(String(url||\"\"))){window.open(url,\"_blank\",\"noopener,noreferrer\");return;}return or(url);};}}catch(e){}'
+                    + '}());<\/script>'
+                    + '<script async src="' + invokeUrl.replace(/"/g, '&quot;') + '" referrerpolicy="no-referrer-when-downgrade"><\/script>'
+                    + '</body></html>';
+
+                slot.appendChild(iframe);
+                return iframe;
+            };
+        })();
+    

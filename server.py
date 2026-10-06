@@ -1227,6 +1227,19 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 _stream_set(slug, ep, out)
                 return self._send(200,'application/json; charset=utf-8',out)
 
+            # ===== NARTO / DRAMIX (MP4 directo con firma) =====
+            if d.get('source')=='narto' or slug.startswith('nt-'):
+                eps_dict = d.get('episodes') or {}
+                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                if not vurl: return self._send(404,'text/plain',b'sin episodio')
+                obj={'title':d.get('title',''),'type':'mp4','player_type':'file',
+                     'player_url':'/proxy/stream?t=' + encode_url_token(vurl),
+                     'encrypted':False,
+                     'episode_number':str(ep)}
+                out=json.dumps(obj,ensure_ascii=False).encode('utf-8')
+                _stream_set(slug, ep, out)
+                return self._send(200,'application/json; charset=utf-8',out)
+
             # ===== DRAMAVIBE (chartdrama) - HLS/MP4 =====
             if d.get('source')=='dramavibe':
                 d_id = d.get('dramaId') or d.get('sourceBookId') or d.get('id')

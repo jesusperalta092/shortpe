@@ -40,7 +40,7 @@ export default function Header({ stats }) {
       )
     },
     {
-      href: '/seccion/drama',
+      href: '/seccion/dramavibe',
       label: 'DramaVibe',
       theme: 'vibe',
       icon: (
@@ -48,15 +48,7 @@ export default function Header({ stats }) {
       )
     },
     {
-      href: '/seccion/dramashorts',
-      label: 'Dramas',
-      theme: 'drama',
-      icon: (
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
-      )
-    },
-    {
-      href: '/seccion/dramavibe',
+      href: '/seccion/hotdrama',
       label: 'HotDrama',
       theme: 'fire',
       icon: (
@@ -64,7 +56,15 @@ export default function Header({ stats }) {
       )
     },
     {
-      href: '/seccion/hotdrama',
+      href: '/seccion/drama',
+      label: 'Dramas',
+      theme: 'drama',
+      icon: (
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+      )
+    },
+    {
+      href: '/seccion/dramashorts',
       label: 'DramaShorts',
       theme: 'shorts',
       icon: (
