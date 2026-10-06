@@ -148,6 +148,7 @@ def get_upstream_referer(url):
         if 'crazymaplestudios' in host: return 'https://crazymaplestudios.com/'
         if 'wolftv' in host: return 'https://wolftv.online/'
         if 'anyreel' in host: return 'https://anyreel.app/'
+        if 'narto' in host or 'dramix' in host or 'nartodrama' in host: return 'https://dramix.tv/'
         if 'esdramia' in host: return 'https://esdramia.com/'
         parts = host.split('.')
         if len(parts) >= 2:
@@ -416,6 +417,13 @@ def load_catalog(force=False):
                 except Exception as e:
                     sys.stderr.write(f'[catalog] err {fname}: {e}\n')
         all_items = [d for d in all_items if d.get('section') not in ('serie', 'pelicula')]
+        # Ordenar para que los items con mas episodios/hashes queden primero al deduplicar
+        def _ep_count(item):
+            eps = item.get('episodes') or item.get('episode_hashes') or {}
+            if isinstance(eps, dict): return len(eps)
+            if isinstance(eps, list): return len(eps)
+            return item.get('total_episodes') or 0
+        all_items.sort(key=_ep_count, reverse=True)
         seen = set()
         seen_titles = set()
         uniq = []
@@ -423,7 +431,8 @@ def load_catalog(force=False):
             s = d.get('slug')
             t = d.get('title') or ''
             raw_t = unicodedata.normalize('NFKD', t).encode('ascii', 'ignore').decode('utf-8').lower()
-            nt = re.sub(r'[^\w\s]', '', re.sub(r'\(dubbed\)|\[dubbed\]|\(espanol\)|\[espanol\]|\(es\)', '', raw_t)).strip()
+            nt = re.sub(r'\(dubbed\)|\[dubbed\]|\(espanol\)|\[espanol\]|\(es\)|\(doblado\)|\[doblado\]', '', raw_t)
+            nt = re.sub(r'[^\w\s]', '', nt).strip()
             nt = re.sub(r'\s+', ' ', nt)
             if not s or s in seen:
                 continue
@@ -470,22 +479,25 @@ def load_dramavibe():
 HD_ITEMS = []
 HD_BY_SLUG = {}
 HD_LOCK = threading.Lock()
+HD_MTIME = 0
 HD_CACHE = {}  # slug -> {t, episodes}
 HD_TTL = 1800  # 30 min
 
 
-def load_hotdrama():
-    global HD_ITEMS, HD_BY_SLUG
+def load_hotdrama(force=False):
+    global HD_ITEMS, HD_BY_SLUG, HD_MTIME
     with HD_LOCK:
-        if HD_ITEMS:
-            return
         p = os.path.join(ROOT, 'data', 'hotdrama.json')
         if not os.path.exists(p):
             return
+        mt = os.path.getmtime(p)
+        if not force and HD_ITEMS and HD_MTIME == mt:
+            return
+        HD_MTIME = mt
         try:
             data = json.load(open(p, encoding='utf-8'))
             for d in data:
-                d['source'] = 'hotdrama'
+                d.setdefault('source', 'hotdrama')
                 d['section'] = 'hotdrama'
             HD_ITEMS = data
             HD_BY_SLUG = {d['slug']: d for d in HD_ITEMS}
@@ -1165,17 +1177,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
                 return self._send(200,'application/json; charset=utf-8',out)
 
-            # ===== NARTO (DramaShorts) - HLS directo =====
+            # ===== NARTO (DramaShorts / HotDrama) - HLS o MP4 directo =====
             if _d and _d.get('source')=='narto':
                 eps_dict = _d.get('episodes') or {}
-                m3u8 = eps_dict.get(ep) or (list(eps_dict.values())[0] if eps_dict else None)
-                if not m3u8: return self._send(404,'text/plain',b'sin m3u8')
-                obj={'hash':'stream_token','title':_d.get('title',''),'type':'hls','player_type':'hls',
-                     'player_url':'/proxy/manifest?t=' + encode_url_token(m3u8),
-                     'encrypted':False}
+                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                if not vurl: return self._send(404,'text/plain',b'sin episodio')
+                is_hls = ('.m3u8' in vurl.split('?')[0].lower()) or ('s3hls' in vurl) or ('/api/stream/' in vurl)
+                p_type = 'hls' if is_hls else 'file'
+                v_type = 'hls' if is_hls else 'mp4'
+                p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(vurl)
+                obj={'hash':'stream_token','title':_d.get('title',''),'type':v_type,'player_type':p_type,
+                     'player_url': p_url,
+                     'encrypted':False,'episode_number':str(ep)}
                 out=json.dumps(obj,ensure_ascii=False).encode('utf-8')
                 _stream_set(slug, ep, out)
-                threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
+                if is_hls:
+                    threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
                 return self._send(200,'application/json; charset=utf-8',out)
 
             try: ep_i=int(ep)
