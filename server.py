@@ -6,6 +6,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from modules.analytics_tracker import track_event, get_dashboard_metrics
 
 try:
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -1480,6 +1481,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 except Exception as e:
                     return self._send(500,'text/plain',str(e).encode())
 
+        # ============ ANALYTICS DASHBOARD ============
+        if path == '/api/analytics/dashboard':
+            try: days = int(qs.get('days', ['7'])[0])
+            except: days = 7
+            metrics = get_dashboard_metrics(days=days)
+            body = json.dumps(metrics, ensure_ascii=False).encode('utf-8')
+            return self._send(200, 'application/json; charset=utf-8', body, cache_header='no-store')
+
         # Sirve /lib/* con headers anti-cache (fuerza recarga al cambiar version)
         if path.startswith('/lib/'):
             fp=os.path.join(ROOT, path.lstrip('/').replace('/',os.sep))
@@ -1503,6 +1512,39 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return super().do_GET()
         except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError, ConnectionError):
             pass
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        path = parsed.path
+        if path == '/api/analytics/track':
+            try:
+                length = int(self.headers.get('Content-Length', 0))
+                raw = self.rfile.read(length).decode('utf-8') if length > 0 else '{}'
+                data = json.loads(raw)
+                client_ip = self.headers.get('CF-Connecting-IP') or self.headers.get('X-Forwarded-For', '').split(',')[0].strip() or self.client_address[0]
+                ua = self.headers.get('User-Agent', '')
+                ref = self.headers.get('Referer', '')
+                track_event(
+                    event_type=data.get('event_type', 'pageview'),
+                    path=data.get('path', ''),
+                    slug=data.get('slug', ''),
+                    ep=str(data.get('ep', '')),
+                    title=data.get('title', ''),
+                    ip=client_ip,
+                    ua=ua,
+                    referer=ref
+                )
+                return self._send(200, 'application/json', b'{"ok":true}', cache_header='no-store')
+            except Exception as e:
+                return self._send(400, 'application/json', json.dumps({'ok': False, 'error': str(e)}).encode(), cache_header='no-store')
+        return self._send(404, 'text/plain', b'not found')
 
     def copyfile(self, source, outputfile):
         try:

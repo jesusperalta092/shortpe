@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { trackVideoPlay, trackAdClick } from '../lib/analytics';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -325,6 +326,7 @@ export default function Player({ slug, ep, title, total }) {
           info = { type: isHls ? 'hls' : 'file', url: isHls ? '/proxy/manifest?url=' + encodeURIComponent(url) : '/proxy/stream?url=' + encodeURIComponent(url) };
         }
         if (cancelled) return;
+        trackVideoPlay(slug, ep, data.title || title);
         video.muted = false;
         const tryPlay = () => {
           if (isEpisodeAdRestricted(ep) && isAdLocked) {
@@ -459,6 +461,8 @@ export default function Player({ slug, ep, title, total }) {
 
   const handleOpenAd = () => {
     const currentLink = AD_LINKS_ROTATION[adClicksDone % AD_LINKS_ROTATION.length] || AD_LINKS_ROTATION[0];
+    const adNetwork = currentLink.includes('monetag') || currentLink.includes('omg10') ? 'monetag' : 'adsterra';
+    trackAdClick(slug, ep, adNetwork);
     try {
       window.open(currentLink, '_blank', 'noopener,noreferrer');
     } catch (e) {

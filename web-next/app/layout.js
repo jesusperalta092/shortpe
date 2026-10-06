@@ -1,4 +1,6 @@
 import './globals.css';
+import { Suspense } from 'react';
+import AnalyticsBeacon from '../components/AnalyticsBeacon';
 
 const SITE_URL = process.env.SITE_URL || 'https://dramape.com';
 
@@ -149,6 +151,9 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
         />
+        <Suspense fallback={null}>
+          <AnalyticsBeacon />
+        </Suspense>
         {children}
       </body>
     </html>

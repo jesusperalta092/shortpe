@@ -16,6 +16,7 @@ const nextConfig = {
       { source: '/api/dramavibe/:path*', destination: PROXY + '/api/dramavibe/:path*' },
       { source: '/api/hotdrama', destination: PROXY + '/api/hotdrama' },
       { source: '/api/hotdrama/:path*', destination: PROXY + '/api/hotdrama/:path*' },
+      { source: '/api/analytics/:path*', destination: PROXY + '/api/analytics/:path*' },
     ];
   },
 };
