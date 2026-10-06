@@ -3,8 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export const AD_LINK = 'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0';
-export const REQUIRED_AD_CLICKS = 4;
+export const AD_LINKS_ROTATION = [
+  'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
+  'https://omg10.com/4/11963834',                             // 2. Monetag
+  'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 3. Adsterra
+  'https://omg10.com/4/11963834'                              // 4. Monetag
+];
+export const AD_LINK = AD_LINKS_ROTATION[0];
+export const REQUIRED_AD_CLICKS = AD_LINKS_ROTATION.length;
 
 export function isEpisodeAdRestricted(ep) {
   const s = String(ep || '1');
@@ -452,10 +458,11 @@ export default function Player({ slug, ep, title, total }) {
   };
 
   const handleOpenAd = () => {
+    const currentLink = AD_LINKS_ROTATION[adClicksDone % AD_LINKS_ROTATION.length] || AD_LINKS_ROTATION[0];
     try {
-      window.open(AD_LINK, '_blank', 'noopener,noreferrer');
+      window.open(currentLink, '_blank', 'noopener,noreferrer');
     } catch (e) {
-      window.location.href = AD_LINK;
+      window.location.href = currentLink;
     }
 
     const nextCount = adClicksDone + 1;
