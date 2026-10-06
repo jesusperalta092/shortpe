@@ -49,6 +49,8 @@ export default function Player({ slug, ep, title, total }) {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [isAdLocked, setIsAdLocked] = useState(false);
   const [adClicksDone, setAdClicksDone] = useState(0);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [popupBlocked, setPopupBlocked] = useState(false);
   const cuesRef = useRef([]);
   const idleTimer = useRef(null);
   const router = useRouter();
@@ -501,27 +503,38 @@ export default function Player({ slug, ep, title, total }) {
   };
 
   const handleOpenAd = () => {
-    const currentLink = AD_LINKS_ROTATION[adClicksDone % AD_LINKS_ROTATION.length] || AD_LINKS_ROTATION[0];
-    const adNetwork = currentLink.includes('monetag') || currentLink.includes('omg10') ? 'monetag' : 'adsterra';
-    trackAdClick(slug, ep, adNetwork);
-    try {
-      window.open(currentLink, '_blank', 'noopener,noreferrer');
-    } catch (e) {
-      window.location.href = currentLink;
-    }
+    if (isVerifying) return;
 
     const nextCount = adClicksDone + 1;
-    if (nextCount >= REQUIRED_AD_CLICKS) {
-      setIsAdLocked(false);
-      setAdClicksDone(nextCount);
-      setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.play().catch(() => {});
-        }
-      }, 300);
-    } else {
-      setAdClicksDone(nextCount);
+    const unlockUrl = `/api/unlock?step=${nextCount}&slug=${encodeURIComponent(slug || '')}&ep=${encodeURIComponent(ep || '1')}`;
+    const adNetwork = (nextCount % 2 === 0) ? 'monetag' : 'adsterra';
+    trackAdClick(slug, ep, adNetwork);
+
+    setPopupBlocked(false);
+    try {
+      const win = window.open(unlockUrl, '_blank', 'noopener,noreferrer');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        setPopupBlocked(true);
+      }
+    } catch (e) {
+      setPopupBlocked(true);
     }
+
+    setIsVerifying(true);
+    setTimeout(() => {
+      setIsVerifying(false);
+      if (nextCount >= REQUIRED_AD_CLICKS) {
+        setIsAdLocked(false);
+        setAdClicksDone(nextCount);
+        setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.play().catch(() => {});
+          }
+        }, 300);
+      } else {
+        setAdClicksDone(nextCount);
+      }
+    }, 1400);
   };
 
   const handleDisagree = () => {
@@ -658,7 +671,7 @@ export default function Player({ slug, ep, title, total }) {
           </div>
         )}
 
-        {/* Modal Emergente de Anuncios Adsterra */}
+        {/* Modal Emergente de Anuncios Adsterra & Monetag Cloaked */}
         {isAdLocked && (
           <div className="ad-modal-backdrop">
             <div className="ad-modal-card" onClick={(e) => e.stopPropagation()}>
@@ -670,10 +683,26 @@ export default function Player({ slug, ep, title, total }) {
                   <line x1="12" y1="17" x2="12" y2="21"/>
                 </svg>
               </div>
-              <h2 className="ad-modal-title">Advertisement before watching</h2>
+              <h2 className="ad-modal-title">Publicidad para continuar</h2>
               <p className="ad-modal-subtitle">
-                {REQUIRED_AD_CLICKS - adClicksDone} of {REQUIRED_AD_CLICKS} more ads needed to unlock stream
+                Faltan {REQUIRED_AD_CLICKS - adClicksDone} de {REQUIRED_AD_CLICKS} anuncios para desbloquear
               </p>
+
+              {popupBlocked && (
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.18)',
+                  border: '1px solid rgba(239, 68, 68, 0.4)',
+                  borderRadius: 10,
+                  padding: '8px 12px',
+                  fontSize: 12,
+                  color: '#fca5a5',
+                  margin: '10px 0',
+                  lineHeight: 1.35,
+                  textAlign: 'center'
+                }}>
+                  ⚠️ Pestaña bloqueada por el navegador. Permite las ventanas emergentes para completar el desbloqueo.
+                </div>
+              )}
               
               <div className="ad-progress-dots" style={{ marginTop: 14 }}>
                 {Array.from({ length: REQUIRED_AD_CLICKS }).map((_, idx) => (
@@ -685,14 +714,29 @@ export default function Player({ slug, ep, title, total }) {
               </div>
 
               <div className="ad-modal-actions">
-                <button onClick={handleOpenAd} className="ad-btn-open" aria-label="Open ads">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" width="16" height="16">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
-                  </svg>
-                  Open ads ({adClicksDone + 1}/{REQUIRED_AD_CLICKS})
+                <button
+                  onClick={handleOpenAd}
+                  className="ad-btn-open"
+                  disabled={isVerifying}
+                  style={isVerifying ? { opacity: 0.75, cursor: 'wait' } : {}}
+                  aria-label="Abrir patrocinador"
+                >
+                  {isVerifying ? (
+                    <>
+                      <div className="spinner" style={{ width: 14, height: 14, borderWidth: 2, marginRight: 4, display: 'inline-block' }} />
+                      Verificando ({adClicksDone + 1}/{REQUIRED_AD_CLICKS})...
+                    </>
+                  ) : (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" width="16" height="16">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                      </svg>
+                      Abrir anuncio ({adClicksDone + 1}/{REQUIRED_AD_CLICKS})
+                    </>
+                  )}
                 </button>
-                <button onClick={handleDisagree} className="ad-btn-disagree" aria-label="Don't agree">
-                  Don't agree
+                <button onClick={handleDisagree} className="ad-btn-disagree" aria-label="Volver">
+                  Volver
                 </button>
               </div>
             </div>

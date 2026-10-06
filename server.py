@@ -1525,9 +1525,45 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     self.send_header('Cache-Control', 'public, max-age=86400')
                     self.end_headers()
                     self.wfile.write(data)
-                    return
                 except Exception as e:
                     return self._send(500,'text/plain',str(e).encode())
+
+        # ============ FIRST-PARTY AD UNLOCK & CLOAKING ============
+        if path == '/api/unlock':
+            step = qs.get('step', ['1'])[0]
+            slug = qs.get('slug', [''])[0]
+            ep = qs.get('ep', ['1'])[0]
+            
+            ad_targets = [
+                'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0',  # 1. Adsterra
+                'https://omg10.com/4/11963834',                              # 2. Monetag
+                'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0',  # 3. Adsterra
+                'https://omg10.com/4/11963834'                               # 4. Monetag
+            ]
+            try:
+                step_idx = (int(step) - 1) % len(ad_targets)
+                if step_idx < 0: step_idx = 0
+            except Exception:
+                step_idx = 0
+            
+            target_ad = ad_targets[step_idx]
+            ad_network = 'monetag' if ('omg10' in target_ad or 'monetag' in target_ad) else 'adsterra'
+            
+            try:
+                client_ip = self.headers.get('CF-Connecting-IP') or self.headers.get('X-Forwarded-For', '').split(',')[0].strip() or self.client_address[0]
+                user_agent = self.headers.get('User-Agent', '')
+                track_event('ad_click', slug=slug, episode=ep, client_ip=client_ip, user_agent=user_agent, metadata={'step': step, 'network': ad_network})
+            except Exception as e:
+                _dlog('UNLOCK_ERR', f"analytics tracking failed: {e}")
+
+            self.send_response(302)
+            self.send_header('Location', target_ad)
+            self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            return
 
         # ============ ANALYTICS DASHBOARD (PROTEGIDO POR SESIÓN CRIPTOGRÁFICA) ============
         if path == '/api/analytics/dashboard':
