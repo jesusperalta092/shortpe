@@ -5,6 +5,7 @@ import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from modules.analytics_tracker import (
     track_event, 
     get_dashboard_metrics, 

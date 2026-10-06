@@ -3,9 +3,13 @@ const PROXY = process.env.PROXY_URL || 'http://127.0.0.1:8090';
 
 /** Trae el catalogo completo (server-side). */
 export async function getCatalog() {
-  const res = await fetch(PROXY + '/api/catalog', { cache: 'no-store' });
-  if (!res.ok) throw new Error('catalog fetch failed: ' + res.status);
-  return res.json();
+  try {
+    const res = await fetch(PROXY + '/api/catalog', { cache: 'no-store' });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {}
+  return [];
 }
 
 /** Trae items de HotDrama (server-side). */
