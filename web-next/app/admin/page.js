@@ -13,6 +13,7 @@ export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [serverStatus, setServerStatus] = useState('checking'); // 'live' | 'dead' | 'checking'
 
   // Cargar token previo de sessionStorage
   useEffect(() => {
@@ -24,29 +25,38 @@ export default function AdminDashboardPage() {
     }
   }, []);
 
-  // Cargar datos cuando haya token de sesión
+  // Cargar datos y verificar estado del servidor cada 8 segundos
   useEffect(() => {
     if (!sessionToken) return;
 
     let isMounted = true;
     const loadMetrics = async () => {
       setLoading(true);
-      const res = await fetchAdminDashboard(timeRange, sessionToken);
-      if (!isMounted) return;
+      try {
+        const res = await fetchAdminDashboard(timeRange, sessionToken);
+        if (!isMounted) return;
 
-      if (res.unauthorized) {
-        sessionStorage.removeItem('dramape_admin_token');
-        setSessionToken(null);
-        setAuthError('Sesión expirada. Ingresa tu PIN.');
-      } else if (res.ok) {
-        setData(res);
-        setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+        if (res.unauthorized) {
+          sessionStorage.removeItem('dramape_admin_token');
+          setSessionToken(null);
+          setAuthError('Sesión expirada. Ingresa tu PIN.');
+          setServerStatus('dead');
+        } else if (res.ok) {
+          setData(res);
+          setServerStatus('live');
+          setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+        } else {
+          setServerStatus('dead');
+        }
+      } catch (e) {
+        if (isMounted) setServerStatus('dead');
+      } finally {
+        if (isMounted) setLoading(false);
       }
-      setLoading(false);
     };
 
     loadMetrics();
-    const interval = setInterval(loadMetrics, 10000);
+    const interval = setInterval(loadMetrics, 8000);
     return () => {
       isMounted = false;
       clearInterval(interval);
@@ -197,7 +207,7 @@ export default function AdminDashboardPage() {
   }
 
   // ==========================================
-  // 📊 DASHBOARD REFINADO, COMPACTO Y PROFESIONAL
+  // 📊 DASHBOARD REFINADO CON CONTENEDORES AISLADOS
   // ==========================================
   const realtime = data?.realtime || { online_now: 0, watching_now: 0, active_streams: [] };
   const overview = data?.overview || {};
@@ -214,43 +224,80 @@ export default function AdminDashboardPage() {
       backgroundColor: '#08080c',
       color: '#f4f4f5',
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      padding: '20px 16px 40px',
+      padding: '24px 20px 48px',
       boxSizing: 'border-box'
     }}>
-      <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
         
-        {/* HEADER LIMPIO CON PADDING PERFECTO */}
-        <header style={{
+        {/* HEADER CONTENEDOR RELATIVO (NO USA ETIQUETA HEADER PARA EVITAR CONFLICTO CON GLOBALS.CSS) */}
+        <div style={{
+          position: 'relative',
+          width: '100%',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '12px',
-          padding: '12px 18px',
-          background: 'rgba(18, 18, 24, 0.75)',
-          backdropFilter: 'blur(12px)',
+          gap: '14px',
+          padding: '14px 20px',
+          background: 'rgba(18, 18, 24, 0.95)',
           borderRadius: '12px',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
-          marginBottom: '20px'
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+          marginBottom: '24px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* LOGO + ESTADO DEL SERVIDOR */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
               background: '#e50914',
               color: '#fff',
-              fontSize: '10px',
+              fontSize: '11px',
               fontWeight: '900',
-              padding: '3px 7px',
-              borderRadius: '4px',
+              padding: '3px 8px',
+              borderRadius: '5px',
               letterSpacing: '0.04em'
             }}>PRO</div>
-            <div>
-              <div style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span>DramaPe</span>
-                <span style={{ color: '#71717a', fontSize: '13px', fontWeight: '500' }}>/ Analíticas</span>
-              </div>
+            
+            <div style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>DramaPe</span>
+              <span style={{ color: '#71717a', fontSize: '13px', fontWeight: '500' }}>/ Analíticas</span>
+            </div>
+
+            {/* BADGE DE ESTADO DEL SERVIDOR: LIVE / DEAD */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '20px',
+              fontSize: '11px',
+              fontWeight: '800',
+              marginLeft: '6px',
+              background: serverStatus === 'live' 
+                ? 'rgba(34, 197, 94, 0.15)' 
+                : serverStatus === 'dead' 
+                ? 'rgba(239, 68, 68, 0.2)' 
+                : 'rgba(255, 255, 255, 0.08)',
+              border: `1px solid ${
+                serverStatus === 'live' 
+                  ? 'rgba(34, 197, 94, 0.35)' 
+                  : serverStatus === 'dead' 
+                  ? 'rgba(239, 68, 68, 0.5)' 
+                  : 'rgba(255, 255, 255, 0.12)'
+              }`,
+              color: serverStatus === 'live' ? '#4ade80' : serverStatus === 'dead' ? '#f87171' : '#a1a1aa'
+            }}>
+              <span style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                backgroundColor: serverStatus === 'live' ? '#4ade80' : serverStatus === 'dead' ? '#ef4444' : '#a1a1aa',
+                boxShadow: serverStatus === 'live' ? '0 0 8px #4ade80' : serverStatus === 'dead' ? '0 0 8px #ef4444' : 'none'
+              }}></span>
+              {serverStatus === 'live' ? 'LIVE' : serverStatus === 'dead' ? 'DEAD' : 'CHECKING...'}
             </div>
           </div>
 
+          {/* CONTROLES DEL HEADER */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             {/* SELECTOR DE DÍAS */}
             <div style={{
@@ -290,7 +337,7 @@ export default function AdminDashboardPage() {
             <button
               onClick={handleLogout}
               style={{
-                padding: '5px 11px',
+                padding: '5px 12px',
                 borderRadius: '7px',
                 background: 'rgba(255, 255, 255, 0.06)',
                 color: '#a1a1aa',
@@ -303,25 +350,24 @@ export default function AdminDashboardPage() {
               Cerrar Sesión
             </button>
           </div>
-        </header>
+        </div>
 
         {/* 📊 4 TARJETAS PRINCIPALES REFINADAS Y COMPACTAS */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-          gap: '12px',
-          marginBottom: '18px'
+          gap: '14px',
+          marginBottom: '20px'
         }}>
           {/* CARD 1: REPRODUCCIÓN EN VIVO */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(229, 9, 20, 0.12), rgba(18, 18, 24, 0.85))',
+            background: 'linear-gradient(135deg, rgba(229, 9, 20, 0.12), rgba(18, 18, 24, 0.9))',
             borderRadius: '12px',
-            padding: '14px 16px',
+            padding: '16px 18px',
             border: '1px solid rgba(229, 9, 20, 0.3)',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            position: 'relative'
+            justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <span style={{ color: '#f87171', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -352,9 +398,9 @@ export default function AdminDashboardPage() {
 
           {/* CARD 2: VISITANTES EN LÍNEA */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(18, 18, 24, 0.85))',
+            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(18, 18, 24, 0.9))',
             borderRadius: '12px',
-            padding: '14px 16px',
+            padding: '16px 18px',
             border: '1px solid rgba(34, 197, 94, 0.25)',
             display: 'flex',
             flexDirection: 'column',
@@ -389,10 +435,10 @@ export default function AdminDashboardPage() {
 
           {/* CARD 3: VISITAS HOY */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
-            padding: '14px 16px',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            padding: '16px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between'
@@ -410,10 +456,10 @@ export default function AdminDashboardPage() {
 
           {/* CARD 4: PLAYS TOTALES */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
-            padding: '14px 16px',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            padding: '16px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between'
@@ -432,11 +478,11 @@ export default function AdminDashboardPage() {
 
         {/* 👁️ TRANSMISIONES EN VIVO (COMPACTO) */}
         <div style={{
-          background: 'rgba(18, 18, 24, 0.85)',
+          background: 'rgba(18, 18, 24, 0.9)',
           borderRadius: '12px',
           padding: '16px 18px',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
-          marginBottom: '18px'
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          marginBottom: '20px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <h2 style={{ fontSize: '14px', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -497,15 +543,15 @@ export default function AdminDashboardPage() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-          gap: '14px',
-          marginBottom: '18px'
+          gap: '16px',
+          marginBottom: '20px'
         }}>
           {/* LÍNEA DE TIEMPO */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.06)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <h2 style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>📈</span> Tendencia Diaria (Visitas / Plays)
@@ -541,10 +587,10 @@ export default function AdminDashboardPage() {
 
           {/* TOP DORAMAS */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.06)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <h2 style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>🏆</span> Top Doramas Más Vistos
@@ -621,14 +667,14 @@ export default function AdminDashboardPage() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: '14px'
+          gap: '16px'
         }}>
           {/* DISPOSITIVOS */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.06)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <h2 style={{ fontSize: '13px', fontWeight: '700', margin: '0 0 12px' }}>
               📱 Dispositivos
@@ -657,10 +703,10 @@ export default function AdminDashboardPage() {
 
           {/* TELEMETRÍA DE ANUNCIOS */}
           <div style={{
-            background: 'rgba(18, 18, 24, 0.85)',
+            background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.06)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <h2 style={{ fontSize: '13px', fontWeight: '700', margin: '0 0 12px' }}>
               💰 Telemetría de Anuncios
