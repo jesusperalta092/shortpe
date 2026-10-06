@@ -145,6 +145,8 @@ def get_upstream_referer(url):
         if 'mydramawave' in host: return 'https://mydramawave.com/'
         if 'shortswave' in host: return 'https://shortswave.com/'
         if 'dramaexpress' in host: return 'https://dramaexpress.net/'
+        if any(h in host for h in ['dramabluff', 'serivibe', 'swoopreels', 'sanpplay', 'kynesttv', 'cinerratv', 'fliksotv', 'miraluneshort', 'cinerrashort', 'cinebytetv', 'blazeflick', 'pagejoytv', 'quickeltv', 'toptaletv', 'kaelixs', 'lumiloreqj', 'popmeloqj']):
+            return 'https://dramaexpress.net/'
         if 'crazymaplestudios' in host: return 'https://crazymaplestudios.com/'
         if 'wolftv' in host: return 'https://wolftv.online/'
         if 'anyreel' in host: return 'https://anyreel.app/'
@@ -901,7 +903,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 r = requests.get(up, headers=hdrs, verify=False, timeout=25)
                 data = r.content
                 ctype = r.headers.get('Content-Type','image/webp')
-                # Si el upstream dio error (403/404) NO cachear el error
+                # Si el upstream dio error (403/404) intentar con referers alternativos conocidos
+                if r.status_code != 200 or 'html' in ctype or len(data) < 500:
+                    for fb_ref in ['https://dramaexpress.net/', 'https://' + urllib.parse.urlparse(up).netloc + '/', 'https://akamai-static.shorttv.live/', 'https://chartdrama.com/']:
+                        try:
+                            r2 = requests.get(up, headers={'User-Agent': UA, 'Referer': fb_ref, 'Accept': 'image/*,*/*'}, verify=False, timeout=8)
+                            if r2.status_code == 200 and len(r2.content) >= 500:
+                                r = r2
+                                data = r.content
+                                ctype = r.headers.get('Content-Type', 'image/webp')
+                                break
+                        except Exception: pass
                 if r.status_code != 200 or 'html' in ctype or len(data) < 500:
                     return self._send(502,'text/plain',('img upstream %s' % r.status_code).encode())
                 try:
