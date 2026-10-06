@@ -7,8 +7,12 @@ export default function Footer({ catalogCount = 2220 }) {
       <div className="footer-inner">
         <div className="footer-brand">
           <Link href="/" className="footer-logo" aria-label="DramaPe — Inicio">
-            <img src="/logo.png" alt="DramaPe" className="logo-img" width="32" height="32" />
-            <span className="logo-text">DramaPe</span>
+            <div className="logo-badge-container">
+              <img src="/logo-icon.png" alt="DramaPe" className="logo-badge-icon" width="28" height="28" />
+            </div>
+            <span className="logo-text">
+              <span className="logo-text-red">Drama</span><span className="logo-text-white">Pe</span>
+            </span>
           </Link>
           <p className="footer-tagline">
             Tu portal líder de minidramas, doramas y series cortas en español latino para Perú, México y toda Latinoamérica. Disfruta de miles de capítulos en HD 1080p gratis y sin cortes.

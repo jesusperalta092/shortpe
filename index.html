@@ -40,8 +40,12 @@
   header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);padding:0 40px;display:flex;align-items:center;gap:28px;background:linear-gradient(180deg,rgba(10,10,15,.98) 0%,rgba(10,10,15,.75) 70%,transparent 100%);transition:background .3s}
   header.scrolled{background:var(--bg);box-shadow:0 2px 20px rgba(0,0,0,.6)}
   .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:24px;letter-spacing:-.5px;cursor:pointer;flex-shrink:0}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--red) 0%,#7a0309 100%);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 20px rgba(229,9,20,.5)}
-  .logo-text{background:linear-gradient(90deg,#fff 0%,#ffb3b8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .logo-badge-container{width:36px;height:36px;border-radius:11px;background:#ffffff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 16px rgba(229,9,20,0.35),0 2px 6px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.4);transition:all 0.25s cubic-bezier(0.16,1,0.3,1);padding:3.5px}
+  .logo:hover .logo-badge-container{transform:translateY(-1px) scale(1.06);box-shadow:0 6px 20px rgba(229,9,20,0.55),0 0 12px rgba(255,255,255,0.4)}
+  .logo-badge-icon{width:100%;height:100%;object-fit:contain;display:block}
+  .logo-text{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;line-height:1}
+  .logo-text-red{color:#e50914;text-shadow:0 0 20px rgba(229,9,20,0.4)}
+  .logo-text-white{color:#ffffff}
   nav{display:flex;gap:22px;font-size:14px;font-weight:500}
   nav a{color:var(--muted);text-decoration:none;transition:color .2s;cursor:pointer;white-space:nowrap}
   nav a:hover,nav a.active{color:#fff}
@@ -313,8 +317,12 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
   </button>
   <div class="logo" onclick="goHome()" aria-label="DramaPe — Inicio">
-    <img src="/logo.png" alt="DramaPe" style="width:34px;height:34px;border-radius:9px;object-fit:cover;box-shadow:0 4px 14px rgba(229,9,20,.45);border:1px solid rgba(255,255,255,.15);">
-    <span class="logo-text">DramaPe</span>
+    <div class="logo-badge-container">
+      <img src="/logo-icon.png" alt="DramaPe" class="logo-badge-icon" width="28" height="28">
+    </div>
+    <span class="logo-text">
+      <span class="logo-text-red">Drama</span><span class="logo-text-white">Pe</span>
+    </span>
   </div>
   <nav id="nav">
     <a class="active" data-nav="home" onclick="goHome()">Inicio</a>

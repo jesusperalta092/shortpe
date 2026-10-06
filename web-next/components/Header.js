@@ -97,8 +97,12 @@ export default function Header({ stats }) {
         </button>
 
         <Link href="/" className="logo" aria-label="DramaPe — Inicio">
-          <img src="/logo.png" alt="DramaPe" className="logo-img" width="34" height="34" />
-          <span className="logo-text">DramaPe</span>
+          <div className="logo-badge-container">
+            <img src="/logo-icon.png" alt="DramaPe" className="logo-badge-icon" width="28" height="28" />
+          </div>
+          <span className="logo-text">
+            <span className="logo-text-red">Drama</span><span className="logo-text-white">Pe</span>
+          </span>
         </Link>
 
         {/* Dropdown / Desktop Navigation */}
