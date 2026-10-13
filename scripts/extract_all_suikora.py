@@ -21,10 +21,8 @@ HEADERS = {
 
 def get_sitemap_urls():
     sitemap_url = 'https://suikora.com/sitemap/dramas-es-0.xml'
-    print(f"Fetching sitemap from {sitemap_url}...")
     r = requests.get(sitemap_url, headers=HEADERS, timeout=15)
     urls = re.findall(r'<loc>(.*?)</loc>', r.text)
-    print(f"Total drama URLs in sitemap: {len(urls)}")
     return urls
 
 def infer_genres(title, desc):
@@ -71,35 +69,28 @@ def download_poster(slug, poster_url):
     return poster_url
 
 def extract_one(url, idx, total):
-    # Extract slug
     m = re.search(r'/es/drama/([^/]+)', url)
-    if not m:
-        return None
+    if not m: return None
     slug = m.group(1)
-    page_url = f"https://suikora.com/es/drama/{slug}/1"
     
     for attempt in range(3):
         try:
-            r = requests.get(page_url, headers=HEADERS, timeout=15)
+            # First try /1, fallback to drama root
+            r = requests.get(f"https://suikora.com/es/drama/{slug}/1", headers=HEADERS, timeout=15)
             if r.status_code != 200:
-                # Try root drama url
                 r = requests.get(f"https://suikora.com/es/drama/{slug}", headers=HEADERS, timeout=15)
                 if r.status_code != 200:
-                    print(f"[{idx}/{total}] ERR {slug}: status {r.status_code}")
                     return None
             html = r.text
             
             # Title
             title = None
             h1_m = re.search(r'<h1[^>]*>(?:<a[^>]*>)?(.*?)(?:</a>)?</h1>', html, re.DOTALL)
-            if h1_m:
-                title = re.sub(r'<[^>]+>', '', h1_m.group(1)).strip()
+            if h1_m: title = re.sub(r'<[^>]+>', '', h1_m.group(1)).strip()
             if not title:
                 og_t = re.search(r'<meta\s+property="og:title"\s+content="([^"]*)"', html)
-                if og_t:
-                    title = og_t.group(1).split(' cap ')[0].split(' - ')[0].strip()
-            if not title:
-                title = slug.replace('-', ' ').title()
+                if og_t: title = og_t.group(1).split(' cap ')[0].split(' - ')[0].strip()
+            if not title: title = slug.replace('-', ' ').title()
 
             # Description
             desc = ""
@@ -113,14 +104,50 @@ def extract_one(url, idx, total):
             remote_poster = og_img.group(1).strip() if og_img else ""
             local_poster = download_poster(slug, remote_poster)
 
-            # Episodes
-            m3u8_matches = re.findall(r'https?://[^\s"\'<>]+\.m3u8[^\s"\'<>]*', html)
-            clean_urls = [u.rstrip('\\').rstrip('"').rstrip("'") for u in m3u8_matches]
-            if not clean_urls:
-                print(f"[{idx}/{total}] WARN {slug}: 0 episodes found")
+            # 1. Check m3u8
+            m3u8s = re.findall(r'https?://[^\s"\'<>]+\.m3u8[^\s"\'<>]*', html)
+            video_urls = [u.rstrip('\\').rstrip('"').rstrip("'") for u in m3u8s]
+            
+            # 2. Check NetShort CDN
+            if not video_urls:
+                ns_urls = re.findall(r'https://[^\'"\s<>]*netshort\.com/[^\'"\s<>]+', html)
+                if ns_urls:
+                    video_urls = [u.replace(r'\u0026', '&').rstrip('\\').rstrip('"') for u in ns_urls]
+            
+            # 3. Check TikTok CDN
+            if not video_urls:
+                tt_urls = re.findall(r'https://[^\'"\s<>]+tiktokcdn[^\'"\s<>]+', html)
+                if tt_urls:
+                    video_urls = [u.replace(r'\u0026', '&').rstrip('\\').rstrip('"') for u in tt_urls]
+            
+            # 4. Check other MP4
+            if not video_urls:
+                mp4_urls = re.findall(r'https?://[^\s"\'<>]+\.mp4[^\s"\'<>]*', html)
+                if mp4_urls:
+                    video_urls = [u.replace(r'\u0026', '&').rstrip('\\').rstrip('"') for u in mp4_urls]
+
+            if not video_urls:
+                # If still 0 on /1, check root drama page
+                r_root = requests.get(f"https://suikora.com/es/drama/{slug}", headers=HEADERS, timeout=10)
+                if r_root.status_code == 200:
+                    html_root = r_root.text
+                    ns = re.findall(r'https://[^\'"\s<>]*netshort\.com/[^\'"\s<>]+', html_root)
+                    if ns: video_urls = [u.replace(r'\u0026', '&').rstrip('\\').rstrip('"') for u in ns]
+                    if not video_urls:
+                        tt = re.findall(r'https://[^\'"\s<>]+tiktokcdn[^\'"\s<>]+', html_root)
+                        if tt: video_urls = [u.replace(r'\u0026', '&').rstrip('\\').rstrip('"') for u in tt]
+
+            if not video_urls:
+                print(f"[{idx}/{total}] SKIP {slug}: no streams")
                 return None
             
-            episodes = {str(i): u for i, u in enumerate(clean_urls, 1)}
+            # Remove exact duplicate consecutive URLs
+            dedup_urls = []
+            for vu in video_urls:
+                if not dedup_urls or dedup_urls[-1] != vu:
+                    dedup_urls.append(vu)
+
+            episodes = {str(i): u for i, u in enumerate(dedup_urls, 1)}
             genres = infer_genres(title, desc)
 
             item = {
@@ -146,7 +173,6 @@ def main():
     urls = get_sitemap_urls()
     total = len(urls)
     
-    # Load existing items to avoid re-extracting if already complete
     existing = {}
     if os.path.exists(DATA_PATH):
         try:
@@ -154,47 +180,32 @@ def main():
                 if d.get('slug') and d.get('episodes'):
                     existing[d['slug']] = d
         except: pass
-    print(f"Already existing in dramashorts.json: {len(existing)} dramas")
+    print(f"Currently in dramashorts.json: {len(existing)} dramas")
 
-    results = list(existing.values())
     slugs_to_fetch = []
     for i, u in enumerate(urls, 1):
         m = re.search(r'/es/drama/([^/]+)', u)
         if m and m.group(1) not in existing:
             slugs_to_fetch.append((u, i))
 
-    print(f"Remaining dramas to extract: {len(slugs_to_fetch)} of {total}")
+    print(f"Dramas to extract: {len(slugs_to_fetch)} of {total}")
+    results = list(existing.values())
     
-    start_time = time.time()
-    extracted_count = 0
-
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(extract_one, u, idx, total): u for u, idx in slugs_to_fetch}
         for future in as_completed(futures):
             res = future.result()
             if res:
                 results.append(res)
-                extracted_count += 1
-                # Save progress periodically every 10 items
-                if extracted_count % 10 == 0:
+                if len(results) % 5 == 0:
                     with open(DATA_PATH, 'w', encoding='utf-8') as f:
                         json.dump(results, f, ensure_ascii=False, indent=2)
-                    print(f"--> Saved progress: {len(results)} dramas in data/dramashorts.json")
 
-    # Final save
-    # Sort by title
     results.sort(key=lambda x: x.get('title', ''))
     with open(DATA_PATH, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
 
-    total_eps = sum(d.get('total_episodes', 0) for d in results)
-    elapsed = time.time() - start_time
-    print(f"\n==========================================")
-    print(f"EXTRACTION COMPLETE!")
-    print(f"Total dramas in DramaShorts: {len(results)}")
-    print(f"Total episodes: {total_eps}")
-    print(f"Elapsed time: {elapsed:.1f} seconds")
-    print(f"==========================================")
+    print(f"\nFINISH! Total now in dramashorts: {len(results)} of {total}")
 
 if __name__ == '__main__':
     main()
