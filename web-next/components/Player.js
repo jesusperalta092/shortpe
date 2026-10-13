@@ -317,7 +317,10 @@ export default function Player({ slug, ep, title, total }) {
 
         let info;
         if (data.player_url) {
-          const isHls = data.player_type === 'hls' || data.type === 'hls';
+          let isHls = data.player_type === 'hls' || data.type === 'hls';
+          if (data.player_url.includes('/proxy/stream')) isHls = false;
+          if (data.player_url.includes('/proxy/manifest')) isHls = true;
+          if (data.player_type === 'file' || data.type === 'mp4') isHls = false;
           info = { type: isHls ? 'hls' : 'file', url: data.player_url };
         } else {
           const first = (data.sources && data.sources[0]) || null;
@@ -407,6 +410,17 @@ export default function Player({ slug, ep, title, total }) {
                 setLoading(false);
                 setError('Error de conexión al cargar segmentos de video');
                 return;
+              }
+              if (d.details === 'manifestParsingError' || d.details === 'manifestLoadError') {
+                if (info.url && info.url.includes('/proxy/manifest')) {
+                  const fallbackUrl = info.url.replace('/proxy/manifest', '/proxy/stream');
+                  try { hls.destroy(); } catch (_) {}
+                  hlsRef.current = null;
+                  video.src = fallbackUrl;
+                  video.addEventListener('loadedmetadata', () => { setLoading(false); tryPlay(); }, { once: true });
+                  video.addEventListener('canplay', () => { setLoading(false); }, { once: true });
+                  return;
+                }
               }
               setLoading(false);
               setError('Error al procesar el formato de video');

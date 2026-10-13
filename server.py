@@ -150,7 +150,8 @@ def get_upstream_referer(url):
         if 'crazymaplestudios' in host: return 'https://crazymaplestudios.com/'
         if 'wolftv' in host: return 'https://wolftv.online/'
         if 'anyreel' in host: return 'https://anyreel.app/'
-        if 'narto' in host or 'dramix' in host or 'nartodrama' in host: return 'https://dramix.tv/'
+        if 'narto' in host or 'nartodrama' in host: return 'https://narto-drama.com/'
+        if 'dramix' in host: return 'https://dramix.tv/'
         if 'esdramia' in host: return 'https://esdramia.com/'
         parts = host.split('.')
         if len(parts) >= 2:
@@ -503,6 +504,48 @@ def load_hotdrama(force=False):
             sys.stderr.write('[hotdrama] err: %s\n' % e)
 
 
+NARTO_CACHE = {}
+NARTO_TTL = 1800  # 30 minutos
+
+def _resolve_narto_episode(slug, ep, force=False):
+    """Resuelve token fresco on-demand desde narto-drama.com para evitar 410 (expired)."""
+    now = time.time()
+    cache_key = (slug, str(ep))
+    c = NARTO_CACHE.get(cache_key)
+    if not force and c and (now - c[0]) < NARTO_TTL:
+        return c[1]
+
+    narto_slug = slug[3:] if slug.startswith('nt-') else slug
+    url = f'https://narto-drama.com/detail/watch/{narto_slug}/{ep}?lang=es-ES'
+    for attempt in range(2):
+        try:
+            r = requests.get(url, headers={'User-Agent': UA, 'Referer': 'https://narto-drama.com/'}, timeout=8)
+            if r.status_code == 200:
+                m = re.search(r'(https?://[^\s"\'<>]+(?:vigloo-stream|dramabox-stream|stream)[^\s"\'<>]*)', r.text)
+                if m:
+                    fresh_url = m.group(1).rstrip('`";,')
+                    NARTO_CACHE[cache_key] = (now, fresh_url)
+                    return fresh_url
+            elif r.status_code == 500:
+                time.sleep(0.5)
+                continue
+        except Exception as e:
+            sys.stderr.write(f'[narto] err resolviendo {slug} ep {ep}: {e}\n')
+            time.sleep(0.5)
+    return None
+
+
+def is_hls_stream(url):
+    """Determina si un video es stream HLS (m3u8) o archivo directo (mp4/webm)."""
+    if not url: return False
+    u = url.split('?')[0].lower()
+    if u.endswith('.mp4') or u.endswith('.webm') or u.endswith('.mkv') or u.endswith('.mov') or u.endswith('.m4v'):
+        return False
+    if '.m3u8' in u or 's3hls' in u or '/api/stream/' in u or 'vigloo-stream' in u:
+        return True
+    return False
+
+
 def _hd_episodes(slug):
     """Resuelve episodios on-demand desde shortmax.org (mp4 con firma temporal, gratis)."""
     now = time.time()
@@ -670,6 +713,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if path == '/proxy/manifest':
             up = resolve_requested_url(qs)
             if not up: return self._send(400,'text/plain',b'missing or invalid security token')
+            if not is_hls_stream(up):
+                redir = '/proxy/stream?t=' + encode_url_token(up)
+                return self._send(307, 'text/plain', b'', extra={'Location': redir})
             mcp = cache_path('manifest_'+up)
             raw = None
             if os.path.exists(mcp):
@@ -1119,23 +1165,28 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
                 return self._send(200,'application/json; charset=utf-8',out)
 
-            # ===== SUIKORA (DramaShorts) - HLS directo =====
+            # ===== SUIKORA (DramaShorts) - HLS o MP4 directo =====
             if _d and _d.get('source') == 'suikora':
                 eps_dict = _d.get('episodes') or {}
                 vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404, 'text/plain', b'sin episodio')
-                p_url = '/proxy/manifest?t=' + encode_url_token(vurl)
+                is_hls = is_hls_stream(vurl)
+                p_type = 'hls' if is_hls else 'file'
+                v_type = 'hls' if is_hls else 'mp4'
+                p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(vurl)
                 obj = {
                     'hash': 'stream_token',
                     'title': _d.get('title', ''),
-                    'type': 'hls',
-                    'player_type': 'hls',
+                    'type': v_type,
+                    'player_type': p_type,
                     'player_url': p_url,
                     'encrypted': False,
                     'episode_number': str(ep)
                 }
                 out = json.dumps(obj, ensure_ascii=False).encode('utf-8')
                 _stream_set(slug, ep, out)
+                if is_hls:
+                    threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
                 return self._send(200, 'application/json; charset=utf-8', out)
 
             # ===== DRAMATUBE (DramaExpress HLS directo con subtitulos) =====
@@ -1188,7 +1239,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                             })
                             break
                     
-                is_hls = ('.m3u8' in m3u8.split('?')[0].lower()) or ('s3hls' in m3u8) or ('/api/stream/' in m3u8)
+                is_hls = is_hls_stream(m3u8)
                 p_type = 'hls' if is_hls else 'file'
                 v_type = 'hls' if is_hls else 'mp4'
                 p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(m3u8)
@@ -1204,11 +1255,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self._send(200,'application/json; charset=utf-8',out)
 
             # ===== NARTO (DramaShorts / HotDrama) - HLS o MP4 directo =====
-            if _d and _d.get('source')=='narto':
+            if _d and (_d.get('source')=='narto' or slug.startswith('nt-')):
                 eps_dict = _d.get('episodes') or {}
-                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                fresh_vurl = _resolve_narto_episode(slug, ep, force=fresh)
+                vurl = fresh_vurl or eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
-                is_hls = ('.m3u8' in vurl.split('?')[0].lower()) or ('s3hls' in vurl) or ('/api/stream/' in vurl)
+                is_hls = is_hls_stream(vurl)
                 p_type = 'hls' if is_hls else 'file'
                 v_type = 'hls' if is_hls else 'mp4'
                 p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(vurl)
@@ -1270,13 +1322,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 _stream_set(slug, ep, out)
                 return self._send(200,'application/json; charset=utf-8',out)
 
-            # ===== NARTO / DRAMIX (MP4 directo con firma) =====
+            # ===== NARTO / DRAMIX (HLS o MP4 directo) =====
             if d.get('source')=='narto' or slug.startswith('nt-'):
                 eps_dict = d.get('episodes') or {}
-                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                fresh_vurl = _resolve_narto_episode(slug, ep, force=fresh)
+                vurl = fresh_vurl or eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
-                obj={'title':d.get('title',''),'type':'mp4','player_type':'file',
-                     'player_url':'/proxy/stream?t=' + encode_url_token(vurl),
+                is_hls = is_hls_stream(vurl)
+                p_type = 'hls' if is_hls else 'file'
+                v_type = 'hls' if is_hls else 'mp4'
+                p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(vurl)
+                obj={'title':d.get('title',''),'type':v_type,'player_type':p_type,
+                     'player_url': p_url,
                      'encrypted':False,
                      'episode_number':str(ep)}
                 out=json.dumps(obj,ensure_ascii=False).encode('utf-8')
