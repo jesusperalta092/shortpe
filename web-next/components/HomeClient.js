@@ -190,9 +190,7 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
 
         <div className="rows">
           <Carousel title="🔥 Tendencias ahora" items={sections.drama?.slice(0, 24) || []} onOpen={handleOpenModal} />
-          {sections.dramatube?.length > 0 && <Carousel title="🎬 DramaTube · Nuevos Subtitulados" items={sections.dramatube.slice(0, 24)} onOpen={handleOpenModal} />}
           {hotdramaItems?.length > 0 && <Carousel title="🔥 HotDrama · Exclusivos" items={hotdramaItems.slice(0, 24)} onOpen={handleOpenModal} />}
-          {sections.dramashorts?.length > 0 && <Carousel title="⚡ DramaShorts · Selección Rápida" items={sections.dramashorts.slice(0, 24)} onOpen={handleOpenModal} />}
           {dramavibeItems?.length > 0 && <Carousel title="🌟 DramaVibe · Lo Más Visto" items={dramavibeItems.slice(0, 24)} onOpen={handleOpenModal} />}
           <Carousel title="✨ Agregados recientemente" items={[...catalog].reverse().slice(0, 24)} onOpen={handleOpenModal} />
         </div>

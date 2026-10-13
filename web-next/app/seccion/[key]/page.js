@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getCatalog, groupBySection } from '../../../lib/api';
 import Header from '../../../components/Header';
 import GridClient from '../../../components/GridClient';
@@ -10,9 +10,7 @@ export const dynamic = 'force-dynamic';
 const LABELS = { 
   dramavibe: 'DramaVibe', 
   hotdrama: 'HotDrama', 
-  drama: 'Dramas', 
-  dramashorts: 'DramaShorts', 
-  dramatube: 'DramaTube' 
+  drama: 'Dramas'
 };
 
 const PROXY = process.env.PROXY_URL || 'http://127.0.0.1:8090';
@@ -49,6 +47,9 @@ export async function generateMetadata({ params }) {
 
 export default async function SeccionPage({ params }) {
   const { key } = await params;
+  if (key === 'dramashorts' || key === 'dramatube') {
+    redirect('/seccion/drama');
+  }
   if (!LABELS[key]) notFound();
   const label = LABELS[key];
 
@@ -98,7 +99,7 @@ export default async function SeccionPage({ params }) {
   const cat = await getCatalog();
   const secs = groupBySection(cat);
   const items = secs[key] || [];
-  const themeClass = key === 'drama' ? 'theme-drama' : (key === 'dramashorts' ? 'theme-shorts' : (key === 'dramatube' ? 'theme-tube' : ''));
+  const themeClass = key === 'drama' ? 'theme-drama' : '';
 
   return (
     <>

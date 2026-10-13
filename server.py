@@ -377,7 +377,7 @@ CAT_MTIMES = {}
 def load_catalog(force=False):
     global CATALOG, CAT_BY_SLUG, CAT_MTIMES
     with CAT_LOCK:
-        files = ('data/dramatube.json', 'catalog_full.json', 'catalog.json', 'data/narto.json', 'data/netshort.json', 'catalog_freereels.json')
+        files = ('catalog_full.json', 'catalog.json')
         current_mtimes = {}
         needs_reload = force or not CATALOG
         for fname in files:
@@ -404,21 +404,11 @@ def load_catalog(force=False):
                         d.setdefault('source','esdramia')
                         if 'genres' in d and isinstance(d['genres'], list):
                             d['genres'] = list(dict.fromkeys(d['genres']))
-                    if 'narto.json' in fname:
-                        for d in data: d['source']='narto'
-                    elif 'netshort.json' in fname:
-                        for d in data: d['source']='netshort'
-                    elif fname=='catalog_freereels.json':
-                        for d in data: d['source']='freereels'
-                    elif 'dramatube.json' in fname:
-                        for d in data:
-                            d['source']='dramatube'
-                            d['section']='dramatube'
                     all_items.extend(data)
                     sys.stderr.write(f'[catalog] +{len(data)} de {fname}\n')
                 except Exception as e:
                     sys.stderr.write(f'[catalog] err {fname}: {e}\n')
-        all_items = [d for d in all_items if d.get('section') not in ('serie', 'pelicula')]
+        all_items = [d for d in all_items if d.get('section') not in ('serie', 'pelicula', 'dramashorts', 'dramatube')]
         # Ordenar para que los items con mas episodios/hashes queden primero al deduplicar
         def _ep_count(item):
             eps = item.get('episodes') or item.get('episode_hashes') or {}
