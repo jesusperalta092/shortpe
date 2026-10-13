@@ -377,7 +377,7 @@ CAT_MTIMES = {}
 def load_catalog(force=False):
     global CATALOG, CAT_BY_SLUG, CAT_MTIMES
     with CAT_LOCK:
-        files = ('catalog_full.json', 'catalog.json', 'data/dramashorts.json')
+        files = ('data/dramashorts.json', 'catalog_full.json', 'catalog.json')
         current_mtimes = {}
         needs_reload = force or not CATALOG
         for fname in files:
@@ -432,11 +432,12 @@ def load_catalog(force=False):
             nt = re.sub(r'\s+', ' ', nt)
             if not s or s in seen:
                 continue
-            if nt and nt in seen_titles:
+            sec_key = (d.get('section', 'drama'), nt)
+            if nt and sec_key in seen_titles:
                 continue
             seen.add(s)
             if nt:
-                seen_titles.add(nt)
+                seen_titles.add(sec_key)
             uniq.append(d)
         CATALOG = uniq
         CAT_BY_SLUG = {d['slug']: d for d in CATALOG}
