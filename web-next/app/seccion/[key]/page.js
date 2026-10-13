@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 const LABELS = { 
   dramavibe: 'DramaVibe', 
   hotdrama: 'HotDrama', 
+  dramashorts: 'DramaShorts',
   drama: 'Dramas'
 };
 
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }) {
 
 export default async function SeccionPage({ params }) {
   const { key } = await params;
-  if (key === 'dramashorts' || key === 'dramatube') {
+  if (key === 'dramatube') {
     redirect('/seccion/drama');
   }
   if (!LABELS[key]) notFound();
@@ -99,7 +100,7 @@ export default async function SeccionPage({ params }) {
   const cat = await getCatalog();
   const secs = groupBySection(cat);
   const items = secs[key] || [];
-  const themeClass = key === 'drama' ? 'theme-drama' : '';
+  const themeClass = key === 'drama' ? 'theme-drama' : (key === 'dramashorts' ? 'theme-shorts' : '');
 
   return (
     <>

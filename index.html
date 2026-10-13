@@ -328,6 +328,7 @@
     <a class="active" data-nav="home" onclick="goHome()">Inicio</a>
     <a data-nav="dramas" onclick="showSection('drama')">Dramas</a>
     <a data-nav="hotdrama" onclick="showSection('hotdrama')">🔥 HotDrama</a>
+    <a data-nav="dramashorts" onclick="showSection('dramashorts')">⚡ DramaShorts</a>
     <a data-nav="genres" onclick="showGenres()">Géneros</a>
     <a class="nav-planes" onclick="showPlans()">⭐ Planes</a>
   </nav>
@@ -529,8 +530,8 @@ function goHome(){
 }
 
 function showSection(sec){
-  const labels={drama:'Dramas',hotdrama:'HotDrama'};
-  setNav(sec==='drama'?'dramas':'hotdrama');
+  const labels={drama:'Dramas',hotdrama:'HotDrama',dramashorts:'DramaShorts'};
+  setNav(sec==='drama'?'dramas':(sec==='hotdrama'?'hotdrama':'dramashorts'));
   document.getElementById('searchInput').value='';
   document.getElementById('nav').classList.remove('open');
   const items=CATALOG.filter(d=>(d.section||'drama')===sec);

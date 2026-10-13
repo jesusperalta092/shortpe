@@ -31,6 +31,7 @@ export default function Footer({ catalogCount = 2220 }) {
             <Link href="/">Inicio</Link>
             <Link href="/seccion/dramavibe">DramaVibe</Link>
             <Link href="/seccion/hotdrama">HotDrama</Link>
+            <Link href="/seccion/dramashorts">DramaShorts</Link>
             <Link href="/seccion/drama">Dramas</Link>
           </div>
           <div className="footer-nav-col">

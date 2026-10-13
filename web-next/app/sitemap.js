@@ -6,7 +6,7 @@ export default async function sitemap() {
   const cat = await getCatalog();
   const now = new Date();
 
-  const sections = ['drama', 'dramavibe', 'hotdrama'];
+  const sections = ['drama', 'dramashorts', 'dramavibe', 'hotdrama'];
 
   const entries = [
     {

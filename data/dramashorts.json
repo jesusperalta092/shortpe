@@ -1,0 +1,45 @@
+[
+  {
+    "slug": "mi-presa-facil-resulto-ser-el-rey-del-colegio",
+    "title": "Mi presa fácil resultó ser el rey del colegio",
+    "poster": "/posters/mi-presa-facil-resulto-ser-el-rey-del-colegio.webp",
+    "description": "Luciana ingresa a una escuela peligrosa y necesita protección. Para evitar ser víctima de acoso, decide acercarse a Ángel, a quien cree débil y dócil. Sin embargo, descubre que él es en realidad el temido rey del colegio.",
+    "section": "dramashorts",
+    "source": "suikora",
+    "genres": [
+      "Drama",
+      "Romance",
+      "Escolar",
+      "DramaShorts"
+    ],
+    "total_episodes": 26,
+    "episodes": {
+      "1": "https://akamai-static.shorttv.live/hls/b0381ed9-b400-44cf-b752-95de2f08a150_1080/main.m3u8",
+      "2": "https://akamai-static.shorttv.live/hls/f1c6a8d1-9c90-4afe-817d-7de6dde9d151_1080/main.m3u8",
+      "3": "https://akamai-static.shorttv.live/hls/38e55830-434a-47d6-bd58-ad84b5c1ab81_1080/main.m3u8",
+      "4": "https://akamai-static.shorttv.live/hls/3f1978e9-ddde-493c-9fad-7ca40aea4af9_1080/main.m3u8",
+      "5": "https://akamai-static.shorttv.live/hls/93a9c8f4-f973-4987-96e2-7eb13fb3e771_1080/main.m3u8",
+      "6": "https://akamai-static.shorttv.live/hls/712a90f7-13a9-4a3b-b298-1f6232031651_1080/main.m3u8",
+      "7": "https://akamai-static.shorttv.live/hls/60906b96-ceca-493d-a1bd-6d9185cbbbeb_1080/main.m3u8",
+      "8": "https://akamai-static.shorttv.live/hls/79f8e0a2-3ac3-48c0-b372-8118fa73d449_1080/main.m3u8",
+      "9": "https://akamai-static.shorttv.live/hls/4ee77b35-2c49-4caf-bf9a-f1610b8df258_1080/main.m3u8",
+      "10": "https://akamai-static.shorttv.live/hls/c591cba7-cb0e-4695-b870-d424c24bfc3a_1080/main.m3u8",
+      "11": "https://akamai-static.shorttv.live/hls/94e4ff64-4837-4778-be2f-a2b07d460c59_1080/main.m3u8",
+      "12": "https://akamai-static.shorttv.live/hls/5c84acb4-4040-4edd-baad-05147573cf81_1080/main.m3u8",
+      "13": "https://akamai-static.shorttv.live/hls/64ed8a26-766d-48b1-ac27-bcd80aef4651_1080/main.m3u8",
+      "14": "https://akamai-static.shorttv.live/hls/4aa8e65e-17e6-4946-ab93-13d0c81d4878_1080/main.m3u8",
+      "15": "https://akamai-static.shorttv.live/hls/f2666fbf-9161-4d9c-9707-a1ae4f877cb4_1080/main.m3u8",
+      "16": "https://akamai-static.shorttv.live/hls/f2c78979-1d6d-44d7-a550-dc6adf87eb92_1080/main.m3u8",
+      "17": "https://akamai-static.shorttv.live/hls/f4454f20-e26d-4b6c-82ae-f609436e26c6_1080/main.m3u8",
+      "18": "https://akamai-static.shorttv.live/hls/6ef315e7-884e-4f0f-a137-40d2add1691a_1080/main.m3u8",
+      "19": "https://akamai-static.shorttv.live/hls/0c5960e4-7c3d-4022-be74-3ab552fc3014_1080/main.m3u8",
+      "20": "https://akamai-static.shorttv.live/hls/997d8715-6928-4c3e-9a48-46deefb5fb83_1080/main.m3u8",
+      "21": "https://akamai-static.shorttv.live/hls/7f84a751-d9e7-4342-b5de-bf9be8a80e2f_1080/main.m3u8",
+      "22": "https://akamai-static.shorttv.live/hls/79d0a6c8-898c-4b85-b106-2b3ca9a78244_1080/main.m3u8",
+      "23": "https://akamai-static.shorttv.live/hls/34938618-dbb3-44d0-acf9-b444c245376b_1080/main.m3u8",
+      "24": "https://akamai-static.shorttv.live/hls/da1ba301-8e1f-4fbf-912e-eb2fbcfdc8fc_1080/main.m3u8",
+      "25": "https://akamai-static.shorttv.live/hls/35f1c701-988b-4f2a-9db7-0f5cb9d6a748_1080/main.m3u8",
+      "26": "https://akamai-static.shorttv.live/hls/953aa5b5-18bd-4a89-a269-632ce5ea251e_1080/main.m3u8"
+    }
+  }
+]

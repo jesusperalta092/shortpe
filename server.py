@@ -377,7 +377,7 @@ CAT_MTIMES = {}
 def load_catalog(force=False):
     global CATALOG, CAT_BY_SLUG, CAT_MTIMES
     with CAT_LOCK:
-        files = ('catalog_full.json', 'catalog.json')
+        files = ('catalog_full.json', 'catalog.json', 'data/dramashorts.json')
         current_mtimes = {}
         needs_reload = force or not CATALOG
         for fname in files:
@@ -404,11 +404,15 @@ def load_catalog(force=False):
                         d.setdefault('source','esdramia')
                         if 'genres' in d and isinstance(d['genres'], list):
                             d['genres'] = list(dict.fromkeys(d['genres']))
+                    if 'dramashorts.json' in fname:
+                        for d in data:
+                            d['section'] = 'dramashorts'
+                            d['source'] = 'suikora'
                     all_items.extend(data)
                     sys.stderr.write(f'[catalog] +{len(data)} de {fname}\n')
                 except Exception as e:
                     sys.stderr.write(f'[catalog] err {fname}: {e}\n')
-        all_items = [d for d in all_items if d.get('section') not in ('serie', 'pelicula', 'dramashorts', 'dramatube')]
+        all_items = [d for d in all_items if d.get('section') not in ('serie', 'pelicula', 'dramatube')]
         # Ordenar para que los items con mas episodios/hashes queden primero al deduplicar
         def _ep_count(item):
             eps = item.get('episodes') or item.get('episode_hashes') or {}
@@ -1113,6 +1117,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 # Prefetch en background de los primeros 4 segmentos (acelera el arranque)
                 threading.Thread(target=prefetch_segments, args=(slug,ep,4), daemon=True).start()
                 return self._send(200,'application/json; charset=utf-8',out)
+
+            # ===== SUIKORA (DramaShorts) - HLS directo =====
+            if _d and _d.get('source') == 'suikora':
+                eps_dict = _d.get('episodes') or {}
+                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                if not vurl: return self._send(404, 'text/plain', b'sin episodio')
+                p_url = '/proxy/manifest?t=' + encode_url_token(vurl)
+                obj = {
+                    'hash': 'stream_token',
+                    'title': _d.get('title', ''),
+                    'type': 'hls',
+                    'player_type': 'hls',
+                    'player_url': p_url,
+                    'encrypted': False,
+                    'episode_number': str(ep)
+                }
+                out = json.dumps(obj, ensure_ascii=False).encode('utf-8')
+                _stream_set(slug, ep, out)
+                return self._send(200, 'application/json; charset=utf-8', out)
 
             # ===== DRAMATUBE (DramaExpress HLS directo con subtitulos) =====
             if _d and _d.get('source')=='dramatube':
