@@ -285,7 +285,7 @@ export default function Player({ slug, ep, title, total }) {
     let cancelled = false;
     let autoRetryTimer = null;
 
-    async function load(isFresh = false) {
+    async function load(isFresh = false, retryCount = 0) {
       setLoading(true); setError('');
       fetch('/proxy/warmup?slug=' + encodeURIComponent(slug) + '&ep=' + encodeURIComponent(ep), { cache: 'no-store' }).catch(() => {});
       if (hlsRef.current) { try { hlsRef.current.destroy(); } catch (e) {} hlsRef.current = null; }
@@ -296,10 +296,9 @@ export default function Player({ slug, ep, title, total }) {
         const epUrl = '/proxy/episode?slug=' + encodeURIComponent(slug) + '&ep=' + encodeURIComponent(ep) + (isFresh ? '&fresh=1' : '');
         const res = await fetch(epUrl, { cache: 'no-store' });
         if (!res.ok) {
-          if (!isFresh) {
-            // Auto-reintento con token fresco
+          if (retryCount < 2) {
             autoRetryTimer = setTimeout(() => {
-              if (!cancelled) load(true);
+              if (!cancelled) load(true, retryCount + 1);
             }, 1200);
             return;
           }
@@ -341,11 +340,10 @@ export default function Player({ slug, ep, title, total }) {
         };
         video.onerror = () => {
           if (!cancelled) {
-            if (!isFresh) {
-              // Si el video falla (ej. upstream 410 expired token), reintentar automáticamente con token fresco
+            if (retryCount < 2) {
               autoRetryTimer = setTimeout(() => {
-                if (!cancelled) load(true);
-              }, 1000);
+                if (!cancelled) load(true, retryCount + 1);
+              }, 1200);
             } else {
               setLoading(false);
               setError('No se pudo reproducir el video en el navegador');

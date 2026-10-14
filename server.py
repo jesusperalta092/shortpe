@@ -1383,78 +1383,73 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
             # ===== ESDRAMIA (dramas) =====
             h = None
-            if d.get('episode_hashes') and not fresh:
+            if d.get('episode_hashes'):
                 h = d['episode_hashes'].get(str(ep_i))
             if not h:
                 try:
                     ref_url = f'{UPSTREAM}/dramas/{slug}/{ep_i}'
                     hdrs = get_upstream_headers(ref_url)
-                    html = requests.get(ref_url, headers=hdrs, verify=False, timeout=20).text
+                    html = requests.get(ref_url, headers=hdrs, verify=False, timeout=10).text
+                    eps = {}
+                    for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\",\\"title\\":\\"[^\\"]*\\",\\"episodeNumber\\":(\d+)', html):
+                        eps[int(m.group(2))] = m.group(1)
+                    if not eps:
+                        for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\"', html):
+                            eps[len(eps)+1] = m.group(1)
+                    h = eps.get(ep_i)
+                    if h and d.get('episode_hashes'):
+                        d['episode_hashes'][str(ep_i)] = h
                 except Exception as e:
-                    return self._send(502,'text/plain',('page: '+str(e)[:80]).encode())
-                eps={}
-                for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\",\\"title\\":\\"[^\\"]*\\",\\"episodeNumber\\":(\d+)', html):
-                    eps[int(m.group(2))]=m.group(1)
-                if not eps:
-                    for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\"', html):
-                        eps[len(eps)+1]=m.group(1)
-                h = eps.get(ep_i)
-                if h and d.get('episode_hashes'):
-                    d['episode_hashes'][str(ep_i)] = h
+                    _dlog('ERR', f"page scrape error: {e}")
             if not h:
-                return self._send(404,'text/plain',(f'ep {ep_i} no encontrado').encode())
+                return self._send(404, 'text/plain', (f'ep {ep_i} no encontrado').encode())
 
-            try:
-                ep_ref = f'{UPSTREAM}/dramas/{slug}/{ep_i}'
-                hdrs = get_upstream_headers(UPSTREAM + '/api/stream/' + h, {'Referer': ep_ref, 'Accept': '*/*'})
-                r = requests.get(UPSTREAM + '/api/stream/' + h, headers=hdrs, verify=False, timeout=20)
-                obj = {}
-                if r.status_code == 200:
-                    try: obj = json.loads(r.text)
-                    except: obj = {}
-                sources = obj.get('sources')
-                if not sources or not isinstance(sources, list) or len(sources) == 0:
-                    try:
-                        time.sleep(0.3)
-                        html = requests.get(ep_ref, headers=get_upstream_headers(ep_ref), verify=False, timeout=15).text
-                        eps = {}
-                        for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\",\\"title\\":\\"[^\\"]*\\",\\"episodeNumber\\":(\d+)', html):
-                            eps[int(m.group(2))] = m.group(1)
-                        if not eps:
-                            for m in re.finditer(r'\\"hash\\":\\"([0-9a-f]{32})\\"', html):
-                                eps[len(eps)+1] = m.group(1)
-                        fresh_h = eps.get(ep_i)
-                        if fresh_h:
-                            h = fresh_h
-                            if d.get('episode_hashes'):
-                                d['episode_hashes'][str(ep_i)] = fresh_h
-                            fresh_hdrs = get_upstream_headers(UPSTREAM + '/api/stream/' + h, {'Referer': ep_ref, 'Accept': '*/*'})
-                            fr = requests.get(UPSTREAM + '/api/stream/' + h, headers=fresh_hdrs, verify=False, timeout=15)
-                            if fr.status_code == 200:
-                                obj = json.loads(fr.text)
-                                sources = obj.get('sources')
-                    except Exception:
-                        pass
-                if not sources or not isinstance(sources, list) or len(sources) == 0:
-                    return self._send(502, 'text/plain', b'episodio sin fuentes disponibles')
-                raw = sources[0]['url']
-                full = raw if raw.startswith('http') else UPSTREAM+raw
-                low = full.split('?')[0].lower()
-                is_hls = (obj.get('type')=='hls') or low.endswith('.m3u8') or low.endswith('s3hls') or low.endswith('/hls')
-                clean_obj = {
-                    'title': obj.get('title', d.get('title', '')),
-                    'type': 'hls' if is_hls else 'file',
-                    'player_type': 'hls' if is_hls else 'file',
-                    'player_url': ('/proxy/manifest?t=' + encode_url_token(full)) if is_hls else ('/proxy/stream?t=' + encode_url_token(full)),
-                    'encrypted': is_encrypted(slug, full, is_hls)
-                }
-                out = json.dumps(clean_obj, ensure_ascii=False).encode('utf-8')
-                _stream_set(slug, ep_i, out)
-                return self._send(200,'application/json; charset=utf-8',out)
+            # Fuente de video: el stream directo s3hls de Esdramia es determinista con el hash
+            default_s3hls = f"{UPSTREAM}/stream/{h}/s3hls"
+            full = default_s3hls
+            is_hls = True
+            ep_title = d.get('title', '')
 
-            except Exception as e:
-                _dlog('ERR', f"episode error: {e}")
-                return self._send(502,'text/plain',('stream: '+str(e)[:80]).encode())
+            # Consultar api/stream con reintento para obtener título oficial o fuentes alternativas
+            ep_ref = f'{UPSTREAM}/dramas/{slug}/{ep_i}'
+            hdrs = get_upstream_headers(UPSTREAM + '/api/stream/' + h, {'Referer': ep_ref, 'Accept': '*/*'})
+            for attempt in range(2):
+                try:
+                    r = requests.get(UPSTREAM + '/api/stream/' + h, headers=hdrs, verify=False, timeout=6)
+                    if r.status_code == 200:
+                        obj = r.json()
+                        sources = obj.get('sources')
+                        if sources and isinstance(sources, list) and len(sources) > 0:
+                            raw = sources[0].get('url', '')
+                            if raw:
+                                full = raw if raw.startswith('http') else UPSTREAM + raw
+                                low = full.split('?')[0].lower()
+                                is_hls = (obj.get('type') == 'hls') or low.endswith('.m3u8') or low.endswith('s3hls') or low.endswith('/hls')
+                                ep_title = obj.get('title', ep_title)
+                                break
+                    elif r.status_code == 404:
+                        break
+                except Exception as e:
+                    _dlog('WARN', f"api/stream intento {attempt+1} falló para {slug} ep {ep_i}: {e}")
+                    time.sleep(0.3)
+
+            p_type = 'hls' if is_hls else 'file'
+            v_type = 'hls' if is_hls else 'mp4'
+            p_url = ('/proxy/manifest?t=' if is_hls else '/proxy/stream?t=') + encode_url_token(full)
+
+            clean_obj = {
+                'title': ep_title,
+                'type': v_type,
+                'player_type': p_type,
+                'player_url': p_url,
+                'encrypted': is_encrypted(slug, full, is_hls),
+                'episode_number': str(ep_i)
+            }
+            out = json.dumps(clean_obj, ensure_ascii=False).encode('utf-8')
+            _stream_set(slug, ep_i, out)
+            if is_hls:
+                threading.Thread(target=prefetch_segments, args=(slug, ep_i, 4), daemon=True).start()
+            return self._send(200, 'application/json; charset=utf-8', out)
 
         # ============ DRAMAVIBE (paginado, catalogo grande) ============
         if path == '/api/dramavibe':
