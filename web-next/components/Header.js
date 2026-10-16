@@ -56,6 +56,14 @@ export default function Header({ stats }) {
       )
     },
     {
+      href: '/seccion/dramatube',
+      label: 'DramaTube',
+      theme: 'tube',
+      icon: (
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="15" x="2" y="4" rx="2"/><polygon points="10 8 16 11.5 10 15 10 8" fill="currentColor"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+      )
+    },
+    {
       href: '/seccion/drama',
       label: 'Dramas',
       theme: 'drama',

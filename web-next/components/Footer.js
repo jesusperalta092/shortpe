@@ -29,6 +29,7 @@ export default function Footer({ catalogCount = 2220 }) {
           <div className="footer-nav-col">
             <h4>Secciones</h4>
             <Link href="/">Inicio</Link>
+            <Link href="/seccion/dramatube">DramaTube</Link>
             <Link href="/seccion/dramavibe">DramaVibe</Link>
             <Link href="/seccion/hotdrama">HotDrama</Link>
             <Link href="/seccion/dramashorts">DramaShorts</Link>

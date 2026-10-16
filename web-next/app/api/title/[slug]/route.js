@@ -27,6 +27,21 @@ async function findDramaVibe(slug) {
 export async function GET(req, { params }) {
   const { slug } = await params;
 
+  // DramaTube: catalogo Kurzdrama
+  if (slug && slug.startsWith('dt-')) {
+    try {
+      const r = await fetch(PROXY + '/api/dramatube/item?slug=' + encodeURIComponent(slug), { cache: 'no-store' });
+      if (!r.ok) return Response.json({ error: 'not found' }, { status: 404 });
+      const d = await r.json();
+      if (!d || d.error) return Response.json({ error: 'not found' }, { status: 404 });
+      const total = d.total_episodes || 0;
+      const eps = Array.from({ length: Math.min(total, 500) }, (_, i) => String(i + 1));
+      return Response.json({ ...d, episodeKeys: eps }, { headers: { 'Cache-Control': 'no-store' } });
+    } catch (e) {
+      return Response.json({ error: 'not found' }, { status: 404 });
+    }
+  }
+
   // DramaVibe va por su propio carril (catalogo grande, on-demand)
   if (slug && slug.startsWith('dv-')) {
     const d = await findDramaVibe(slug);

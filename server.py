@@ -504,6 +504,69 @@ def load_hotdrama(force=False):
             sys.stderr.write('[hotdrama] err: %s\n' % e)
 
 
+# ============ DRAMATUBE (kurzdrama.com / reelshort) ============
+DT_ITEMS = []
+DT_BY_SLUG = {}
+DT_SHELVES = []
+DT_LOCK = threading.Lock()
+DT_MTIME = 0
+
+def load_dramatube(force=False):
+    global DT_ITEMS, DT_BY_SLUG, DT_SHELVES, DT_MTIME
+    with DT_LOCK:
+        p = os.path.join(ROOT, 'data', 'dramatube.json')
+        if not os.path.exists(p):
+            return
+        mt = os.path.getmtime(p)
+        if not force and DT_ITEMS and DT_MTIME == mt:
+            return
+        DT_MTIME = mt
+        try:
+            data = json.load(open(p, encoding='utf-8'))
+            for d in data:
+                d.setdefault('source', 'kurzdrama')
+                d['section'] = 'dramatube'
+            DT_ITEMS = data
+            DT_BY_SLUG = {d['slug']: d for d in DT_ITEMS}
+            sh_p = os.path.join(ROOT, 'data', 'dramatube_shelves.json')
+            if os.path.exists(sh_p):
+                DT_SHELVES = json.load(open(sh_p, encoding='utf-8')).get('shelves', [])
+            sys.stderr.write('[dramatube] cargados %d items y %d shelves\n' % (len(DT_ITEMS), len(DT_SHELVES)))
+        except Exception as e:
+            sys.stderr.write('[dramatube] err: %s\n' % e)
+
+
+def _dt_episode_url(dt, ep, force=False):
+    """Resuelve la URL m3u8 upstream para un episodio de DramaTube on-demand."""
+    if not dt: return None
+    eps = dt.get('episodes') or {}
+    ep_data = eps.get(str(ep))
+    if ep_data and not force and ep_data.get('m3u8'):
+        return ep_data['m3u8']
+
+    ep_slug = (ep_data.get('slug') if ep_data else None)
+    if not ep_slug:
+        if str(ep) == '1':
+            ep_slug = dt.get('first_slug')
+    if not ep_slug:
+        return None
+
+    try:
+        url = f"https://www.kurzdrama.com/es/episodes/{ep_slug}"
+        r = requests.get(url, headers={'User-Agent': UA, 'Referer': 'https://www.kurzdrama.com/'}, timeout=10)
+        if r.status_code == 200:
+            m = re.search(r'https?://v-mps\.crazymaplestudios\.com/[^\s"\'<>]+\.m3u8', r.text)
+            if m:
+                m3u8 = m.group(0)
+                if str(ep) not in eps:
+                    eps[str(ep)] = {'number': int(ep), 'slug': ep_slug, 'title': f'Episodio {ep}'}
+                eps[str(ep)]['m3u8'] = m3u8
+                return m3u8
+    except Exception as e:
+        _dlog('DT', f'resolv err {dt.get("slug")} ep {ep}: {e}')
+    return None
+
+
 NARTO_CACHE = {}
 NARTO_TTL = 1800  # 30 minutos
 
@@ -1150,6 +1213,26 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 _stream_set(slug, ep, out)
                 return self._send(200,'application/json; charset=utf-8',out)
 
+            # ===== DRAMATUBE (kurzdrama / reelshort) =====
+            if slug.startswith('dt-'):
+                load_dramatube()
+                dt = DT_BY_SLUG.get(slug)
+                if not dt: return self._send(404,'text/plain',b'no encontrado')
+                vurl = _dt_episode_url(dt, ep, force=fresh)
+                if not vurl: return self._send(404,'text/plain',b'sin episodio')
+                is_hls = vurl.split('?')[0].lower().endswith('.m3u8')
+                if is_hls:
+                    obj={'title':dt.get('title',''),'type':'hls','player_type':'hls',
+                         'player_url':'/proxy/manifest?t=' + encode_url_token(vurl),
+                         'encrypted':False,'episode_number':str(ep)}
+                else:
+                    obj={'title':dt.get('title',''),'type':'mp4','player_type':'file',
+                         'player_url':'/proxy/stream?t=' + encode_url_token(vurl),
+                         'encrypted':False,'episode_number':str(ep)}
+                out=json.dumps(obj,ensure_ascii=False).encode('utf-8')
+                _stream_set(slug, ep, out)
+                return self._send(200,'application/json; charset=utf-8',out)
+
             # Detectar fuente (cukelis no usa int)
             _d = CAT_BY_SLUG.get(slug)
             if _d and _d.get('source')=='cukelis':
@@ -1539,10 +1622,53 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             item['total_episodes'] = len(eps) or item.get('total_episodes', 0)
             return self._send(200,'application/json; charset=utf-8', json.dumps(item, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
 
+        # ============ DRAMATUBE (kurzdrama) ============
+        if path == '/api/dramatube':
+            load_dramatube()
+            try: page = int(qs.get('page',['1'])[0])
+            except: page = 1
+            try: limit = int(qs.get('limit',['48'])[0])
+            except: limit = 48
+            limit = max(1, min(limit, 250))
+            q = (qs.get('q',[''])[0] or '').strip().lower()
+            shelf = (qs.get('shelf',[''])[0] or '').strip()
+            src = DT_ITEMS
+            if shelf:
+                src = [d for d in src if shelf.lower() in [s.lower() for s in d.get('shelves', [d.get('shelf', '')])]]
+            if q:
+                src = [d for d in src if q in (d.get('title','').lower())]
+            total = len(src)
+            start = (page-1)*limit
+            chunk = src[start:start+limit]
+            slim = [{k:v for k,v in d.items() if k != 'episodes'} for d in chunk]
+            body = {'items': slim, 'page': page, 'limit': limit, 'total': total, 'pages': (total+limit-1)//limit}
+            return self._send(200,'application/json; charset=utf-8', json.dumps(body, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+
+        if path == '/api/dramatube/shelves':
+            load_dramatube()
+            return self._send(200,'application/json; charset=utf-8', json.dumps({'shelves': DT_SHELVES, 'total': len(DT_ITEMS)}, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+
+        if path == '/api/dramatube/stats':
+            load_dramatube()
+            return self._send(200,'application/json; charset=utf-8', json.dumps({'total': len(DT_ITEMS)}).encode())
+
+        if path == '/api/dramatube/item':
+            load_dramatube()
+            slug = qs.get('slug',[''])[0]
+            d = DT_BY_SLUG.get(slug)
+            if not d:
+                return self._send(404,'application/json; charset=utf-8', b'{"error":"not found"}')
+            item = {k:v for k,v in d.items() if k != 'episodes'}
+            total = d.get('total_episodes') or len(d.get('episodes') or {}) or 1
+            item['total_episodes'] = total
+            eps_keys = [str(i) for i in range(1, total + 1)]
+            item['episodeKeys'] = eps_keys
+            return self._send(200,'application/json; charset=utf-8', json.dumps(item, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+
         # ============ STATS / CATALOG / HTML ============
         if path == '/api/stats':
-            load_catalog(); load_dramavibe(); load_hotdrama()
-            info={'total_dramas':len(CATALOG),'total_episodes':sum(len(d.get('episode_hashes',{})) for d in CATALOG),'total_dramavibe':len(DV_ITEMS),'total_hotdrama':len(HD_ITEMS)}
+            load_catalog(); load_dramavibe(); load_hotdrama(); load_dramatube()
+            info={'total_dramas':len(CATALOG),'total_episodes':sum(len(d.get('episode_hashes',{})) for d in CATALOG),'total_dramavibe':len(DV_ITEMS),'total_hotdrama':len(HD_ITEMS),'total_dramatube':len(DT_ITEMS)}
             return self._send(200,'application/json; charset=utf-8', json.dumps(info).encode())
         if path == '/api/catalog':
             load_catalog()

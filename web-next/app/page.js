@@ -1,14 +1,15 @@
 import { Suspense } from 'react';
-import { getCatalog, getHotDrama, getDramaVibe, groupBySection } from '../lib/api';
+import { getCatalog, getHotDrama, getDramaVibe, getDramaTube, groupBySection } from '../lib/api';
 import HomeClient from '../components/HomeClient';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [cat, hotdramaItems, dramavibeItems] = await Promise.all([
+  const [cat, hotdramaItems, dramavibeItems, dramatubeItems] = await Promise.all([
     getCatalog(),
     getHotDrama(24),
-    getDramaVibe(24)
+    getDramaVibe(24),
+    getDramaTube(24)
   ]);
   
   const sections = groupBySection(cat);
@@ -20,6 +21,7 @@ export default async function Home() {
         sections={sections} 
         hotdramaItems={hotdramaItems} 
         dramavibeItems={dramavibeItems}
+        dramatubeItems={dramatubeItems}
       />
     </Suspense>
   );

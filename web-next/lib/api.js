@@ -36,8 +36,43 @@ export async function getDramaVibe(limit = 24) {
   return [];
 }
 
+/** Trae items de DramaTube (server-side). */
+export async function getDramaTube(limit = 24) {
+  try {
+    const res = await fetch(`${PROXY}/api/dramatube?page=1&limit=${limit}`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      return data.items || [];
+    }
+  } catch (e) {}
+  return [];
+}
+
+/** Trae las secciones/shelves de DramaTube estructuradas (server-side). */
+export async function getDramaTubeShelves() {
+  try {
+    const res = await fetch(`${PROXY}/api/dramatube/shelves`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      return data.shelves || [];
+    }
+  } catch (e) {}
+  return [];
+}
+
 /** Trae un titulo por slug (server-side). */
 export async function getTitle(slug) {
+  // DramaTube (kurzdrama)
+  if (slug && slug.startsWith('dt-')) {
+    try {
+      const r = await fetch(PROXY + '/api/dramatube/item?slug=' + encodeURIComponent(slug), { cache: 'no-store' });
+      if (r.ok) {
+        const d = await r.json();
+        if (d && !d.error) return d;
+      }
+    } catch (e) {}
+    return null;
+  }
   // DramaVibe vive en su propio catalogo (grande, aparte)
   if (slug && slug.startsWith('dv-')) {
     try {

@@ -1,13 +1,15 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getCatalog, groupBySection } from '../../../lib/api';
 import Header from '../../../components/Header';
 import GridClient from '../../../components/GridClient';
 import CatalogGrid from '../../../components/CatalogGrid';
+import DramaTubeClient from '../../../components/DramaTubeClient';
 import Footer from '../../../components/Footer';
 
 export const dynamic = 'force-dynamic';
 
 const LABELS = { 
+  dramatube: 'DramaTube',
   dramavibe: 'DramaVibe', 
   hotdrama: 'HotDrama', 
   dramashorts: 'DramaShorts',
@@ -48,11 +50,36 @@ export async function generateMetadata({ params }) {
 
 export default async function SeccionPage({ params }) {
   const { key } = await params;
-  if (key === 'dramatube') {
-    redirect('/seccion/drama');
-  }
   if (!LABELS[key]) notFound();
   const label = LABELS[key];
+
+  // ===== Seccion 'dramatube' (Kurzdrama con Estantes tematicos) =====
+  if (key === 'dramatube') {
+    let shelves = [];
+    let allDramas = [];
+    try {
+      const rSh = await fetch(PROXY + '/api/dramatube/shelves', { cache: 'no-store' });
+      if (rSh.ok) {
+        const dSh = await rSh.json();
+        shelves = dSh.shelves || [];
+      }
+      const rAll = await fetch(PROXY + '/api/dramatube?page=1&limit=200', { cache: 'no-store' });
+      if (rAll.ok) {
+        const dAll = await rAll.json();
+        allDramas = dAll.items || [];
+      }
+    } catch (e) {}
+
+    return (
+      <>
+        <Header />
+        <main className="con-header">
+          <DramaTubeClient shelves={shelves} allDramas={allDramas} totalCount={allDramas.length || 114} />
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   // ===== Seccion 'dramavibe' (catalogo grande chartdrama) =====
   if (key === 'dramavibe') {
