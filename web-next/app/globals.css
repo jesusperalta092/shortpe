@@ -2842,5 +2842,103 @@ video {
   font-size: 16px;
 }
 
+/* ============================================================
+   HOTDRAMA FUEGO THEME (Naranja / Fuego Cálido)
+   ============================================================ */
+.hotdrama-container {
+  padding-bottom: 60px;
+}
+
+.hotdrama-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+
+.hotdrama-title .fire-text {
+  background: linear-gradient(90deg, #ff2d00 0%, #ff7b00 35%, #ffb800 65%, #ff5e00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 90, 0, 0.7));
+  animation: firePulse 2.2s ease-in-out infinite;
+}
+
+.hotdrama-search-box:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ff7b00 !important;
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.45) !important;
+}
+
+.hotdrama-view-btn.active {
+  background: linear-gradient(135deg, #ff2d00, #ff7b00) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(255, 94, 0, 0.55) !important;
+}
+
+.hotdrama-pill.active {
+  background: linear-gradient(135deg, #ff2d00, #ff7b00) !important;
+  border-color: rgba(255, 123, 0, 0.8) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(255, 94, 0, 0.5) !important;
+}
+
+.hotdrama-pill:hover:not(.active) {
+  border-color: rgba(255, 123, 0, 0.5);
+  background: rgba(255, 123, 0, 0.15);
+  color: #fff;
+}
+
+.hotdrama-shelf-more-btn {
+  border-color: rgba(255, 123, 0, 0.35) !important;
+}
+
+.hotdrama-shelf-more-btn:hover {
+  background: rgba(255, 123, 0, 0.25) !important;
+  border-color: rgba(255, 123, 0, 0.7) !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(255, 123, 0, 0.45) !important;
+}
+
+.hotdrama-container .kurz-card:hover .kurz-card-poster-wrap {
+  border-color: rgba(255, 123, 0, 0.75);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 22px rgba(255, 123, 0, 0.5);
+}
+
+.hotdrama-container .kurz-card:hover .kurz-play-circle {
+  background: linear-gradient(135deg, #ff2d00, #ff7b00);
+  box-shadow: 0 0 24px rgba(255, 94, 0, 0.85);
+}
+
+.hotdrama-container .kurz-card-eps {
+  color: #ff7b00 !important;
+  font-weight: 700;
+}
+
+.hotdrama-container .kurz-more-card:hover .kurz-more-poster-wrap {
+  border-color: #ff7b00;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 123, 0, 0.55);
+}
+
+.hotdrama-container .kurz-more-circle {
+  background: linear-gradient(135deg, rgba(255, 123, 0, 0.35), rgba(255, 45, 0, 0.1));
+  border-color: rgba(255, 123, 0, 0.7);
+  box-shadow: 0 0 18px rgba(255, 123, 0, 0.35);
+}
+
+.hotdrama-container .kurz-more-card:hover .kurz-more-circle {
+  background: linear-gradient(135deg, #ff2d00, #ff7b00);
+  box-shadow: 0 0 28px rgba(255, 94, 0, 0.85);
+}
+
+.hotdrama-container .kurz-more-count {
+  color: #ffb800;
+  background: rgba(255, 123, 0, 0.2);
+}
+
+
 
 

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Carousel from './Carousel';
 import TitleModal from './TitleModal';
 
 export default function HotDramaClient({ shelves = [], allDramas = [], totalCount = 31 }) {
@@ -146,16 +147,9 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
     );
   }, [selectedCategory, q]);
 
-  const scrollShelf = (shelfName, direction) => {
-    const el = shelfRefs.current[shelfName];
-    if (el) {
-      el.scrollBy({ left: direction * 560, behavior: 'smooth' });
-    }
-  };
-
   const effectiveTotal = totalCount || allDramas.length || 31;
 
-  // Renderizador unificado de la tarjeta "bonita" con título y episodios abajo
+  // Renderizador de tarjeta "bonita" con títulos y episodios
   const renderCard = (d, i) => {
     const imgSrc = d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : (d.poster || '/favicon.ico'));
     return (
@@ -165,6 +159,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
         onClick={() => handleOpenModal(d.slug)}
       >
         <div className="kurz-card-poster-wrap">
+          {i < 3 && <span className="card-tag fire" style={{ position: 'absolute', top: 6, left: 6, zIndex: 2 }}>🔥 TOP {i + 1}</span>}
           <img 
             src={imgSrc} 
             alt={d.title} 
@@ -179,7 +174,6 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
           <div className="kurz-poster-fallback" style={{ display: d.poster || d.poster_local ? 'none' : 'flex' }}>
             <span>{d.title}</span>
           </div>
-          {i < 3 && <span className="card-tag fire" style={{ position: 'absolute', top: 6, left: 6, zIndex: 2 }}>🔥 TOP {i + 1}</span>}
           <div className="kurz-play-overlay">
             <div className="kurz-play-circle">
               <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
@@ -201,16 +195,16 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
   };
 
   return (
-    <div className="dramatube-container">
+    <div className="dramatube-container hotdrama-container">
       {/* Header Info y Buscador */}
       <div className="dramatube-hero-header">
-        <h1 className="dramatube-title">
-          Hot<span className="text-red">Drama</span>
+        <h1 className="hotdrama-title">
+          Hot<span className="fire-text">Drama</span>
         </h1>
 
         {/* Buscador y Controles de Vista */}
         <div className="dramatube-controls">
-          <div className="dramatube-search-box">
+          <div className="dramatube-search-box hotdrama-search-box">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
@@ -228,7 +222,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
 
           <div className="dramatube-view-toggle">
             <button 
-              className={`view-btn ${viewMode === 'shelves' && !selectedCategory ? 'active' : ''}`}
+              className={`view-btn hotdrama-view-btn ${viewMode === 'shelves' && !selectedCategory ? 'active' : ''}`}
               onClick={() => { setViewMode('shelves'); setSelectedCategory(null); }}
               title="Ver por Secciones temáticas"
             >
@@ -238,7 +232,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
               <span>Secciones</span>
             </button>
             <button 
-              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              className={`view-btn hotdrama-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
               onClick={() => { setViewMode('grid'); setSelectedCategory(null); }}
               title="Ver todos en Cuadrícula"
             >
@@ -271,7 +265,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
             onScroll={checkPillsScroll}
           >
             <button 
-              className={`dramatube-pill ${activeShelf === 'all' && !selectedCategory ? 'active' : ''}`}
+              className={`dramatube-pill hotdrama-pill ${activeShelf === 'all' && !selectedCategory ? 'active' : ''}`}
               onClick={() => selectShelf('all')}
             >
               <span>Todos</span>
@@ -283,7 +277,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
               return (
                 <button 
                   key={sh.name}
-                  className={`dramatube-pill ${isSelected ? 'active' : ''}`}
+                  className={`dramatube-pill hotdrama-pill ${isSelected ? 'active' : ''}`}
                   onClick={() => selectShelf(sh.name)}
                 >
                   <span className="pill-icon">{sh.icon}</span>
@@ -313,7 +307,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
         /* Vista de Categoría Expandida (al hacer click en "Más +" o en una categoría) */
         <div className="dramatube-category-view">
           <div className="dramatube-cat-header">
-            <button className="dramatube-back-btn" onClick={handleBackToAll}>
+            <button className="dramatube-back-btn hotdrama-shelf-more-btn" onClick={handleBackToAll}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
@@ -323,20 +317,22 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
 
             <div className="dramatube-cat-title-wrap">
               <span className="dramatube-cat-icon">{selectedCategory.icon}</span>
-              <h2 className="dramatube-cat-title">{selectedCategory.name}</h2>
-              <span className="dramatube-cat-badge">
+              <h2 className="dramatube-cat-title" style={{ color: '#fff' }}>
+                {selectedCategory.name}
+              </h2>
+              <span className="dramatube-cat-badge" style={{ background: 'rgba(255, 123, 0, 0.2)', color: '#ffb800', borderColor: 'rgba(255, 123, 0, 0.4)' }}>
                 {categoryItems.length} {categoryItems.length === 1 ? 'título' : 'títulos'}
               </span>
             </div>
             <p className="dramatube-cat-desc">
-              Catálogo completo de {selectedCategory.name} en audio español latino y calidad HD.
+              Catálogo de {selectedCategory.name} en audio doblado en español latino y calidad HD.
             </p>
           </div>
 
           {categoryItems.length === 0 ? (
             <div className="dramatube-empty">
               <p>No se encontraron títulos en esta categoría con &quot;{q}&quot;.</p>
-              <button className="dramatube-reset-btn" onClick={() => setQ('')}>
+              <button className="dramatube-reset-btn hotdrama-shelf-more-btn" onClick={() => setQ('')}>
                 Limpiar búsqueda
               </button>
             </div>
@@ -352,105 +348,65 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
           {visibleShelves.length === 0 ? (
             <div className="dramatube-empty">
               <p>No se encontraron títulos en esta búsqueda.</p>
-              <button className="dramatube-reset-btn" onClick={() => setQ('')}>
+              <button className="dramatube-reset-btn hotdrama-shelf-more-btn" onClick={() => setQ('')}>
                 Limpiar búsqueda
               </button>
             </div>
           ) : (
             visibleShelves.map((sh) => {
               const totalInShelf = sh.all_items ? sh.all_items.length : (sh.count || sh.items.length);
-              const itemsToShow = sh.items || [];
-              const hasMoreThan10 = totalInShelf > 10;
-              const remainingCount = totalInShelf - itemsToShow.length;
+              const itemsToShow = (sh.items || []).slice(0, 10);
+              const remaining = Math.max(0, totalInShelf - itemsToShow.length);
 
               return (
-                <div key={sh.name} className="kurz-section">
-                  <div className="kurz-section-header">
-                    <div className="kurz-section-title-wrap">
-                      <span className="kurz-section-icon">{sh.icon}</span>
-                      <h2 className="kurz-section-title">{sh.name}</h2>
-                      <span className="kurz-section-count">({totalInShelf})</span>
+                <div 
+                  key={sh.name} 
+                  ref={(el) => (shelfRefs.current[sh.name] = el)}
+                  className="dramatube-shelf-block"
+                >
+                  <div className="dramatube-shelf-header">
+                    <div className="dramatube-shelf-header-left">
+                      <span className="shelf-icon">{sh.icon}</span>
+                      <h2 className="dramatube-shelf-title">{sh.name}</h2>
+                      <span className="shelf-count" style={{ borderColor: 'rgba(255, 123, 0, 0.2)', color: '#cbd5e1' }}>
+                        ({totalInShelf})
+                      </span>
                     </div>
-
-                    <button 
-                      className="kurz-section-more-btn"
-                      onClick={() => handleOpenCategory(sh)}
-                      aria-label={`Ver más de ${sh.name}`}
-                    >
-                      <span>Ver más + ({totalInShelf})</span>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </button>
+                    {totalInShelf > 10 && (
+                      <button 
+                        className="dramatube-shelf-more-btn hotdrama-shelf-more-btn"
+                        onClick={() => handleOpenCategory(sh)}
+                        title={`Ver todos los ${totalInShelf} títulos de ${sh.name}`}
+                      >
+                        <span>Ver más + ({totalInShelf})</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                      </button>
+                    )}
                   </div>
-
-                  <div className="kurz-carousel-wrapper">
-                    <button 
-                      className="kurz-arrow left" 
-                      onClick={() => scrollShelf(sh.name, -1)}
-                      aria-label="Deslizar a la izquierda"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-                        <polyline points="15 18 9 12 15 6" />
-                      </svg>
-                    </button>
-
-                    <div 
-                      className="kurz-track"
-                      ref={el => shelfRefs.current[sh.name] = el}
-                    >
-                      {itemsToShow.map((d, i) => renderCard(d, i))}
-
-                      {/* Tarjeta "+ Más" cuando hay más títulos */}
-                      {hasMoreThan10 && (
-                        <div 
-                          className="kurz-more-card" 
-                          onClick={() => handleOpenCategory(sh)}
-                          role="button"
-                          tabIndex={0}
-                        >
-                          <div className="kurz-more-poster-wrap">
-                            <div className="kurz-more-circle">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                              </svg>
-                            </div>
-                            <span className="kurz-more-text">Ver más</span>
-                            <span className="kurz-more-count">+{remainingCount} títulos</span>
-                          </div>
-                          <div className="kurz-card-info">
-                            <h3 className="kurz-card-title kurz-more-title">Explorar todo</h3>
-                            <div className="kurz-card-meta">
-                              <span className="kurz-card-eps">{totalInShelf} en total</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <button 
-                      className="kurz-arrow right" 
-                      onClick={() => scrollShelf(sh.name, 1)}
-                      aria-label="Deslizar a la derecha"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </button>
-                  </div>
+                  <Carousel 
+                    title="" 
+                    variant="kurzdrama"
+                    items={itemsToShow} 
+                    onOpen={handleOpenModal} 
+                    onMore={totalInShelf > 10 ? () => handleOpenCategory(sh) : null}
+                    moreLabel="Más +"
+                    totalCount={totalInShelf}
+                    remainingCount={remaining}
+                  />
                 </div>
               );
             })
           )}
         </div>
       ) : (
-        /* Vista de Cuadrícula General */
+        /* Vista en Cuadrícula General de todos los dramas */
         <div className="dramatube-grid-view">
           {filteredDramas.length === 0 ? (
             <div className="dramatube-empty">
               <p>No se encontraron títulos con &quot;{q}&quot;.</p>
-              <button className="dramatube-reset-btn" onClick={() => setQ('')}>
+              <button className="dramatube-reset-btn hotdrama-shelf-more-btn" onClick={() => setQ('')}>
                 Limpiar búsqueda
               </button>
             </div>
