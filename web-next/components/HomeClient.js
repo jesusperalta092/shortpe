@@ -11,15 +11,18 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
   const [modalSlug, setModalSlug] = useState(null);
   const searchParams = useSearchParams();
 
-  // 10 dramas destacados de HotDrama (DramaVibe) para la portada dinamica
+  // 10 dramas destacados de HotDrama (100% en español) para la portada dinámica
   const heroDramas = useMemo(() => {
+    if (hotdramaItems && hotdramaItems.length >= 5) {
+      return hotdramaItems.slice(0, 10);
+    }
     if (dramavibeItems && dramavibeItems.length >= 5) {
       return dramavibeItems.slice(0, 10);
     }
     return (sections.drama && sections.drama.length >= 10
       ? sections.drama.slice(0, 10)
       : catalog.slice(0, 10));
-  }, [dramavibeItems, sections.drama, catalog]);
+  }, [hotdramaItems, dramavibeItems, sections.drama, catalog]);
 
   const [heroIndex, setHeroIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -78,6 +81,17 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
       return raw;
     }
     return '/proxy/img?url=' + encodeURIComponent(raw);
+  };
+
+  const getHeroDesc = (desc) => {
+    if (!desc) return 'Una apasionante historia llena de giros inesperados, romance y emociones intensas en alta definición.';
+    let d = desc;
+    d = d.replace(/^Episode\s+\d+\/\d+.*?\. /i, '');
+    d = d.replace(/\.?\s*Narto Drama.*$/i, '');
+    d = d.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').trim();
+    if (!d) return 'Una apasionante historia llena de giros inesperados, romance y emociones intensas en alta definición.';
+    if (!/[.!?]$/.test(d)) d += '...';
+    return d;
   };
 
   return (
@@ -139,7 +153,7 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
                   <span className="pill badge-hd">ULTRA HD 4K</span>
                   <span>{(currentHero.genres || []).slice(0, 3).join(' · ') || 'HotDrama'}</span>
                 </div>
-                <p className="hero-desc">{currentHero.description || 'Una apasionante historia llena de giros inesperados, romance y emociones intensas en alta definición.'}</p>
+                <p className="hero-desc">{getHeroDesc(currentHero.description)}</p>
                 <div className="hero-btns">
                   <Link className="btn btn-play" href={'/ver/' + currentHero.slug + '/1'} scroll={false}>
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg> Reproducir

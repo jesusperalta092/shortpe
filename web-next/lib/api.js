@@ -85,7 +85,7 @@ export async function getTitle(slug) {
     return null;
   }
   // HotDrama
-  if (slug && slug.startsWith('hd-')) {
+  if (slug && (slug.startsWith('hd-') || slug.startsWith('nt-'))) {
     try {
       const r = await fetch(PROXY + '/api/hotdrama/item?slug=' + encodeURIComponent(slug), { cache: 'no-store' });
       if (r.ok) {

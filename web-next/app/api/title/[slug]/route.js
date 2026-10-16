@@ -52,7 +52,7 @@ export async function GET(req, { params }) {
   }
 
   // HotDrama: su propio carril
-  if (slug && slug.startsWith('hd-')) {
+  if (slug && (slug.startsWith('hd-') || slug.startsWith('nt-'))) {
     try {
       const r = await fetch(PROXY + '/api/hotdrama/item?slug=' + encodeURIComponent(slug), { cache: 'no-store' });
       if (!r.ok) return Response.json({ error: 'not found' }, { status: 404 });
