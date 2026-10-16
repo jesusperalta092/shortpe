@@ -2939,6 +2939,196 @@ video {
   background: rgba(255, 123, 0, 0.2);
 }
 
+/* ============================================================
+   DRAMASHORTS THEME (Cyan / Neón Eléctrico)
+   ============================================================ */
+.dramashorts-container {
+  padding-bottom: 60px;
+}
+
+.dramashorts-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+
+.dramashorts-title .shorts-text {
+  background: linear-gradient(90deg, #06b6d4 0%, #22d3ee 50%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 14px rgba(34, 211, 238, 0.7));
+}
+
+.dramashorts-search-box:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #22d3ee !important;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.45) !important;
+}
+
+.dramashorts-view-btn.active {
+  background: linear-gradient(135deg, #0891b2, #22d3ee) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(34, 211, 238, 0.55) !important;
+}
+
+.dramashorts-pill.active {
+  background: linear-gradient(135deg, #0891b2, #22d3ee) !important;
+  border-color: rgba(34, 211, 238, 0.8) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(34, 211, 238, 0.5) !important;
+}
+
+.dramashorts-pill:hover:not(.active) {
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.15);
+  color: #fff;
+}
+
+.dramashorts-shelf-more-btn {
+  border-color: rgba(34, 211, 238, 0.35) !important;
+}
+
+.dramashorts-shelf-more-btn:hover {
+  background: rgba(34, 211, 238, 0.25) !important;
+  border-color: rgba(34, 211, 238, 0.7) !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.45) !important;
+}
+
+.dramashorts-container .kurz-card:hover .kurz-card-poster-wrap {
+  border-color: rgba(34, 211, 238, 0.75);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 22px rgba(34, 211, 238, 0.5);
+}
+
+.dramashorts-container .kurz-card:hover .kurz-play-circle {
+  background: linear-gradient(135deg, #0891b2, #22d3ee);
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.85);
+}
+
+.dramashorts-container .kurz-card-eps {
+  color: #22d3ee !important;
+  font-weight: 700;
+}
+
+.dramashorts-container .kurz-more-card:hover .kurz-more-poster-wrap {
+  border-color: #22d3ee;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 25px rgba(34, 211, 238, 0.55);
+}
+
+.dramashorts-container .kurz-more-circle {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(8, 145, 178, 0.1));
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+}
+
+.dramashorts-container .kurz-more-card:hover .kurz-more-circle {
+  background: linear-gradient(135deg, #0891b2, #22d3ee);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.85);
+}
+
+.dramashorts-container .kurz-more-count {
+  color: #a5f3fc;
+  background: rgba(34, 211, 238, 0.2);
+}
+
+/* ============================================================
+   DRAMAS THEME (Rojo Netflix / Carmesí)
+   ============================================================ */
+.dramas-container {
+  padding-bottom: 60px;
+}
+
+.dramas-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+
+.dramas-title .text-red {
+  color: #e50914;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+.dramas-search-box:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #e50914 !important;
+  box-shadow: 0 0 18px rgba(229, 9, 20, 0.45) !important;
+}
+
+.dramas-view-btn.active {
+  background: #e50914 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(229, 9, 20, 0.55) !important;
+}
+
+.dramas-pill.active {
+  background: #e50914 !important;
+  border-color: rgba(229, 9, 20, 0.8) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 14px rgba(229, 9, 20, 0.5) !important;
+}
+
+.dramas-pill:hover:not(.active) {
+  border-color: rgba(229, 9, 20, 0.5);
+  background: rgba(229, 9, 20, 0.15);
+  color: #fff;
+}
+
+.dramas-shelf-more-btn {
+  border-color: rgba(229, 9, 20, 0.35) !important;
+}
+
+.dramas-shelf-more-btn:hover {
+  background: rgba(229, 9, 20, 0.25) !important;
+  border-color: rgba(229, 9, 20, 0.7) !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(229, 9, 20, 0.45) !important;
+}
+
+.dramas-container .kurz-card:hover .kurz-card-poster-wrap {
+  border-color: rgba(229, 9, 20, 0.75);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 22px rgba(229, 9, 20, 0.5);
+}
+
+.dramas-container .kurz-card:hover .kurz-play-circle {
+  background: linear-gradient(135deg, #b91c1c, #e50914);
+  box-shadow: 0 0 24px rgba(229, 9, 20, 0.85);
+}
+
+.dramas-container .kurz-card-eps {
+  color: #f87171 !important;
+  font-weight: 700;
+}
+
+.dramas-container .kurz-more-card:hover .kurz-more-poster-wrap {
+  border-color: #e50914;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85), 0 0 25px rgba(229, 9, 20, 0.55);
+}
+
+.dramas-container .kurz-more-circle {
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.35), rgba(185, 28, 28, 0.1));
+  border-color: rgba(229, 9, 20, 0.7);
+  box-shadow: 0 0 18px rgba(229, 9, 20, 0.35);
+}
+
+.dramas-container .kurz-more-card:hover .kurz-more-circle {
+  background: linear-gradient(135deg, #b91c1c, #e50914);
+  box-shadow: 0 0 28px rgba(229, 9, 20, 0.85);
+}
+
+.dramas-container .kurz-more-count {
+  color: #fca5a5;
+  background: rgba(229, 9, 20, 0.2);
+}
+
+
+
 
 
 

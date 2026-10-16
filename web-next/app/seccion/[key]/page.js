@@ -5,6 +5,8 @@ import GridClient from '../../../components/GridClient';
 import CatalogGrid from '../../../components/CatalogGrid';
 import DramaTubeClient from '../../../components/DramaTubeClient';
 import HotDramaClient from '../../../components/HotDramaClient';
+import DramaShortsClient from '../../../components/DramaShortsClient';
+import DramasClient from '../../../components/DramasClient';
 import Footer from '../../../components/Footer';
 
 export const dynamic = 'force-dynamic';
@@ -86,7 +88,6 @@ export default async function SeccionPage({ params }) {
     );
   }
 
-
   // ===== Seccion 'dramavibe' (catalogo grande chartdrama) =====
   if (key === 'dramavibe') {
     let first = { items: [], total: 0, page: 1, pages: 1 };
@@ -140,6 +141,72 @@ export default async function SeccionPage({ params }) {
     );
   }
 
+  // ===== Seccion 'dramashorts' (catalogo dramashorts con estantes) =====
+  if (key === 'dramashorts') {
+    let shelves = [];
+    let allDramas = [];
+    try {
+      const rSh = await fetch(PROXY + '/api/dramashorts/shelves', { cache: 'no-store' });
+      if (rSh.ok) {
+        const dSh = await rSh.json();
+        shelves = dSh.shelves || [];
+      }
+      const cat = await getCatalog();
+      const secs = groupBySection(cat);
+      allDramas = secs['dramashorts'] || [];
+      if (!allDramas.length && shelves.length) {
+        allDramas = shelves[0].items || [];
+      }
+    } catch (e) {}
+
+    return (
+      <>
+        <Header />
+        <main className="con-header">
+          <DramaShortsClient 
+            shelves={shelves} 
+            allDramas={allDramas} 
+            totalCount={allDramas.length || 135} 
+          />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // ===== Seccion 'drama' (catalogo dramas con estantes) =====
+  if (key === 'drama') {
+    let shelves = [];
+    let allDramas = [];
+    try {
+      const rSh = await fetch(PROXY + '/api/dramas/shelves', { cache: 'no-store' });
+      if (rSh.ok) {
+        const dSh = await rSh.json();
+        shelves = dSh.shelves || [];
+      }
+      const cat = await getCatalog();
+      const secs = groupBySection(cat);
+      allDramas = secs['drama'] || [];
+      if (!allDramas.length && shelves.length) {
+        allDramas = shelves[0].items || [];
+      }
+    } catch (e) {}
+
+    return (
+      <>
+        <Header />
+        <main className="con-header">
+          <DramasClient 
+            shelves={shelves} 
+            allDramas={allDramas} 
+            totalCount={allDramas.length || 942} 
+          />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
   // ===== Otras secciones: catalogo normal =====
   const cat = await getCatalog();
   const secs = groupBySection(cat);
@@ -159,3 +226,4 @@ export default async function SeccionPage({ params }) {
     </>
   );
 }
+

@@ -1660,6 +1660,26 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     pass
             return self._send(200,'application/json; charset=utf-8', b'{"shelves":[]}', cache_header='no-store')
 
+        if path == '/api/dramas/shelves':
+            sh_p = os.path.join(ROOT, 'data', 'dramas_shelves.json')
+            if os.path.exists(sh_p):
+                try:
+                    sdata = json.load(open(sh_p, encoding='utf-8'))
+                    return self._send(200,'application/json; charset=utf-8', json.dumps(sdata, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+                except Exception:
+                    pass
+            return self._send(200,'application/json; charset=utf-8', b'{"shelves":[]}', cache_header='no-store')
+
+        if path == '/api/dramashorts/shelves':
+            sh_p = os.path.join(ROOT, 'data', 'dramashorts_shelves.json')
+            if os.path.exists(sh_p):
+                try:
+                    sdata = json.load(open(sh_p, encoding='utf-8'))
+                    return self._send(200,'application/json; charset=utf-8', json.dumps(sdata, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+                except Exception:
+                    pass
+            return self._send(200,'application/json; charset=utf-8', b'{"shelves":[]}', cache_header='no-store')
+
         if path == '/api/hotdrama/item':
             load_hotdrama()
             slug = qs.get('slug',[''])[0]
