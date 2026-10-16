@@ -3,56 +3,22 @@
     {
       "name": "Top Tendencias",
       "icon": "🔥",
-      "count": 12,
+      "count": 30,
       "items": [
         {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
+          "slug": "nt-doblado-pasando-por-tu-florecimiento",
+          "title": "Pasando por Tu Florecimiento",
+          "description": "Ver serie completa Pasando por Tu Florecimiento doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9665.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
+          "total_episodes": 99,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
+          ]
         },
         {
           "slug": "nt-consentida-del-senor-ferrer",
@@ -71,157 +37,10 @@
           "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
         },
         {
-          "slug": "nt-doblada-dos-suenos-un-despertar",
-          "title": "(DOBLADA)Dos Sueños, Un Despertar",
-          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 65,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
-        },
-        {
-          "slug": "nt-doblada-la-duena-del-karma",
-          "title": "(DOBLADA)La Dueña del Karma",
-          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
-        },
-        {
-          "slug": "nt-ecos-de-la-fatalidad",
-          "title": "Ecos de la Fatalidad",
-          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 49,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
-        },
-        {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 53,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        }
-      ],
-      "all_items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
-        },
-        {
-          "slug": "nt-consentida-del-senor-ferrer",
-          "title": "Consentida del Señor Ferrer",
-          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
+          "slug": "nt-doblado-la-chica-del-pueblo-tambien-es-mimada",
+          "title": "La chica del pueblo también es mimada",
+          "description": "Ver serie completa La chica del pueblo también es mimada doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9666.jpg",
           "section": "hotdrama",
           "source": "narto",
           "total_episodes": 84,
@@ -230,8 +49,67 @@
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
+          ]
+        },
+        {
+          "slug": "nt-doblado-a-estrella-para-toda-mi-vida",
+          "title": "A Estrella para toda mi vida",
+          "description": "Ver serie completa A Estrella para toda mi vida doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9676.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 74,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-de-cuidar-cerdos-a-conquistar-a-la-jefa",
+          "title": "De cuidar cerdos a conquistar a la jefa",
+          "description": "Ver serie completa De cuidar cerdos a conquistar a la jefa doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9664.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 70,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-heredero-cansado-solo-chambear",
+          "title": "Heredero cansado, solo chambear.",
+          "description": "Ver serie completa Heredero cansado, solo chambear. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9683.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 69,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-historia-de-un-mistico",
+          "title": "La Historia de un Místico",
+          "description": "Ver serie completa La Historia de un Místico doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9675.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 67,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
         },
         {
           "slug": "nt-doblada-dos-suenos-un-despertar",
@@ -248,238 +126,6 @@
             "Drama"
           ],
           "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
-        },
-        {
-          "slug": "nt-doblada-la-duena-del-karma",
-          "title": "(DOBLADA)La Dueña del Karma",
-          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
-        },
-        {
-          "slug": "nt-ecos-de-la-fatalidad",
-          "title": "Ecos de la Fatalidad",
-          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 49,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
-        },
-        {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 53,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        },
-        {
-          "slug": "nt-embarazada-de-trillizos-del-rey-dragon",
-          "title": "Embarazada de trillizos del Rey Dragón",
-          "description": "Episode 1/44 — Embarazada de trillizos del Rey Dragón. Vendida por su familia a pretendientes crueles por Agua del Manantial Sagrado, la asistenta zorra Silvia,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/534399.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 44,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-embarazada-de-trillizos-del-rey-dragon.jpg"
-        },
-        {
-          "slug": "nt-esposa-del-magnate-oculto",
-          "title": "Esposa del Magnate Oculto",
-          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
-        }
-      ]
-    },
-    {
-      "name": "Romance CEO & Millonarios",
-      "icon": "💍",
-      "count": 8,
-      "items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-consentida-del-senor-ferrer",
-          "title": "Consentida del Señor Ferrer",
-          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 84,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
-        },
-        {
-          "slug": "nt-esposa-del-magnate-oculto",
-          "title": "Esposa del Magnate Oculto",
-          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
-        },
-        {
-          "slug": "nt-me-enamore-del-padre-millonario-de-mi-amiga",
-          "title": "Me enamoré del padre millonario de mi amiga",
-          "description": "Episode 1/51 — Me enamoré del padre millonario de mi amiga. Lisa Morales, una estudiante de Derecho huérfana, trabaja como mesera en un yate y conoce a Cristian. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/208082.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-me-enamore-del-padre-millonario-de-mi-amiga.jpg"
-        },
-        {
-          "slug": "nt-la-tierra-baldia-que-me-hizo-millonario-doblado",
-          "title": "La tierra baldía que me hizo millonario (Doblado)",
-          "description": "Episode 1/31 — La tierra baldía que me hizo millonario (Doblado). Un ranchero caído en desgracia apuesta su último dólar por 400 acres de tierra estéril. Pero p. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/544148.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 31,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-tierra-baldia-que-me-hizo-millonario-doblado.jpg"
-        },
-        {
-          "slug": "nt-doblada-dos-suenos-un-despertar",
-          "title": "(DOBLADA)Dos Sueños, Un Despertar",
-          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 65,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
-        },
-        {
-          "slug": "nt-el-ultimo-baile-por-amor",
-          "title": "El último baile por amor",
-          "description": "Episode 1/60 — El último baile por amor. Emma Johnson had been married to Ryan Morgan for five years. She danced relentlessly, striving to achieve the highest h. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/156276.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 38,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-ultimo-baile-por-amor.jpg"
         },
         {
           "slug": "nt-o-cesar-o-nada",
@@ -496,25 +142,38 @@
             "Drama"
           ],
           "poster_local": "posters/nt-o-cesar-o-nada.jpg"
+        },
+        {
+          "slug": "nt-doblado-la-guarderia-del-dios-bestia",
+          "title": "La Guardería del Dios Bestia",
+          "description": "Ver serie completa La Guardería del Dios Bestia doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9663.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
         }
       ],
       "all_items": [
         {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
+          "slug": "nt-doblado-pasando-por-tu-florecimiento",
+          "title": "Pasando por Tu Florecimiento",
+          "description": "Ver serie completa Pasando por Tu Florecimiento doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9665.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 51,
+          "total_episodes": 99,
           "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
         },
         {
           "slug": "nt-consentida-del-senor-ferrer",
@@ -533,52 +192,79 @@
           "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
         },
         {
-          "slug": "nt-esposa-del-magnate-oculto",
-          "title": "Esposa del Magnate Oculto",
-          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "slug": "nt-doblado-la-chica-del-pueblo-tambien-es-mimada",
+          "title": "La chica del pueblo también es mimada",
+          "description": "Ver serie completa La chica del pueblo también es mimada doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9666.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 60,
+          "total_episodes": 84,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+          ]
         },
         {
-          "slug": "nt-me-enamore-del-padre-millonario-de-mi-amiga",
-          "title": "Me enamoré del padre millonario de mi amiga",
-          "description": "Episode 1/51 — Me enamoré del padre millonario de mi amiga. Lisa Morales, una estudiante de Derecho huérfana, trabaja como mesera en un yate y conoce a Cristian. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/208082.jpg",
+          "slug": "nt-doblado-a-estrella-para-toda-mi-vida",
+          "title": "A Estrella para toda mi vida",
+          "description": "Ver serie completa A Estrella para toda mi vida doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9676.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 51,
+          "total_episodes": 74,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-me-enamore-del-padre-millonario-de-mi-amiga.jpg"
+          ]
         },
         {
-          "slug": "nt-la-tierra-baldia-que-me-hizo-millonario-doblado",
-          "title": "La tierra baldía que me hizo millonario (Doblado)",
-          "description": "Episode 1/31 — La tierra baldía que me hizo millonario (Doblado). Un ranchero caído en desgracia apuesta su último dólar por 400 acres de tierra estéril. Pero p. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/544148.jpg",
+          "slug": "nt-doblado-de-cuidar-cerdos-a-conquistar-a-la-jefa",
+          "title": "De cuidar cerdos a conquistar a la jefa",
+          "description": "Ver serie completa De cuidar cerdos a conquistar a la jefa doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9664.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 31,
+          "total_episodes": 70,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-la-tierra-baldia-que-me-hizo-millonario-doblado.jpg"
+          ]
+        },
+        {
+          "slug": "nt-doblado-heredero-cansado-solo-chambear",
+          "title": "Heredero cansado, solo chambear.",
+          "description": "Ver serie completa Heredero cansado, solo chambear. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9683.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 69,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-historia-de-un-mistico",
+          "title": "La Historia de un Místico",
+          "description": "Ver serie completa La Historia de un Místico doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9675.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 67,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
         },
         {
           "slug": "nt-doblada-dos-suenos-un-despertar",
@@ -595,22 +281,6 @@
             "Drama"
           ],
           "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
-        },
-        {
-          "slug": "nt-el-ultimo-baile-por-amor",
-          "title": "El último baile por amor",
-          "description": "Episode 1/60 — El último baile por amor. Emma Johnson had been married to Ryan Morgan for five years. She danced relentlessly, striving to achieve the highest h. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/156276.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 38,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-ultimo-baile-por-amor.jpg"
         },
         {
           "slug": "nt-o-cesar-o-nada",
@@ -627,827 +297,66 @@
             "Drama"
           ],
           "poster_local": "posters/nt-o-cesar-o-nada.jpg"
-        }
-      ]
-    },
-    {
-      "name": "Hombres Lobo & Fantasía",
-      "icon": "🐺",
-      "count": 7,
-      "items": [
-        {
-          "slug": "nt-embarazada-de-trillizos-del-rey-dragon",
-          "title": "Embarazada de trillizos del Rey Dragón",
-          "description": "Episode 1/44 — Embarazada de trillizos del Rey Dragón. Vendida por su familia a pretendientes crueles por Agua del Manantial Sagrado, la asistenta zorra Silvia,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/534399.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 44,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-embarazada-de-trillizos-del-rey-dragon.jpg"
         },
         {
-          "slug": "nt-rechazame-rey-dragon",
-          "title": "Recházame, Rey Dragón",
-          "description": "Episode 1/50 — Recházame, Rey Dragón. Tras una noche de pasión con el Rey Dragón Gael, Lara fue expulsada por una falsa profecía. Un año después Lara regresa co. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/190591.jpg",
+          "slug": "nt-doblado-la-guarderia-del-dios-bestia",
+          "title": "La Guardería del Dios Bestia",
+          "description": "Ver serie completa La Guardería del Dios Bestia doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9663.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 50,
+          "total_episodes": 63,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-rechazame-rey-dragon.jpg"
+          ]
         },
         {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
+          "slug": "nt-doblado-destinados-a-amarnos",
+          "title": "Destinados a amarnos",
+          "description": "Ver serie completa Destinados a amarnos doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9677.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 49,
+          "total_episodes": 63,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
+          ]
         },
         {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
+          "slug": "nt-doblado-larga-noche-de-fuego-y-hielo",
+          "title": "Larga noche de fuego y hielo",
+          "description": "Ver serie completa Larga noche de fuego y hielo doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9679.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 53,
+          "total_episodes": 63,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
+          ]
         },
         {
-          "slug": "nt-tu-pequena-dulzura-es-la-heredera-de-hades",
-          "title": "Tu Pequeña Dulzura Es la Heredera de Hades",
-          "description": "Episode 1/60 — Tu Pequeña Dulzura Es la Heredera de Hades. Una bebé demoníaca arrasa con el caos: el Rey del Inframundo renace en un frágil cuerpo de niña. Mien. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/101196.jpg",
+          "slug": "nt-doblado-el-amor-nos-encontro-otra-vez",
+          "title": "El amor nos encontró otra vez",
+          "description": "Ver serie completa El amor nos encontró otra vez doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9684.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 60,
+          "total_episodes": 63,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-tu-pequena-dulzura-es-la-heredera-de-hades.jpg"
-        },
-        {
-          "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
-          "title": "Un pacto me unió al inmortal supremo 1",
-          "description": "Episode 1/50 — Un pacto me unió al inmortal supremo 1. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/228093.webp",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 3,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
-        },
-        {
-          "slug": "nt-la-centesima-traicion",
-          "title": "La centésima traición",
-          "description": "Episode 1/50 — La centésima traición. Para proteger el Reino de Avaloria, Lucio renuncia a su divinidad. Cumpliendo el último deseo del difunto rey, promete ayu. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/529563.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-centesima-traicion.jpg"
-        }
-      ],
-      "all_items": [
-        {
-          "slug": "nt-embarazada-de-trillizos-del-rey-dragon",
-          "title": "Embarazada de trillizos del Rey Dragón",
-          "description": "Episode 1/44 — Embarazada de trillizos del Rey Dragón. Vendida por su familia a pretendientes crueles por Agua del Manantial Sagrado, la asistenta zorra Silvia,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/534399.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 44,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-embarazada-de-trillizos-del-rey-dragon.jpg"
-        },
-        {
-          "slug": "nt-rechazame-rey-dragon",
-          "title": "Recházame, Rey Dragón",
-          "description": "Episode 1/50 — Recházame, Rey Dragón. Tras una noche de pasión con el Rey Dragón Gael, Lara fue expulsada por una falsa profecía. Un año después Lara regresa co. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/190591.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-rechazame-rey-dragon.jpg"
-        },
-        {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 49,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
-        },
-        {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 53,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
-        },
-        {
-          "slug": "nt-tu-pequena-dulzura-es-la-heredera-de-hades",
-          "title": "Tu Pequeña Dulzura Es la Heredera de Hades",
-          "description": "Episode 1/60 — Tu Pequeña Dulzura Es la Heredera de Hades. Una bebé demoníaca arrasa con el caos: el Rey del Inframundo renace en un frágil cuerpo de niña. Mien. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/101196.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-tu-pequena-dulzura-es-la-heredera-de-hades.jpg"
-        },
-        {
-          "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
-          "title": "Un pacto me unió al inmortal supremo 1",
-          "description": "Episode 1/50 — Un pacto me unió al inmortal supremo 1. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/228093.webp",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 3,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
-        },
-        {
-          "slug": "nt-la-centesima-traicion",
-          "title": "La centésima traición",
-          "description": "Episode 1/50 — La centésima traición. Para proteger el Reino de Avaloria, Lucio renuncia a su divinidad. Cumpliendo el último deseo del difunto rey, promete ayu. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/529563.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-centesima-traicion.jpg"
-        }
-      ]
-    },
-    {
-      "name": "Amor Prohibido & Pasión",
-      "icon": "💋",
-      "count": 6,
-      "items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        },
-        {
-          "slug": "nt-mi-hermanastro-es-un-bad-boy",
-          "title": "Mi hermanastro es un Bad Boy",
-          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 30,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
-        },
-        {
-          "slug": "nt-rendida-a-su-oscuro-secreto",
-          "title": "Rendida a su oscuro secreto",
-          "description": "Episode 1/54 — Rendida a su oscuro secreto. Amelia, una sirvienta de 20 años, es despedida tras descubrir el cuarto privado de BDSM de su jefe multimillonario,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/138706.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 54,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-rendida-a-su-oscuro-secreto.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
-        }
-      ],
-      "all_items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        },
-        {
-          "slug": "nt-mi-hermanastro-es-un-bad-boy",
-          "title": "Mi hermanastro es un Bad Boy",
-          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 30,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
-        },
-        {
-          "slug": "nt-rendida-a-su-oscuro-secreto",
-          "title": "Rendida a su oscuro secreto",
-          "description": "Episode 1/54 — Rendida a su oscuro secreto. Amelia, una sirvienta de 20 años, es despedida tras descubrir el cuarto privado de BDSM de su jefe multimillonario,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/138706.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 54,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-rendida-a-su-oscuro-secreto.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
-        }
-      ]
-    },
-    {
-      "name": "Venganza & Segundas Oportunidades",
-      "icon": "👑",
-      "count": 9,
-      "items": [
-        {
-          "slug": "nt-doblada-la-duena-del-karma",
-          "title": "(DOBLADA)La Dueña del Karma",
-          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
-        },
-        {
-          "slug": "nt-ecos-de-la-fatalidad",
-          "title": "Ecos de la Fatalidad",
-          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado",
-          "title": "Mi ángel de la fortuna me hizo reina (Doblado)",
-          "description": "Episode 1/52 — Mi ángel de la fortuna me hizo reina (Doblado). Bendecida por Gabriel, una mujer embarazada deja a su esposo infiel para proteger a su hija por n. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/187911.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 52,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado.jpg"
-        },
-        {
-          "slug": "nt-mi-barco-del-amor-zarpo-sin-ti",
-          "title": "Mi Barco del Amor Zarpó sin Ti",
-          "description": "Episode 1/57 — Mi Barco del Amor Zarpó sin Ti. Cuando el hombre que ama la abandona por otra mujer, una esposa devota pierde todo lo que creía seguro. Mientras. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/273982.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 57,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-barco-del-amor-zarpo-sin-ti.jpg"
-        },
-        {
-          "slug": "nt-la-abogada-del-baile-enmascarado",
-          "title": "La abogada del baile enmascarado",
-          "description": "Episode 1/61 — La abogada del baile enmascarado. Seis años después de que un baile de máscaras cambiara sus vidas para siempre, la abogada Madeline vuelve a cru. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/129677.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 61,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-abogada-del-baile-enmascarado.jpg"
-        },
-        {
-          "slug": "nt-playboy-el-verdadero-dios",
-          "title": "¿Playboy? El Verdadero Dios",
-          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 34,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
-        },
-        {
-          "slug": "nt-entre-la-niebla-y-el-viento",
-          "title": "Entre la Niebla y el Viento",
-          "description": "Episode 1/60 — Entre la Niebla y el Viento. Sofía, experta ginecóloga, sufre diez años de infidelidad y humillación por infertilidad. ¡Todo estalla al descubrir. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/75926.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-entre-la-niebla-y-el-viento.jpg"
-        },
-        {
-          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
-          "title": "El médico divino rodeado de siete bellezas 2",
-          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
-        },
-        {
-          "slug": "nt-la-centesima-traicion",
-          "title": "La centésima traición",
-          "description": "Episode 1/50 — La centésima traición. Para proteger el Reino de Avaloria, Lucio renuncia a su divinidad. Cumpliendo el último deseo del difunto rey, promete ayu. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/529563.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-centesima-traicion.jpg"
-        }
-      ],
-      "all_items": [
-        {
-          "slug": "nt-doblada-la-duena-del-karma",
-          "title": "(DOBLADA)La Dueña del Karma",
-          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
-        },
-        {
-          "slug": "nt-ecos-de-la-fatalidad",
-          "title": "Ecos de la Fatalidad",
-          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado",
-          "title": "Mi ángel de la fortuna me hizo reina (Doblado)",
-          "description": "Episode 1/52 — Mi ángel de la fortuna me hizo reina (Doblado). Bendecida por Gabriel, una mujer embarazada deja a su esposo infiel para proteger a su hija por n. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/187911.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 52,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado.jpg"
-        },
-        {
-          "slug": "nt-mi-barco-del-amor-zarpo-sin-ti",
-          "title": "Mi Barco del Amor Zarpó sin Ti",
-          "description": "Episode 1/57 — Mi Barco del Amor Zarpó sin Ti. Cuando el hombre que ama la abandona por otra mujer, una esposa devota pierde todo lo que creía seguro. Mientras. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/273982.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 57,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-barco-del-amor-zarpo-sin-ti.jpg"
-        },
-        {
-          "slug": "nt-la-abogada-del-baile-enmascarado",
-          "title": "La abogada del baile enmascarado",
-          "description": "Episode 1/61 — La abogada del baile enmascarado. Seis años después de que un baile de máscaras cambiara sus vidas para siempre, la abogada Madeline vuelve a cru. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/129677.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 61,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-abogada-del-baile-enmascarado.jpg"
-        },
-        {
-          "slug": "nt-playboy-el-verdadero-dios",
-          "title": "¿Playboy? El Verdadero Dios",
-          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 34,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
-        },
-        {
-          "slug": "nt-entre-la-niebla-y-el-viento",
-          "title": "Entre la Niebla y el Viento",
-          "description": "Episode 1/60 — Entre la Niebla y el Viento. Sofía, experta ginecóloga, sufre diez años de infidelidad y humillación por infertilidad. ¡Todo estalla al descubrir. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/75926.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-entre-la-niebla-y-el-viento.jpg"
-        },
-        {
-          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
-          "title": "El médico divino rodeado de siete bellezas 2",
-          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
-        },
-        {
-          "slug": "nt-la-centesima-traicion",
-          "title": "La centésima traición",
-          "description": "Episode 1/50 — La centésima traición. Para proteger el Reino de Avaloria, Lucio renuncia a su divinidad. Cumpliendo el último deseo del difunto rey, promete ayu. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/529563.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-centesima-traicion.jpg"
-        }
-      ]
-    },
-    {
-      "name": "Doblaje Latino Completo",
-      "icon": "🎙️",
-      "count": 31,
-      "items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
-        },
-        {
-          "slug": "nt-consentida-del-senor-ferrer",
-          "title": "Consentida del Señor Ferrer",
-          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 84,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
-        },
-        {
-          "slug": "nt-doblada-dos-suenos-un-despertar",
-          "title": "(DOBLADA)Dos Sueños, Un Despertar",
-          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 65,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+          ]
         },
         {
           "slug": "nt-doblada-la-duena-del-karma",
@@ -1480,281 +389,6 @@
             "Drama"
           ],
           "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 49,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
-        },
-        {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 53,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        }
-      ],
-      "all_items": [
-        {
-          "slug": "nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado",
-          "title": "Aventura prohibida con el papá de mi mejor amiga (Doblado)",
-          "description": "Tras descubrir en el vuelo que su prometido le es infiel, Mía queda destrozada. Está rumbo a la boda de su mejor amiga. Borracha y dolida, se siente profundamente atraída por Damián, un atractivo multimillonario mayor. Pero pronto descubre que es el padre de su amiga. Durante el caótico fin de semana, deberán mantener en secreto su aventura prohibida, mientras enfrentan la venganza de sus ex celosos, el riesgo de arruinar la boda y destruir la amistad.",
-          "poster": "https://img.nartodrama-api.online/poster/762309.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "CEO",
-            "Sentimientos ocultos",
-            "Diferencia de edad",
-            "Amor prohibido",
-            "Doblado"
-          ],
-          "poster_local": "posters/nt-aventura-prohibida-con-el-papa-de-mi-mejor-amiga-doblado.jpg"
-        },
-        {
-          "slug": "nt-besando-al-hermano-equivocado",
-          "title": "Besando al hermano equivocado",
-          "description": "Episode 1/56 — Besando al hermano equivocado. Para conquistar el corazón de su crush antes de la graduación, la nerd Ariadna recurre a la ayuda del atractivo y. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/91526.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 56,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besando-al-hermano-equivocado.jpg"
-        },
-        {
-          "slug": "nt-besare-tus-cicatrices",
-          "title": "Besaré Tus Cicatrices",
-          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
-        },
-        {
-          "slug": "nt-consentida-del-senor-ferrer",
-          "title": "Consentida del Señor Ferrer",
-          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 84,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
-        },
-        {
-          "slug": "nt-doblada-dos-suenos-un-despertar",
-          "title": "(DOBLADA)Dos Sueños, Un Despertar",
-          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 65,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
-        },
-        {
-          "slug": "nt-doblada-la-duena-del-karma",
-          "title": "(DOBLADA)La Dueña del Karma",
-          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
-        },
-        {
-          "slug": "nt-ecos-de-la-fatalidad",
-          "title": "Ecos de la Fatalidad",
-          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
-        },
-        {
-          "slug": "nt-el-cazador-legendario",
-          "title": "El Cazador Legendario",
-          "description": "Episode 1/49 — El Cazador Legendario. Ocho años después de abatir al dragón que amenazaba al Imperio, el Cazador Legendario Ramiro Rivas desapareció y vive ocul. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/216687.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 49,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-cazador-legendario.jpg"
-        },
-        {
-          "slug": "nt-el-despertar-del-dios-mortal-doblado",
-          "title": "El despertar del Dios Mortal (Doblado)",
-          "description": "Episode 1/53 — El despertar del Dios Mortal (Doblado). Traicionado por la mujer que ama y exiliado por su familia para morir, Alexis, un mortal &quot;inútil&quot;, sobrev. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/533831.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 53,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-despertar-del-dios-mortal-doblado.jpg"
-        },
-        {
-          "slug": "nt-el-es-mas-apasionado-que-mi-ex",
-          "title": "Él Es más Apasionado que mi Ex",
-          "description": "Episode 1/71 — Él Es más Apasionado que mi Ex. Julia y Miguel fueron novios por 4 años, pero él se casó con su primer amor. Con el corazón roto, Julia decidió a. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/135251.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 71,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-es-mas-apasionado-que-mi-ex.jpg"
-        },
-        {
-          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
-          "title": "El médico divino rodeado de siete bellezas 2",
-          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 50,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
-        },
-        {
-          "slug": "nt-el-ultimo-baile-por-amor",
-          "title": "El último baile por amor",
-          "description": "Episode 1/60 — El último baile por amor. Emma Johnson had been married to Ryan Morgan for five years. She danced relentlessly, striving to achieve the highest h. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/156276.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 38,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-el-ultimo-baile-por-amor.jpg"
-        },
-        {
-          "slug": "nt-embarazada-de-trillizos-del-rey-dragon",
-          "title": "Embarazada de trillizos del Rey Dragón",
-          "description": "Episode 1/44 — Embarazada de trillizos del Rey Dragón. Vendida por su familia a pretendientes crueles por Agua del Manantial Sagrado, la asistenta zorra Silvia,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/534399.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 44,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-embarazada-de-trillizos-del-rey-dragon.jpg"
-        },
-        {
-          "slug": "nt-entre-la-niebla-y-el-viento",
-          "title": "Entre la Niebla y el Viento",
-          "description": "Episode 1/60 — Entre la Niebla y el Viento. Sofía, experta ginecóloga, sufre diez años de infidelidad y humillación por infertilidad. ¡Todo estalla al descubrir. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/75926.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 60,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-entre-la-niebla-y-el-viento.jpg"
         },
         {
           "slug": "nt-esposa-del-magnate-oculto",
@@ -1773,10 +407,85 @@
           "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
         },
         {
-          "slug": "nt-ji-ge-yao-wo",
-          "title": "El lobo que vive conmigo",
-          "description": "Episode 1/55 — El lobo que vive conmigo. Amy, una humilde chica de campo, entra en la prestigiosa familia West tras el nuevo matrimonio de su madre. Allí conoce. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/115087.png",
+          "slug": "nt-doblado-mama-papa-es-invencible",
+          "title": "¡Mamá, papá es invencible!",
+          "description": "Ver serie completa ¡Mamá, papá es invencible! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9670.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-no-me-dejo",
+          "title": "La Luz que No Me Dejó",
+          "description": "Ver serie completa La Luz que No Me Dejó doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9672.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-por-ti-lo-que-sea",
+          "title": "Por Ti, Lo Que Sea",
+          "description": "Ver serie completa Por Ti, Lo Que Sea doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9687.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-despues-del-ruido-llego-el",
+          "title": "Después del ruido, llegó él",
+          "description": "Ver serie completa Después del ruido, llegó él doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9669.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 57,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mi-humilde-padre-es-un-mago-supremo",
+          "title": "¡Mi Humilde Padre es un Mago Supremo!",
+          "description": "Ver serie completa ¡Mi Humilde Padre es un Mago Supremo! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9682.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 56,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-vidas-robadas",
+          "title": "Vidas Robadas",
+          "description": "Ver serie completa Vidas Robadas doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9678.jpg",
           "section": "hotdrama",
           "source": "narto",
           "total_episodes": 55,
@@ -1785,30 +494,13 @@
             "Doblado",
             "Romance",
             "Drama"
-          ],
-          "poster_local": "posters/nt-ji-ge-yao-wo.jpg"
+          ]
         },
         {
-          "slug": "nt-la-abogada-del-baile-enmascarado",
-          "title": "La abogada del baile enmascarado",
-          "description": "Episode 1/61 — La abogada del baile enmascarado. Seis años después de que un baile de máscaras cambiara sus vidas para siempre, la abogada Madeline vuelve a cru. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/129677.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 61,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-abogada-del-baile-enmascarado.jpg"
-        },
-        {
-          "slug": "nt-la-centesima-traicion",
-          "title": "La centésima traición",
-          "description": "Episode 1/50 — La centésima traición. Para proteger el Reino de Avaloria, Lucio renuncia a su divinidad. Cumpliendo el último deseo del difunto rey, promete ayu. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/529563.jpg",
+          "slug": "nt-besare-tus-cicatrices",
+          "title": "Besaré Tus Cicatrices",
+          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
           "section": "hotdrama",
           "source": "narto",
           "total_episodes": 50,
@@ -1818,125 +510,13 @@
             "Romance",
             "Drama"
           ],
-          "poster_local": "posters/nt-la-centesima-traicion.jpg"
+          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
         },
         {
-          "slug": "nt-la-tierra-baldia-que-me-hizo-millonario-doblado",
-          "title": "La tierra baldía que me hizo millonario (Doblado)",
-          "description": "Episode 1/31 — La tierra baldía que me hizo millonario (Doblado). Un ranchero caído en desgracia apuesta su último dólar por 400 acres de tierra estéril. Pero p. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/544148.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 31,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-la-tierra-baldia-que-me-hizo-millonario-doblado.jpg"
-        },
-        {
-          "slug": "nt-me-enamore-del-padre-millonario-de-mi-amiga",
-          "title": "Me enamoré del padre millonario de mi amiga",
-          "description": "Episode 1/51 — Me enamoré del padre millonario de mi amiga. Lisa Morales, una estudiante de Derecho huérfana, trabaja como mesera en un yate y conoce a Cristian. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/208082.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 51,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-me-enamore-del-padre-millonario-de-mi-amiga.jpg"
-        },
-        {
-          "slug": "nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado",
-          "title": "Mi ángel de la fortuna me hizo reina (Doblado)",
-          "description": "Episode 1/52 — Mi ángel de la fortuna me hizo reina (Doblado). Bendecida por Gabriel, una mujer embarazada deja a su esposo infiel para proteger a su hija por n. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/187911.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 52,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-angel-de-la-fortuna-me-hizo-reina-doblado.jpg"
-        },
-        {
-          "slug": "nt-mi-barco-del-amor-zarpo-sin-ti",
-          "title": "Mi Barco del Amor Zarpó sin Ti",
-          "description": "Episode 1/57 — Mi Barco del Amor Zarpó sin Ti. Cuando el hombre que ama la abandona por otra mujer, una esposa devota pierde todo lo que creía seguro. Mientras. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/273982.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 57,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-barco-del-amor-zarpo-sin-ti.jpg"
-        },
-        {
-          "slug": "nt-mi-hermanastro-es-un-bad-boy",
-          "title": "Mi hermanastro es un Bad Boy",
-          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 30,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
-        },
-        {
-          "slug": "nt-o-cesar-o-nada",
-          "title": "O César o nada",
-          "description": "Episode 1/64 — O César o nada. Valeria Suárez, única heredera de la noble familia Suárez, descubre que su madre fue acusada de ser la amante, mientras la niñera. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/183127.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 64,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-o-cesar-o-nada.jpg"
-        },
-        {
-          "slug": "nt-playboy-el-verdadero-dios",
-          "title": "¿Playboy? El Verdadero Dios",
-          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 34,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
-        },
-        {
-          "slug": "nt-rechazame-rey-dragon",
-          "title": "Recházame, Rey Dragón",
-          "description": "Episode 1/50 — Recházame, Rey Dragón. Tras una noche de pasión con el Rey Dragón Gael, Lara fue expulsada por una falsa profecía. Un año después Lara regresa co. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/190591.jpg",
+          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
+          "title": "El médico divino rodeado de siete bellezas 2",
+          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
           "section": "hotdrama",
           "source": "narto",
           "total_episodes": 50,
@@ -1946,23 +526,7 @@
             "Romance",
             "Drama"
           ],
-          "poster_local": "posters/nt-rechazame-rey-dragon.jpg"
-        },
-        {
-          "slug": "nt-rendida-a-su-oscuro-secreto",
-          "title": "Rendida a su oscuro secreto",
-          "description": "Episode 1/54 — Rendida a su oscuro secreto. Amelia, una sirvienta de 20 años, es despedida tras descubrir el cuarto privado de BDSM de su jefe multimillonario,. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/138706.jpg",
-          "section": "hotdrama",
-          "source": "narto",
-          "total_episodes": 54,
-          "genres": [
-            "HotDrama",
-            "Doblado",
-            "Romance",
-            "Drama"
-          ],
-          "poster_local": "posters/nt-rendida-a-su-oscuro-secreto.jpg"
+          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
         },
         {
           "slug": "nt-the-golden-cage",
@@ -1981,10 +545,111 @@
           "poster_local": "posters/nt-the-golden-cage.jpg"
         },
         {
-          "slug": "nt-tu-pequena-dulzura-es-la-heredera-de-hades",
-          "title": "Tu Pequeña Dulzura Es la Heredera de Hades",
-          "description": "Episode 1/60 — Tu Pequeña Dulzura Es la Heredera de Hades. Una bebé demoníaca arrasa con el caos: el Rey del Inframundo renace en un frágil cuerpo de niña. Mien. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/101196.jpg",
+          "slug": "nt-doblado-la-luz-que-tarda",
+          "title": "La Luz Que Tarda",
+          "description": "Ver serie completa La Luz Que Tarda doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9681.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 37,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mami-ya-no-digo-mentiras",
+          "title": "Mami, ya no digo mentiras.",
+          "description": "Ver serie completa Mami, ya no digo mentiras. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9671.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 35,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        },
+        {
+          "slug": "nt-mi-hermanastro-es-un-bad-boy",
+          "title": "Mi hermanastro es un Bad Boy",
+          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 30,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
+        },
+        {
+          "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
+          "title": "Un pacto me unió al inmortal supremo 1",
+          "description": "Episode 1/50 — Un pacto me unió al inmortal supremo 1. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228093.webp",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 3,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
+        }
+      ]
+    },
+    {
+      "name": "Romance CEO & Millonarios",
+      "icon": "💍",
+      "count": 6,
+      "items": [
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
           "section": "hotdrama",
           "source": "narto",
           "total_episodes": 60,
@@ -1994,7 +659,188 @@
             "Romance",
             "Drama"
           ],
-          "poster_local": "posters/nt-tu-pequena-dulzura-es-la-heredera-de-hades.jpg"
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        },
+        {
+          "slug": "nt-the-golden-cage",
+          "title": "Cautiva en la jaula de oro",
+          "description": "Episode 1/50 — Cautiva en la jaula de oro. Ryu, ídolo del K-pop que enloquece al mundo y hombre de poder absoluto. Cuando la actriz desconocida Chloe entra en s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/184958.png",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-the-golden-cage.jpg"
+        },
+        {
+          "slug": "nt-doblado-de-cuidar-cerdos-a-conquistar-a-la-jefa",
+          "title": "De cuidar cerdos a conquistar a la jefa",
+          "description": "Ver serie completa De cuidar cerdos a conquistar a la jefa doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9664.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 70,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-heredero-cansado-solo-chambear",
+          "title": "Heredero cansado, solo chambear.",
+          "description": "Ver serie completa Heredero cansado, solo chambear. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9683.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 69,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ],
+      "all_items": [
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        },
+        {
+          "slug": "nt-the-golden-cage",
+          "title": "Cautiva en la jaula de oro",
+          "description": "Episode 1/50 — Cautiva en la jaula de oro. Ryu, ídolo del K-pop que enloquece al mundo y hombre de poder absoluto. Cuando la actriz desconocida Chloe entra en s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/184958.png",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-the-golden-cage.jpg"
+        },
+        {
+          "slug": "nt-doblado-de-cuidar-cerdos-a-conquistar-a-la-jefa",
+          "title": "De cuidar cerdos a conquistar a la jefa",
+          "description": "Ver serie completa De cuidar cerdos a conquistar a la jefa doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9664.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 70,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-heredero-cansado-solo-chambear",
+          "title": "Heredero cansado, solo chambear.",
+          "description": "Ver serie completa Heredero cansado, solo chambear. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9683.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 69,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fantasía, Poder & Dioses",
+      "icon": "⚡",
+      "count": 9,
+      "items": [
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
         },
         {
           "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
@@ -2013,21 +859,1329 @@
           "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
         },
         {
-          "slug": "nt-bussy-and-the-beast",
-          "title": "Ángel y la Bestia",
-          "description": "Episode 1/46 — Ángel y la Bestia. Cuando un terapeuta sexual se infiltra en una mansión maldita para rescatar a su hermano secuestrado, descubre que la única fo. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
-          "poster": "https://img.nartodrama-api.online/poster/67816.png",
+          "slug": "nt-doblado-la-guarderia-del-dios-bestia",
+          "title": "La Guardería del Dios Bestia",
+          "description": "Ver serie completa La Guardería del Dios Bestia doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9663.jpg",
           "section": "hotdrama",
           "source": "narto",
-          "total_episodes": 46,
+          "total_episodes": 63,
           "genres": [
             "HotDrama",
             "Doblado",
             "Romance",
-            "Drama",
-            "Miniserie"
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mama-papa-es-invencible",
+          "title": "¡Mamá, papá es invencible!",
+          "description": "Ver serie completa ¡Mamá, papá es invencible! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9670.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-no-me-dejo",
+          "title": "La Luz que No Me Dejó",
+          "description": "Ver serie completa La Luz que No Me Dejó doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9672.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-historia-de-un-mistico",
+          "title": "La Historia de un Místico",
+          "description": "Ver serie completa La Historia de un Místico doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9675.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 67,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-larga-noche-de-fuego-y-hielo",
+          "title": "Larga noche de fuego y hielo",
+          "description": "Ver serie completa Larga noche de fuego y hielo doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9679.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-tarda",
+          "title": "La Luz Que Tarda",
+          "description": "Ver serie completa La Luz Que Tarda doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9681.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 37,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mi-humilde-padre-es-un-mago-supremo",
+          "title": "¡Mi Humilde Padre es un Mago Supremo!",
+          "description": "Ver serie completa ¡Mi Humilde Padre es un Mago Supremo! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9682.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 56,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ],
+      "all_items": [
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
           ],
-          "poster_local": "posters/nt-bussy-and-the-beast.jpg"
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        },
+        {
+          "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
+          "title": "Un pacto me unió al inmortal supremo 1",
+          "description": "Episode 1/50 — Un pacto me unió al inmortal supremo 1. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228093.webp",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 3,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
+        },
+        {
+          "slug": "nt-doblado-la-guarderia-del-dios-bestia",
+          "title": "La Guardería del Dios Bestia",
+          "description": "Ver serie completa La Guardería del Dios Bestia doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9663.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mama-papa-es-invencible",
+          "title": "¡Mamá, papá es invencible!",
+          "description": "Ver serie completa ¡Mamá, papá es invencible! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9670.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-no-me-dejo",
+          "title": "La Luz que No Me Dejó",
+          "description": "Ver serie completa La Luz que No Me Dejó doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9672.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-historia-de-un-mistico",
+          "title": "La Historia de un Místico",
+          "description": "Ver serie completa La Historia de un Místico doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9675.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 67,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-larga-noche-de-fuego-y-hielo",
+          "title": "Larga noche de fuego y hielo",
+          "description": "Ver serie completa Larga noche de fuego y hielo doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9679.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-tarda",
+          "title": "La Luz Que Tarda",
+          "description": "Ver serie completa La Luz Que Tarda doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9681.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 37,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mi-humilde-padre-es-un-mago-supremo",
+          "title": "¡Mi Humilde Padre es un Mago Supremo!",
+          "description": "Ver serie completa ¡Mi Humilde Padre es un Mago Supremo! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9682.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 56,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Amor, Pasión & Destino",
+      "icon": "💋",
+      "count": 9,
+      "items": [
+        {
+          "slug": "nt-besare-tus-cicatrices",
+          "title": "Besaré Tus Cicatrices",
+          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-mi-hermanastro-es-un-bad-boy",
+          "title": "Mi hermanastro es un Bad Boy",
+          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 30,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
+        },
+        {
+          "slug": "nt-doblado-pasando-por-tu-florecimiento",
+          "title": "Pasando por Tu Florecimiento",
+          "description": "Ver serie completa Pasando por Tu Florecimiento doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9665.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 99,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-chica-del-pueblo-tambien-es-mimada",
+          "title": "La chica del pueblo también es mimada",
+          "description": "Ver serie completa La chica del pueblo también es mimada doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9666.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 84,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mami-ya-no-digo-mentiras",
+          "title": "Mami, ya no digo mentiras.",
+          "description": "Ver serie completa Mami, ya no digo mentiras. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9671.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 35,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-a-estrella-para-toda-mi-vida",
+          "title": "A Estrella para toda mi vida",
+          "description": "Ver serie completa A Estrella para toda mi vida doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9676.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 74,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-destinados-a-amarnos",
+          "title": "Destinados a amarnos",
+          "description": "Ver serie completa Destinados a amarnos doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9677.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-el-amor-nos-encontro-otra-vez",
+          "title": "El amor nos encontró otra vez",
+          "description": "Ver serie completa El amor nos encontró otra vez doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9684.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ],
+      "all_items": [
+        {
+          "slug": "nt-besare-tus-cicatrices",
+          "title": "Besaré Tus Cicatrices",
+          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-mi-hermanastro-es-un-bad-boy",
+          "title": "Mi hermanastro es un Bad Boy",
+          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 30,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
+        },
+        {
+          "slug": "nt-doblado-pasando-por-tu-florecimiento",
+          "title": "Pasando por Tu Florecimiento",
+          "description": "Ver serie completa Pasando por Tu Florecimiento doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9665.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 99,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-chica-del-pueblo-tambien-es-mimada",
+          "title": "La chica del pueblo también es mimada",
+          "description": "Ver serie completa La chica del pueblo también es mimada doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9666.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 84,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mami-ya-no-digo-mentiras",
+          "title": "Mami, ya no digo mentiras.",
+          "description": "Ver serie completa Mami, ya no digo mentiras. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9671.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 35,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-a-estrella-para-toda-mi-vida",
+          "title": "A Estrella para toda mi vida",
+          "description": "Ver serie completa A Estrella para toda mi vida doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9676.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 74,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-destinados-a-amarnos",
+          "title": "Destinados a amarnos",
+          "description": "Ver serie completa Destinados a amarnos doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9677.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-el-amor-nos-encontro-otra-vez",
+          "title": "El amor nos encontró otra vez",
+          "description": "Ver serie completa El amor nos encontró otra vez doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9684.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Venganza & Renacimiento",
+      "icon": "👑",
+      "count": 5,
+      "items": [
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-doblada-la-duena-del-karma",
+          "title": "(DOBLADA)La Dueña del Karma",
+          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
+        },
+        {
+          "slug": "nt-ecos-de-la-fatalidad",
+          "title": "Ecos de la Fatalidad",
+          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
+        },
+        {
+          "slug": "nt-doblado-despues-del-ruido-llego-el",
+          "title": "Después del ruido, llegó él",
+          "description": "Ver serie completa Después del ruido, llegó él doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9669.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 57,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-vidas-robadas",
+          "title": "Vidas Robadas",
+          "description": "Ver serie completa Vidas Robadas doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9678.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 55,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ],
+      "all_items": [
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-doblada-la-duena-del-karma",
+          "title": "(DOBLADA)La Dueña del Karma",
+          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
+        },
+        {
+          "slug": "nt-ecos-de-la-fatalidad",
+          "title": "Ecos de la Fatalidad",
+          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
+        },
+        {
+          "slug": "nt-doblado-despues-del-ruido-llego-el",
+          "title": "Después del ruido, llegó él",
+          "description": "Ver serie completa Después del ruido, llegó él doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9669.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 57,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-vidas-robadas",
+          "title": "Vidas Robadas",
+          "description": "Ver serie completa Vidas Robadas doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9678.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 55,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Catálogo HotDrama Doblado",
+      "icon": "🎙️",
+      "count": 30,
+      "items": [
+        {
+          "slug": "nt-besare-tus-cicatrices",
+          "title": "Besaré Tus Cicatrices",
+          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
+        },
+        {
+          "slug": "nt-consentida-del-senor-ferrer",
+          "title": "Consentida del Señor Ferrer",
+          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 84,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
+        },
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-doblada-la-duena-del-karma",
+          "title": "(DOBLADA)La Dueña del Karma",
+          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
+        },
+        {
+          "slug": "nt-ecos-de-la-fatalidad",
+          "title": "Ecos de la Fatalidad",
+          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
+        },
+        {
+          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
+          "title": "El médico divino rodeado de siete bellezas 2",
+          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-mi-hermanastro-es-un-bad-boy",
+          "title": "Mi hermanastro es un Bad Boy",
+          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 30,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
+        },
+        {
+          "slug": "nt-o-cesar-o-nada",
+          "title": "O César o nada",
+          "description": "Episode 1/64 — O César o nada. Valeria Suárez, única heredera de la noble familia Suárez, descubre que su madre fue acusada de ser la amante, mientras la niñera. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183127.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 64,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-o-cesar-o-nada.jpg"
+        },
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        }
+      ],
+      "all_items": [
+        {
+          "slug": "nt-besare-tus-cicatrices",
+          "title": "Besaré Tus Cicatrices",
+          "description": "Episode 1/50 — Besaré Tus Cicatrices. El día de su boda, Natalia descubre que Boris solo se casó con ella por sus acciones y rompe el compromiso. Luego se casa. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/198652.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-besare-tus-cicatrices.jpg"
+        },
+        {
+          "slug": "nt-consentida-del-senor-ferrer",
+          "title": "Consentida del Señor Ferrer",
+          "description": "Episode 1/84 — Consentida del Señor Ferrer. Sonia Sánchez pasó tres años en prisión por cubrir a su infiel novio. Mientras cumplía su condena, fue encontrada po. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/364388.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 84,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-consentida-del-senor-ferrer.jpg"
+        },
+        {
+          "slug": "nt-doblada-dos-suenos-un-despertar",
+          "title": "(DOBLADA)Dos Sueños, Un Despertar",
+          "description": "Episode 1/65 — (DOBLADA)Dos Sueños, Un Despertar. Anabel Quirós se ve obligada a casarse con Teodoro Prieto, un poderoso empresario que quedó en estado vegetal. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/155814.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 65,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-dos-suenos-un-despertar.jpg"
+        },
+        {
+          "slug": "nt-doblada-la-duena-del-karma",
+          "title": "(DOBLADA)La Dueña del Karma",
+          "description": "Episode 1/60 — (DOBLADA)La Dueña del Karma. Hace mil años, el Oráculo Divino, la mayor adivina de la dinastía, reencarnó en Vera Navarro, la hija mayor despreci. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/133509.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-doblada-la-duena-del-karma.jpg"
+        },
+        {
+          "slug": "nt-ecos-de-la-fatalidad",
+          "title": "Ecos de la Fatalidad",
+          "description": "Episode 1/60 — Ecos de la Fatalidad. Hace diez años, Liliana, hija de la poderosa familia Vega, por accidente perdió la memoria y terminó viviendo en la pobreza. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183950.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-ecos-de-la-fatalidad.jpg"
+        },
+        {
+          "slug": "nt-el-medico-divino-rodeado-de-siete-bellezas-2",
+          "title": "El médico divino rodeado de siete bellezas 2",
+          "description": "Episode 1/50 — El médico divino rodeado de siete bellezas 2. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228105.webp",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-el-medico-divino-rodeado-de-siete-bellezas-2.jpg"
+        },
+        {
+          "slug": "nt-esposa-del-magnate-oculto",
+          "title": "Esposa del Magnate Oculto",
+          "description": "Episode 1/60 — Esposa del Magnate Oculto. Valerie Hartwell esperó durante años el regreso de Callum Hayes, su amor de la infancia, con quien había prometido cas. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/140204.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-esposa-del-magnate-oculto.jpg"
+        },
+        {
+          "slug": "nt-mi-hermanastro-es-un-bad-boy",
+          "title": "Mi hermanastro es un Bad Boy",
+          "description": "Episode 1/30 — Mi hermanastro es un Bad Boy. Por fuera, Emma es la típica chica buena perfecta, y Zane es el rompecorazones indiscutible de la escuela. Cuando s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/139806.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 30,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-mi-hermanastro-es-un-bad-boy.jpg"
+        },
+        {
+          "slug": "nt-o-cesar-o-nada",
+          "title": "O César o nada",
+          "description": "Episode 1/64 — O César o nada. Valeria Suárez, única heredera de la noble familia Suárez, descubre que su madre fue acusada de ser la amante, mientras la niñera. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/183127.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 64,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-o-cesar-o-nada.jpg"
+        },
+        {
+          "slug": "nt-playboy-el-verdadero-dios",
+          "title": "¿Playboy? El Verdadero Dios",
+          "description": "Episode 1/34 — ¿Playboy? El Verdadero Dios. Hace diez años, el Señor y la Señora de la Región del Norte fueron asesinados por Lady Morwenna (la esposa de su her. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/125754.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 34,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-playboy-el-verdadero-dios.jpg"
+        },
+        {
+          "slug": "nt-the-golden-cage",
+          "title": "Cautiva en la jaula de oro",
+          "description": "Episode 1/50 — Cautiva en la jaula de oro. Ryu, ídolo del K-pop que enloquece al mundo y hombre de poder absoluto. Cuando la actriz desconocida Chloe entra en s. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/184958.png",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 50,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-the-golden-cage.jpg"
+        },
+        {
+          "slug": "nt-un-pacto-me-unio-al-inmortal-supremo-1",
+          "title": "Un pacto me unió al inmortal supremo 1",
+          "description": "Episode 1/50 — Un pacto me unió al inmortal supremo 1. Narto Drama - Ver Short Dramas, Películas y Anime gratis de proveedores BiliTV, CubeTV, Shortical, DotDrama, DotDrama II, Dramabite, Dramabox, DramaWave, y más",
+          "poster": "https://img.nartodrama-api.online/poster/228093.webp",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 3,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ],
+          "poster_local": "posters/nt-un-pacto-me-unio-al-inmortal-supremo-1.jpg"
+        },
+        {
+          "slug": "nt-doblado-la-guarderia-del-dios-bestia",
+          "title": "La Guardería del Dios Bestia",
+          "description": "Ver serie completa La Guardería del Dios Bestia doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9663.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-de-cuidar-cerdos-a-conquistar-a-la-jefa",
+          "title": "De cuidar cerdos a conquistar a la jefa",
+          "description": "Ver serie completa De cuidar cerdos a conquistar a la jefa doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9664.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 70,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-pasando-por-tu-florecimiento",
+          "title": "Pasando por Tu Florecimiento",
+          "description": "Ver serie completa Pasando por Tu Florecimiento doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9665.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 99,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-chica-del-pueblo-tambien-es-mimada",
+          "title": "La chica del pueblo también es mimada",
+          "description": "Ver serie completa La chica del pueblo también es mimada doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9666.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 84,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-despues-del-ruido-llego-el",
+          "title": "Después del ruido, llegó él",
+          "description": "Ver serie completa Después del ruido, llegó él doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9669.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 57,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mama-papa-es-invencible",
+          "title": "¡Mamá, papá es invencible!",
+          "description": "Ver serie completa ¡Mamá, papá es invencible! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9670.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mami-ya-no-digo-mentiras",
+          "title": "Mami, ya no digo mentiras.",
+          "description": "Ver serie completa Mami, ya no digo mentiras. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9671.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 35,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-no-me-dejo",
+          "title": "La Luz que No Me Dejó",
+          "description": "Ver serie completa La Luz que No Me Dejó doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9672.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-historia-de-un-mistico",
+          "title": "La Historia de un Místico",
+          "description": "Ver serie completa La Historia de un Místico doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9675.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 67,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-a-estrella-para-toda-mi-vida",
+          "title": "A Estrella para toda mi vida",
+          "description": "Ver serie completa A Estrella para toda mi vida doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9676.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 74,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-destinados-a-amarnos",
+          "title": "Destinados a amarnos",
+          "description": "Ver serie completa Destinados a amarnos doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9677.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-vidas-robadas",
+          "title": "Vidas Robadas",
+          "description": "Ver serie completa Vidas Robadas doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9678.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 55,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-larga-noche-de-fuego-y-hielo",
+          "title": "Larga noche de fuego y hielo",
+          "description": "Ver serie completa Larga noche de fuego y hielo doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9679.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-la-luz-que-tarda",
+          "title": "La Luz Que Tarda",
+          "description": "Ver serie completa La Luz Que Tarda doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9681.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 37,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-mi-humilde-padre-es-un-mago-supremo",
+          "title": "¡Mi Humilde Padre es un Mago Supremo!",
+          "description": "Ver serie completa ¡Mi Humilde Padre es un Mago Supremo! doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9682.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 56,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-heredero-cansado-solo-chambear",
+          "title": "Heredero cansado, solo chambear.",
+          "description": "Ver serie completa Heredero cansado, solo chambear. doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9683.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 69,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-el-amor-nos-encontro-otra-vez",
+          "title": "El amor nos encontró otra vez",
+          "description": "Ver serie completa El amor nos encontró otra vez doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9684.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 63,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
+        },
+        {
+          "slug": "nt-doblado-por-ti-lo-que-sea",
+          "title": "Por Ti, Lo Que Sea",
+          "description": "Ver serie completa Por Ti, Lo Que Sea doblada en español latino en alta definición HD gratis.",
+          "poster": "https://img.nartodrama-api.online/poster/9687.jpg",
+          "section": "hotdrama",
+          "source": "narto",
+          "total_episodes": 60,
+          "genres": [
+            "HotDrama",
+            "Doblado",
+            "Romance",
+            "Drama"
+          ]
         }
       ]
     }

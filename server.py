@@ -136,7 +136,7 @@ def get_upstream_referer(url):
         if 'chartdrama.com' in host or 'reelsshort' in host: return 'https://chartdrama.com/'
         if 'cukelis' in host: return 'https://cukelis.com/'
         if 'netshort' in host or 'nsstorage' in host or 'toonshort' in host: return 'https://netshort.com/'
-        if 'vividshort' in host: return UPSTREAM + '/'
+        if 'vividshort' in host: return None
         if 'drama.tv' in host: return 'https://chartdrama.com/'
         if 'kalostv' in host: return 'https://kalostv.com/'
         if 'stardust-tv' in host: return 'https://stardust-tv.com/'
@@ -165,12 +165,15 @@ def get_upstream_headers(url, extra=None):
     """Genera cabeceras completas adaptadas al proveedor CDN del recurso."""
     hdrs = {
         'User-Agent': UA,
-        'Referer': get_upstream_referer(url),
         'Accept': '*/*'
     }
+    ref = get_upstream_referer(url)
+    if ref:
+        hdrs['Referer'] = ref
     if extra:
         hdrs.update(extra)
     return hdrs
+
 
 
 def _cache_manifest(url, text):
@@ -609,7 +612,7 @@ NARTO_CACHE = {}
 NARTO_TTL = 1800  # 30 minutos
 
 def _resolve_narto_episode(slug, ep, force=False):
-    """Resuelve token fresco on-demand desde narto-drama.com para evitar 410 (expired)."""
+    """Resuelve token fresco on-demand desde edge.narto-drama.com o narto-drama.com para evitar 410 (expired)."""
     now = time.time()
     cache_key = (slug, str(ep))
     c = NARTO_CACHE.get(cache_key)
@@ -617,16 +620,51 @@ def _resolve_narto_episode(slug, ep, force=False):
         return c[1]
 
     narto_slug = slug[3:] if slug.startswith('nt-') else slug
+    headers = {
+        'User-Agent': UA,
+        'Referer': f'https://narto-drama.com/detail/watch/{narto_slug}/{ep}?lang=es-ES',
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+
+    # 1. API oficial Edge de Narto (rápida, firma URLs frescas con tokens válidos)
+    edge_url = f'https://edge.narto-drama.com/e/rs/detail/watch/{narto_slug}/{ep}/refresh-source?force=1&lang=es-ES'
+    try:
+        r = requests.get(edge_url, headers=headers, timeout=7)
+        if r.status_code == 200:
+            data = r.json()
+            if data.get('ok'):
+                fresh_url = (data.get('play_url') or data.get('direct_play_url') or '').strip()
+                if fresh_url and '${' not in fresh_url and 'decrypt-stream' not in fresh_url:
+                    NARTO_CACHE[cache_key] = (now, fresh_url)
+                    return fresh_url
+    except Exception as e:
+        sys.stderr.write(f'[narto edge] err {slug} ep {ep}: {e}\n')
+
+    # 2. Fallback: Parsear la página web de watch
     url = f'https://narto-drama.com/detail/watch/{narto_slug}/{ep}?lang=es-ES'
     for attempt in range(2):
         try:
             r = requests.get(url, headers={'User-Agent': UA, 'Referer': 'https://narto-drama.com/'}, timeout=8)
             if r.status_code == 200:
-                m = re.search(r'(https?://[^\s"\'<>]+(?:vigloo-stream|dramabox-stream|stream)[^\s"\'<>]*)', r.text)
-                if m:
+                # Buscar en episodeItemsRaw
+                m_raw = re.search(r'episodeItemsRaw\s*=\s*(\[.*?\]);', r.text)
+                if m_raw:
+                    try:
+                        eps_list = json.loads(m_raw.group(1))
+                        for ep_obj in eps_list:
+                            if str(ep_obj.get('number')) == str(ep) or str(ep_obj.get('route_episode_number')) == str(ep):
+                                cand = (ep_obj.get('play_url') or ep_obj.get('direct_play_url') or '').strip()
+                                if cand and '${' not in cand and 'decrypt-stream' not in cand:
+                                    NARTO_CACHE[cache_key] = (now, cand)
+                                    return cand
+                    except Exception:
+                        pass
+                # Regex seguro: buscar URLs de video CDN reales (excluyendo scripts o decrypt-stream)
+                for m in re.finditer(r'(https?://[^\s"\'<>]+(?:vigloo-stream|dramabox-stream|vividshort\.com|flextv\.cc|janzhoutec\.com)[^\s"\'<>]*)', r.text):
                     fresh_url = m.group(1).rstrip('`";,')
-                    NARTO_CACHE[cache_key] = (now, fresh_url)
-                    return fresh_url
+                    if '${' not in fresh_url and 'decrypt-stream' not in fresh_url:
+                        NARTO_CACHE[cache_key] = (now, fresh_url)
+                        return fresh_url
             elif r.status_code == 500:
                 time.sleep(0.5)
                 continue
@@ -642,9 +680,10 @@ def is_hls_stream(url):
     u = url.split('?')[0].lower()
     if u.endswith('.mp4') or u.endswith('.webm') or u.endswith('.mkv') or u.endswith('.mov') or u.endswith('.m4v'):
         return False
-    if '.m3u8' in u or 's3hls' in u or '/api/stream/' in u or 'vigloo-stream' in u:
+    if '.m3u8' in u or 's3hls' in u or '/api/stream/' in u or 'vigloo-stream' in u or 'dramabox-stream' in u:
         return True
     return False
+
 
 
 def _hd_episodes(slug):
@@ -801,11 +840,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if extra:
                 for k,v in extra.items(): self.send_header(k, str(v))
             self.end_headers()
-            if data: self.wfile.write(data)
+            if data and self.command != 'HEAD': self.wfile.write(data)
         except (ConnectionAbortedError, BrokenPipeError, ConnectionResetError):
             pass
 
+    def do_HEAD(self):
+        """Maneja solicitudes HEAD para permitir inspeccionar headers de streams de video."""
+        return self.do_GET()
+
     def do_GET(self):
+
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         qs = urllib.parse.parse_qs(parsed.query)
@@ -991,14 +1035,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     if code == 206:
                         self.send_header('Content-Range', 'bytes %d-%d/%d' % (start, end, total))
                     self.end_headers()
-                    with open(cp, 'rb') as fh:
-                        fh.seek(start)
-                        remaining = length
-                        while remaining > 0:
-                            blk = fh.read(min(262144, remaining))
-                            if not blk: break
-                            self.wfile.write(blk)
-                            remaining -= len(blk)
+                    if self.command != 'HEAD':
+                        with open(cp, 'rb') as fh:
+                            fh.seek(start)
+                            remaining = length
+                            while remaining > 0:
+                                blk = fh.read(min(262144, remaining))
+                                if not blk: break
+                                self.wfile.write(blk)
+                                remaining -= len(blk)
                 except (ConnectionAbortedError, BrokenPipeError, ConnectionResetError):
                     pass
                 return
@@ -1023,9 +1068,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 if 'Content-Length' in r.headers:
                     self.send_header('Content-Length', r.headers['Content-Length'])
                 self.end_headers()
-                for chunk in r.iter_content(chunk_size=131072):
-                    if chunk:
-                        self.wfile.write(chunk)
+                if self.command != 'HEAD':
+                    for chunk in r.iter_content(chunk_size=131072):
+                        if chunk:
+                            self.wfile.write(chunk)
+
             except (ConnectionAbortedError, BrokenPipeError, ConnectionResetError):
                 pass
             except Exception as e:
@@ -1273,7 +1320,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
             # Detectar fuente (cukelis no usa int)
             _d = CAT_BY_SLUG.get(slug)
+            if not _d and (slug.startswith('nt-') or slug.startswith('hd-')):
+                load_hotdrama()
+                _d = HD_BY_SLUG.get(slug)
             if _d and _d.get('source')=='cukelis':
+
                 eps_dict = _d.get('episodes') or {}
                 h = eps_dict.get(ep) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not h: return self._send(404,'text/plain',b'sin hash')
