@@ -1652,6 +1652,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             load_dramatube()
             return self._send(200,'application/json; charset=utf-8', json.dumps({'total': len(DT_ITEMS)}).encode())
 
+        if path == '/api/dramatube/banners':
+            banners_path = os.path.join(ROOT, 'data', 'dramatube_banners.json')
+            bdata = []
+            if os.path.exists(banners_path):
+                try:
+                    bdata = json.load(open(banners_path, encoding='utf-8'))
+                except:
+                    bdata = []
+            return self._send(200,'application/json; charset=utf-8', json.dumps({'banners': bdata}, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+
         if path == '/api/dramatube/item':
             load_dramatube()
             slug = qs.get('slug',[''])[0]

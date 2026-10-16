@@ -4,13 +4,41 @@ import { useSearchParams } from 'next/navigation';
 import Carousel from './Carousel';
 import TitleModal from './TitleModal';
 
-export default function DramaTubeClient({ shelves = [], allDramas = [], totalCount = 114 }) {
+export default function DramaTubeClient({ shelves = [], allDramas = [], totalCount = 122 }) {
   const [modalSlug, setModalSlug] = useState(null);
   const [activeShelf, setActiveShelf] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [viewMode, setViewMode] = useState('shelves'); // 'shelves' | 'grid'
   const [q, setQ] = useState('');
   const searchParams = useSearchParams();
   const shelfRefs = useRef({});
+  const pillsRef = useRef(null);
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkPillsScroll = useCallback(() => {
+    const el = pillsRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+  }, []);
+
+  const scrollPills = (direction) => {
+    const el = pillsRef.current;
+    if (el) {
+      el.scrollBy({ left: direction * 280, behavior: 'smooth' });
+      setTimeout(checkPillsScroll, 350);
+    }
+  };
+
+  useEffect(() => {
+    checkPillsScroll();
+    const handleResize = () => checkPillsScroll();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [checkPillsScroll]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -44,7 +72,7 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
     }
   }, []);
 
-  // Filtrado por buscador
+  // Filtrado por buscador general
   const filteredDramas = useMemo(() => {
     if (!q.trim()) return allDramas;
     const query = q.toLowerCase().trim();
@@ -54,35 +82,70 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
     );
   }, [allDramas, q]);
 
-  // Filtrado por estantes
+  // Filtrado por estantes en modo carrusel
   const visibleShelves = useMemo(() => {
     if (q.trim()) {
-      // Filtrar items dentro de cada shelf segun la busqueda
       const query = q.toLowerCase().trim();
-      return shelves.map(sh => ({
-        ...sh,
-        items: sh.items.filter(it => it.title && it.title.toLowerCase().includes(query))
-      })).filter(sh => sh.items.length > 0);
+      return shelves.map(sh => {
+        const fullList = sh.all_items || sh.items || [];
+        const filtered = fullList.filter(it => it.title && it.title.toLowerCase().includes(query));
+        return {
+          ...sh,
+          items: filtered.slice(0, 10),
+          all_items: filtered,
+          count: filtered.length
+        };
+      }).filter(sh => sh.items.length > 0);
     }
-    if (activeShelf === 'all') {
-      return shelves;
-    }
-    return shelves.filter(sh => sh.name === activeShelf || sh.slug === activeShelf);
-  }, [shelves, activeShelf, q]);
+    return shelves;
+  }, [shelves, q]);
 
+  // Selección de categoría desde los botones superiores (Pills)
   const selectShelf = (shelfName) => {
-    setActiveShelf(shelfName);
-    if (viewMode === 'shelves' && shelfName !== 'all') {
-      const el = shelfRefs.current[shelfName];
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (shelfName === 'all') {
+      setActiveShelf('all');
+      setSelectedCategory(null);
+      return;
+    }
+    const sh = shelves.find(s => s.name === shelfName || s.slug === shelfName);
+    if (sh) {
+      setActiveShelf(sh.name);
+      setSelectedCategory(sh);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 180, behavior: 'smooth' });
       }
     }
   };
 
+  // Abrir vista expandida de una categoría (desde el botón o tarjeta "+ Más")
+  const handleOpenCategory = (sh) => {
+    setSelectedCategory(sh);
+    setActiveShelf(sh.name);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+  };
+
+  // Volver a la vista general de todos los carruseles
+  const handleBackToAll = () => {
+    setSelectedCategory(null);
+    setActiveShelf('all');
+  };
+
+  // Items mostrados en la vista de categoría expandida
+  const categoryItems = useMemo(() => {
+    if (!selectedCategory) return [];
+    const list = selectedCategory.all_items || selectedCategory.items || [];
+    if (!q.trim()) return list;
+    const query = q.toLowerCase().trim();
+    return list.filter(d => d.title && d.title.toLowerCase().includes(query));
+  }, [selectedCategory, q]);
+
+  const effectiveTotal = totalCount || allDramas.length || 122;
+
   return (
     <div className="dramatube-container">
-      {/* Banner de Seccion DramaTube */}
+      {/* Header Info y Buscador */}
       <div className="dramatube-hero-header">
         <div className="dramatube-hero-badge">
           <span className="dot" /> 🔴 EXCLUSIVO EN DRAMATUBE
@@ -91,7 +154,7 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
           Drama<span className="text-red">Tube</span>
         </h1>
         <p className="dramatube-subtitle">
-          Disfruta de las mejores series cortas y doramas en español organizados por categorías temáticas exclusivas. {totalCount} títulos en audio español latino y HD.
+          Disfruta de las mejores series cortas y doramas en español organizados por categorías temáticas exclusivas. {effectiveTotal} títulos disponibles en audio español latino y calidad HD.
         </p>
 
         {/* Buscador y Controles de Vista */}
@@ -102,7 +165,7 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
             </svg>
             <input 
               type="text" 
-              placeholder="Buscar título o categoría en DramaTube..." 
+              placeholder={selectedCategory ? `Buscar en ${selectedCategory.name}...` : "Buscar título o categoría en DramaTube..."}
               value={q}
               onChange={(e) => setQ(e.target.value)}
               className="dramatube-search-input"
@@ -114,8 +177,8 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
 
           <div className="dramatube-view-toggle">
             <button 
-              className={`view-btn ${viewMode === 'shelves' ? 'active' : ''}`}
-              onClick={() => setViewMode('shelves')}
+              className={`view-btn ${viewMode === 'shelves' && !selectedCategory ? 'active' : ''}`}
+              onClick={() => { setViewMode('shelves'); setSelectedCategory(null); }}
               title="Ver por Secciones temáticas"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -126,7 +189,7 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
             </button>
             <button 
               className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
+              onClick={() => { setViewMode('grid'); setSelectedCategory(null); }}
               title="Ver todos en Cuadrícula"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -138,92 +201,236 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
           </div>
         </div>
 
-        {/* Barra de Filtros de Secciones (Pills) */}
-        <div className="dramatube-pills-scroll">
-          <button 
-            className={`dramatube-pill ${activeShelf === 'all' ? 'active' : ''}`}
-            onClick={() => selectShelf('all')}
-          >
-            <span>Todos</span>
-            <span className="pill-badge">{totalCount}</span>
-          </button>
-          {shelves.map((sh) => (
+        {/* Barra de Filtros de Secciones con Flechas Deslizantes */}
+        <div className="dramatube-pills-container">
+          {canScrollLeft && (
             <button 
-              key={sh.name}
-              className={`dramatube-pill ${activeShelf === sh.name ? 'active' : ''}`}
-              onClick={() => selectShelf(sh.name)}
+              className="dramatube-pills-arrow left" 
+              onClick={() => scrollPills(-1)} 
+              aria-label="Deslizar categorías a la izquierda"
             >
-              <span className="pill-icon">{sh.icon}</span>
-              <span>{sh.name}</span>
-              <span className="pill-badge">{sh.count}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
             </button>
-          ))}
+          )}
+
+          <div 
+            className="dramatube-pills-scroll" 
+            ref={pillsRef}
+            onScroll={checkPillsScroll}
+          >
+            <button 
+              className={`dramatube-pill ${activeShelf === 'all' && !selectedCategory ? 'active' : ''}`}
+              onClick={() => selectShelf('all')}
+            >
+              <span>Todos</span>
+              <span className="pill-badge">{effectiveTotal}</span>
+            </button>
+            {shelves.map((sh) => {
+              const isSelected = selectedCategory ? (selectedCategory.name === sh.name) : (activeShelf === sh.name);
+              const totalInShelf = sh.all_items ? sh.all_items.length : (sh.count || sh.items.length);
+              return (
+                <button 
+                  key={sh.name}
+                  className={`dramatube-pill ${isSelected ? 'active' : ''}`}
+                  onClick={() => selectShelf(sh.name)}
+                >
+                  <span className="pill-icon">{sh.icon}</span>
+                  <span>{sh.name}</span>
+                  <span className="pill-badge">{totalInShelf}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {canScrollRight && (
+            <button 
+              className="dramatube-pills-arrow right" 
+              onClick={() => scrollPills(1)} 
+              aria-label="Deslizar categorías a la derecha"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Contenido: Vista por Secciones / Shelves */}
-      {viewMode === 'shelves' ? (
+      {/* Contenido según vista seleccionada */}
+      {selectedCategory ? (
+        /* Vista de Categoría Expandida (al hacer click en "Más +" o en una categoría) */
+        <div className="dramatube-category-view">
+          <div className="dramatube-cat-header">
+            <button className="dramatube-back-btn" onClick={handleBackToAll}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span>Volver a todas las secciones</span>
+            </button>
+
+            <div className="dramatube-cat-title-wrap">
+              <span className="dramatube-cat-icon">{selectedCategory.icon}</span>
+              <h2 className="dramatube-cat-title">{selectedCategory.name}</h2>
+              <span className="dramatube-cat-badge">
+                {categoryItems.length} {categoryItems.length === 1 ? 'título' : 'títulos'}
+              </span>
+            </div>
+            <p className="dramatube-cat-desc">
+              Catálogo completo de {selectedCategory.name} en audio español latino y calidad HD.
+            </p>
+          </div>
+
+          {categoryItems.length === 0 ? (
+            <div className="dramatube-empty">
+              <p>No se encontraron títulos en esta categoría con &quot;{q}&quot;.</p>
+              <button className="dramatube-reset-btn" onClick={() => setQ('')}>
+                Limpiar búsqueda
+              </button>
+            </div>
+          ) : (
+            <div className="kurz-grid">
+              {categoryItems.map((d, i) => (
+                <div 
+                  key={d.slug + '-' + i} 
+                  className="kurz-card" 
+                  onClick={() => handleOpenModal(d.slug)}
+                >
+                  <div className="kurz-card-poster-wrap">
+                    <img 
+                      src={d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : (d.poster || '/favicon.ico'))} 
+                      alt={d.title} 
+                      loading="lazy" 
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        if (e.currentTarget.nextElementSibling && e.currentTarget.nextElementSibling.classList.contains('kurz-poster-fallback')) {
+                          e.currentTarget.nextElementSibling.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div className="kurz-poster-fallback" style={{ display: d.poster || d.poster_local ? 'none' : 'flex' }}>
+                      <span>{d.title}</span>
+                    </div>
+                    <span className="kurz-badge-ai">Ai</span>
+                    <div className="kurz-play-overlay">
+                      <div className="kurz-play-circle">
+                        <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="kurz-card-info">
+                    <h3 className="kurz-card-title" title={d.title}>{d.title}</h3>
+                    <div className="kurz-card-meta">
+                      <span className="kurz-card-eps">{d.total_episodes ? `${d.total_episodes} eps` : 'HD'}</span>
+                      <span className="kurz-card-dot">•</span>
+                      <span className="kurz-card-lang">Español</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : viewMode === 'shelves' ? (
+        /* Vista de Secciones con Carruseles Kurzdrama */
         <div className="dramatube-shelves-list">
           {visibleShelves.length === 0 ? (
             <div className="dramatube-empty">
               <p>No se encontraron títulos en esta búsqueda.</p>
+              <button className="dramatube-reset-btn" onClick={() => setQ('')}>
+                Limpiar búsqueda
+              </button>
             </div>
           ) : (
-            visibleShelves.map((sh) => (
-              <div 
-                key={sh.name} 
-                ref={(el) => (shelfRefs.current[sh.name] = el)}
-                className="dramatube-shelf-block"
-              >
-                <div className="dramatube-shelf-header">
-                  <h2 className="dramatube-shelf-title">
-                    <span className="shelf-bar" />
-                    <span className="shelf-icon">{sh.icon}</span>
-                    <span>{sh.name}</span>
-                    <span className="shelf-count">({sh.items.length})</span>
-                  </h2>
+            visibleShelves.map((sh) => {
+              const totalInShelf = sh.all_items ? sh.all_items.length : (sh.count || sh.items.length);
+              const itemsToShow = (sh.items || []).slice(0, 10);
+              const remaining = Math.max(0, totalInShelf - itemsToShow.length);
+
+              return (
+                <div 
+                  key={sh.name} 
+                  ref={(el) => (shelfRefs.current[sh.name] = el)}
+                  className="dramatube-shelf-block"
+                >
+                  <div className="dramatube-shelf-header">
+                    <div className="dramatube-shelf-header-left">
+                      <span className="shelf-icon">{sh.icon}</span>
+                      <h2 className="dramatube-shelf-title">{sh.name}</h2>
+                      <span className="shelf-count">({totalInShelf})</span>
+                    </div>
+                    {totalInShelf > 10 && (
+                      <button 
+                        className="dramatube-shelf-more-btn"
+                        onClick={() => handleOpenCategory(sh)}
+                        title={`Ver todos los ${totalInShelf} títulos de ${sh.name}`}
+                      >
+                        <span>Ver más + ({totalInShelf})</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  <Carousel 
+                    title="" 
+                    variant="kurzdrama"
+                    items={itemsToShow} 
+                    onOpen={handleOpenModal} 
+                    onMore={totalInShelf > 10 ? () => handleOpenCategory(sh) : null}
+                    moreLabel="Más +"
+                    totalCount={totalInShelf}
+                    remainingCount={remaining}
+                  />
                 </div>
-                <Carousel 
-                  title="" 
-                  items={sh.items} 
-                  onOpen={handleOpenModal} 
-                />
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       ) : (
-        /* Vista en Cuadrícula Completa */
+        /* Vista en Cuadrícula Completa de todos los dramas */
         <div className="dramatube-grid-view">
-          <div className="grid">
+          <div className="kurz-grid">
             {filteredDramas.map((d, i) => (
               <div 
                 key={d.slug + '-' + i} 
-                className="card" 
+                className="kurz-card" 
                 onClick={() => handleOpenModal(d.slug)}
               >
-                {i < 3 && <div className="card-tag new">TOP {i + 1}</div>}
-                <img 
-                  src={d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : (d.poster || '/favicon.ico'))} 
-                  alt={d.title} 
-                  loading="lazy" 
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    if (e.currentTarget.nextElementSibling) {
-                      e.currentTarget.nextElementSibling.style.display = 'flex';
-                    }
-                  }}
-                />
-                <div className="card-poster-fallback" style={{ display: d.poster ? 'none' : 'flex' }}>
-                  <span className="card-fallback-text">{d.title}</span>
+                <div className="kurz-card-poster-wrap">
+                  <img 
+                    src={d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : (d.poster || '/favicon.ico'))} 
+                    alt={d.title} 
+                    loading="lazy" 
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextElementSibling && e.currentTarget.nextElementSibling.classList.contains('kurz-poster-fallback')) {
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div className="kurz-poster-fallback" style={{ display: d.poster || d.poster_local ? 'none' : 'flex' }}>
+                    <span>{d.title}</span>
+                  </div>
+                  <span className="kurz-badge-ai">Ai</span>
+                  <div className="kurz-play-overlay">
+                    <div className="kurz-play-circle">
+                      <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-play"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg></div>
-                <div className="card-overlay">
-                  <div className="card-title">{d.title}</div>
-                  <div className="card-overlay-meta">
-                    <span className="match">98%</span>
-                    <span className="pill">+16</span>
-                    <span>{d.total_episodes || '?'} eps</span>
+                <div className="kurz-card-info">
+                  <h3 className="kurz-card-title" title={d.title}>{d.title}</h3>
+                  <div className="kurz-card-meta">
+                    <span className="kurz-card-eps">{d.total_episodes ? `${d.total_episodes} eps` : 'HD'}</span>
+                    <span className="kurz-card-dot">•</span>
+                    <span className="kurz-card-lang">Español</span>
                   </div>
                 </div>
               </div>

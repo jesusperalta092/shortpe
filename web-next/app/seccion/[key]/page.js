@@ -63,7 +63,7 @@ export default async function SeccionPage({ params }) {
         const dSh = await rSh.json();
         shelves = dSh.shelves || [];
       }
-      const rAll = await fetch(PROXY + '/api/dramatube?page=1&limit=200', { cache: 'no-store' });
+      const rAll = await fetch(PROXY + '/api/dramatube?page=1&limit=250', { cache: 'no-store' });
       if (rAll.ok) {
         const dAll = await rAll.json();
         allDramas = dAll.items || [];
@@ -74,12 +74,17 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
-          <DramaTubeClient shelves={shelves} allDramas={allDramas} totalCount={allDramas.length || 114} />
+          <DramaTubeClient 
+            shelves={shelves} 
+            allDramas={allDramas} 
+            totalCount={allDramas.length || 122} 
+          />
         </main>
         <Footer />
       </>
     );
   }
+
 
   // ===== Seccion 'dramavibe' (catalogo grande chartdrama) =====
   if (key === 'dramavibe') {
