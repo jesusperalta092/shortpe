@@ -507,12 +507,13 @@ def load_hotdrama(force=False):
 # ============ DRAMATUBE (kurzdrama.com / reelshort) ============
 DT_ITEMS = []
 DT_BY_SLUG = {}
+DT_BY_BOOK_ID = {}
 DT_SHELVES = []
 DT_LOCK = threading.Lock()
 DT_MTIME = 0
 
 def load_dramatube(force=False):
-    global DT_ITEMS, DT_BY_SLUG, DT_SHELVES, DT_MTIME
+    global DT_ITEMS, DT_BY_SLUG, DT_BY_BOOK_ID, DT_SHELVES, DT_MTIME
     with DT_LOCK:
         p = os.path.join(ROOT, 'data', 'dramatube.json')
         if not os.path.exists(p):
@@ -527,13 +528,50 @@ def load_dramatube(force=False):
                 d.setdefault('source', 'kurzdrama')
                 d['section'] = 'dramatube'
             DT_ITEMS = data
-            DT_BY_SLUG = {d['slug']: d for d in DT_ITEMS}
+            DT_BY_SLUG = {d['slug']: d for d in DT_ITEMS if d.get('slug')}
+            DT_BY_BOOK_ID = {d['bookId']: d for d in DT_ITEMS if d.get('bookId')}
             sh_p = os.path.join(ROOT, 'data', 'dramatube_shelves.json')
             if os.path.exists(sh_p):
                 DT_SHELVES = json.load(open(sh_p, encoding='utf-8')).get('shelves', [])
             sys.stderr.write('[dramatube] cargados %d items y %d shelves\n' % (len(DT_ITEMS), len(DT_SHELVES)))
         except Exception as e:
             sys.stderr.write('[dramatube] err: %s\n' % e)
+
+
+def find_dt_drama(slug):
+    """Busca un drama de DramaTube por slug, bookId, ID hexadecimal o caracteres codificados."""
+    if not slug:
+        return None
+    load_dramatube()
+    if slug in DT_BY_SLUG:
+        return DT_BY_SLUG[slug]
+    if slug in DT_BY_BOOK_ID:
+        return DT_BY_BOOK_ID[slug]
+
+    # Buscar coincidencia por bookId (24 caracteres hex) contenido en el slug
+    m = re.search(r'([a-f0-9]{24})', slug, re.IGNORECASE)
+    if m and m.group(1).lower() in DT_BY_BOOK_ID:
+        return DT_BY_BOOK_ID[m.group(1).lower()]
+
+    try:
+        unq = urllib.parse.unquote(slug)
+        if unq in DT_BY_SLUG:
+            return DT_BY_SLUG[unq]
+        m2 = re.search(r'([a-f0-9]{24})', unq, re.IGNORECASE)
+        if m2 and m2.group(1).lower() in DT_BY_BOOK_ID:
+            return DT_BY_BOOK_ID[m2.group(1).lower()]
+        try:
+            fixed = unq.encode('latin1').decode('utf-8')
+            if fixed in DT_BY_SLUG:
+                return DT_BY_SLUG[fixed]
+            m3 = re.search(r'([a-f0-9]{24})', fixed, re.IGNORECASE)
+            if m3 and m3.group(1).lower() in DT_BY_BOOK_ID:
+                return DT_BY_BOOK_ID[m3.group(1).lower()]
+        except Exception:
+            pass
+    except Exception:
+        pass
+    return None
 
 
 def _dt_episode_url(dt, ep, force=False):
@@ -1214,10 +1252,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self._send(200,'application/json; charset=utf-8',out)
 
             # ===== DRAMATUBE (kurzdrama / reelshort) =====
-            if slug.startswith('dt-'):
-                load_dramatube()
-                dt = DT_BY_SLUG.get(slug)
-                if not dt: return self._send(404,'text/plain',b'no encontrado')
+            dt = None
+            if slug.startswith('dt-') or re.search(r'[a-f0-9]{24}', slug, re.IGNORECASE):
+                dt = find_dt_drama(slug)
+            if dt:
                 vurl = _dt_episode_url(dt, ep, force=fresh)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
                 is_hls = vurl.split('?')[0].lower().endswith('.m3u8')
@@ -1663,9 +1701,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self._send(200,'application/json; charset=utf-8', json.dumps({'banners': bdata}, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
 
         if path == '/api/dramatube/item':
-            load_dramatube()
             slug = qs.get('slug',[''])[0]
-            d = DT_BY_SLUG.get(slug)
+            d = find_dt_drama(slug)
             if not d:
                 return self._send(404,'application/json; charset=utf-8', b'{"error":"not found"}')
             item = {k:v for k,v in d.items() if k != 'episodes'}
