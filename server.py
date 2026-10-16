@@ -1649,6 +1649,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             load_hotdrama()
             return self._send(200,'application/json; charset=utf-8', json.dumps({'total': len(HD_ITEMS)}).encode())
 
+        if path == '/api/hotdrama/shelves':
+            load_hotdrama()
+            sh_p = os.path.join(ROOT, 'data', 'hotdrama_shelves.json')
+            if os.path.exists(sh_p):
+                try:
+                    sdata = json.load(open(sh_p, encoding='utf-8'))
+                    return self._send(200,'application/json; charset=utf-8', json.dumps(sdata, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
+                except Exception:
+                    pass
+            return self._send(200,'application/json; charset=utf-8', b'{"shelves":[]}', cache_header='no-store')
+
         if path == '/api/hotdrama/item':
             load_hotdrama()
             slug = qs.get('slug',[''])[0]

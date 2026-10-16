@@ -107,31 +107,51 @@ export default function CatalogGrid({ initial, apiPath, label = 'Catalogo', fire
     }
   }, []);
 
-  const card = (d, i) => (
-    <div key={d.slug + '-' + i} className="card" onClick={() => handleOpen(d.slug)}>
-      {fireTag && i < 3 && page === 1 && !query && (
-        <span className="card-tag fire">🔥 HOT {i + 1}</span>
-      )}
-      {!fireTag && i < 3 && page === 1 && !query && (
-        <span className="card-tag">Top {i + 1}</span>
-      )}
-      {(d.poster_local || d.poster) ? (
-        <img 
-          src={d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : d.poster)} 
-          alt={d.title} 
-          loading="lazy" 
-          decoding="async" 
-        />
-      ) : (
-        <div className="card-noimg" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#1a1a24,#2a2a38)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8a8a99', fontSize: 13, textAlign: 'center', padding: 10 }}>{d.title}</div>
-      )}
-      <div className="card-play"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg></div>
-      <div className="card-overlay">
-        <div className="card-title">{d.title}</div>
-        <div className="card-overlay-meta"><span className="match">98%</span><span className="pill">+16</span><span>{d.total_episodes || '?'} eps</span></div>
+  const card = (d, i) => {
+    const imgSrc = d.poster_local ? '/' + d.poster_local : (d.poster?.startsWith('http') ? '/proxy/img?url=' + encodeURIComponent(d.poster) : d.poster);
+    return (
+      <div key={d.slug + '-' + i} className="kurz-card" onClick={() => handleOpen(d.slug)}>
+        <div className="kurz-card-poster-wrap">
+          {fireTag && i < 3 && page === 1 && !query && (
+            <span className="card-tag fire" style={{ position: 'absolute', top: 6, left: 6, zIndex: 2 }}>🔥 HOT {i + 1}</span>
+          )}
+          {!fireTag && i < 3 && page === 1 && !query && (
+            <span className="card-tag" style={{ position: 'absolute', top: 6, left: 6, zIndex: 2 }}>Top {i + 1}</span>
+          )}
+          {imgSrc ? (
+            <img 
+              src={imgSrc} 
+              alt={d.title} 
+              loading="lazy" 
+              decoding="async" 
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                if (e.currentTarget.nextElementSibling && e.currentTarget.nextElementSibling.classList.contains('kurz-poster-fallback')) {
+                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                }
+              }}
+            />
+          ) : null}
+          <div className="kurz-poster-fallback" style={{ display: imgSrc ? 'none' : 'flex' }}>
+            <span>{d.title}</span>
+          </div>
+          <div className="kurz-play-overlay">
+            <div className="kurz-play-circle">
+              <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M8 5v14l11-7z" /></svg>
+            </div>
+          </div>
+        </div>
+        <div className="kurz-card-info">
+          <h3 className="kurz-card-title" title={d.title}>{d.title}</h3>
+          <div className="kurz-card-meta">
+            <span className="kurz-card-eps">{d.total_episodes ? `${d.total_episodes} eps` : 'HD'}</span>
+            <span className="kurz-card-dot">•</span>
+            <span className="kurz-card-lang">Español</span>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>
@@ -144,7 +164,7 @@ export default function CatalogGrid({ initial, apiPath, label = 'Catalogo', fire
         />
       </div>
 
-      <div className="grid" style={{ padding: 0 }}>
+      <div className="kurz-grid" style={{ padding: 0 }}>
         {items.map(card)}
       </div>
 

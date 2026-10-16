@@ -18,7 +18,7 @@ export default function Carousel({
     if (t) t.scrollBy({ left: dir * (t.clientWidth * 0.8), behavior: 'smooth' });
   };
 
-  const isKurz = variant === 'kurzdrama';
+  const isKurz = true;
 
   return (
     <section className={`row ${isKurz ? 'kurz-row' : ''}`}>

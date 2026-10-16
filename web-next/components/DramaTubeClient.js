@@ -147,15 +147,9 @@ export default function DramaTubeClient({ shelves = [], allDramas = [], totalCou
     <div className="dramatube-container">
       {/* Header Info y Buscador */}
       <div className="dramatube-hero-header">
-        <div className="dramatube-hero-badge">
-          <span className="dot" /> 🔴 EXCLUSIVO EN DRAMATUBE
-        </div>
         <h1 className="dramatube-title">
           Drama<span className="text-red">Tube</span>
         </h1>
-        <p className="dramatube-subtitle">
-          Disfruta de las mejores series cortas y doramas en español organizados por categorías temáticas exclusivas. {effectiveTotal} títulos disponibles en audio español latino y calidad HD.
-        </p>
 
         {/* Buscador y Controles de Vista */}
         <div className="dramatube-controls">

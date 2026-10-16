@@ -4,6 +4,7 @@ import Header from '../../../components/Header';
 import GridClient from '../../../components/GridClient';
 import CatalogGrid from '../../../components/CatalogGrid';
 import DramaTubeClient from '../../../components/DramaTubeClient';
+import HotDramaClient from '../../../components/HotDramaClient';
 import Footer from '../../../components/Footer';
 
 export const dynamic = 'force-dynamic';
@@ -109,19 +110,30 @@ export default async function SeccionPage({ params }) {
 
   // ===== Seccion 'hotdrama' (catalogo dramabox / hot) =====
   if (key === 'hotdrama') {
-    let first = { items: [], total: 0, page: 1, pages: 1 };
+    let shelves = [];
+    let allDramas = [];
     try {
-      const r = await fetch(PROXY + '/api/hotdrama?page=1&limit=48', { cache: 'no-store' });
-      if (r.ok) first = await r.json();
+      const rSh = await fetch(PROXY + '/api/hotdrama/shelves', { cache: 'no-store' });
+      if (rSh.ok) {
+        const dSh = await rSh.json();
+        shelves = dSh.shelves || [];
+      }
+      const rAll = await fetch(PROXY + '/api/hotdrama?page=1&limit=250', { cache: 'no-store' });
+      if (rAll.ok) {
+        const dAll = await rAll.json();
+        allDramas = dAll.items || [];
+      }
     } catch (e) {}
+
     return (
       <>
         <Header />
         <main className="con-header">
-          <section className="row">
-            <h2 className="row-title theme-fire"><span className="bar fire-bar" />Hot<span className="fire-text">Drama</span> ({first.total.toLocaleString('es')})</h2>
-            <CatalogGrid initial={first} apiPath="/api/hotdrama" label="HotDrama" fireTag={true} />
-          </section>
+          <HotDramaClient 
+            shelves={shelves} 
+            allDramas={allDramas} 
+            totalCount={allDramas.length || 31} 
+          />
         </main>
         <Footer />
       </>
