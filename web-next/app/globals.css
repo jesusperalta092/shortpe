@@ -2216,6 +2216,188 @@ video {
 }
 
 /* =========================================================
+   MOBILE & TABLET EXCLUSIVE OPTIMIZATIONS (DRAMATUBE, DRAMASHORTS, DRAMAS, HOTDRAMA)
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .dramatube-shelf-header {
+    padding: 0 3%;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+
+  .dramatube-shelf-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .shelf-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .dramatube-shelf-title {
+    font-size: 17px;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    display: block;
+    line-height: 1.25;
+  }
+
+  .shelf-count {
+    font-size: 11.5px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+  }
+
+  .dramatube-shelf-more-btn {
+    font-size: 11.5px;
+    padding: 5px 12px;
+    flex-shrink: 0;
+  }
+
+  .kurz-row {
+    padding: 0 3%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dramatube-shelves-list {
+    gap: 22px;
+  }
+
+  .dramatube-shelf-header {
+    padding: 0 14px;
+    margin-bottom: 8px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dramatube-shelf-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap !important;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .shelf-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .dramatube-shelf-title {
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    display: block;
+    line-height: 1.25;
+  }
+
+  /* Ocultar el badge shelf-count en celulares porque el botón 'Ver más + (N)' ya muestra el contador */
+  .shelf-count {
+    display: none !important;
+  }
+
+  .dramatube-shelf-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border-radius: 999px;
+  }
+
+  .kurz-row {
+    padding: 0 14px;
+    margin-bottom: 18px;
+  }
+
+  .kurz-track {
+    gap: 12px;
+    padding: 4px 2px 14px;
+  }
+
+  .kurz-card {
+    width: clamp(140px, 38vw, 160px);
+  }
+
+  .kurz-card-title {
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+
+  .kurz-card-meta {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dramatube-shelf-header {
+    padding: 0 10px;
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  .dramatube-shelf-header-left {
+    gap: 6px;
+  }
+
+  .shelf-icon {
+    font-size: 16px;
+  }
+
+  .dramatube-shelf-title {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .dramatube-shelf-more-btn {
+    padding: 4px 8px;
+    font-size: 10.5px;
+    gap: 3px;
+  }
+
+  .dramatube-shelf-more-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .kurz-row {
+    padding: 0 10px;
+  }
+
+  .kurz-track {
+    gap: 10px;
+  }
+
+  .kurz-card {
+    width: 140px;
+  }
+}
+
+/* =========================================================
    KURZDRAMA PROFESSIONAL CARD DESIGN (TITLES OUTSIDE BELOW)
    ========================================================= */
 

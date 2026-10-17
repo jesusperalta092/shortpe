@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Carousel from './Carousel';
 import TitleModal from './TitleModal';
+import { cleanShelfTitle } from '../lib/shelfUtils';
 
 export default function HotDramaClient({ shelves = [], allDramas = [], totalCount = 31 }) {
   const [modalSlug, setModalSlug] = useState(null);
@@ -281,7 +282,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
                   onClick={() => selectShelf(sh.name)}
                 >
                   <span className="pill-icon">{sh.icon}</span>
-                  <span>{sh.name}</span>
+                  <span>{cleanShelfTitle(sh.name)}</span>
                   <span className="pill-badge">{totalInShelf}</span>
                 </button>
               );
@@ -318,14 +319,14 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
             <div className="dramatube-cat-title-wrap">
               <span className="dramatube-cat-icon">{selectedCategory.icon}</span>
               <h2 className="dramatube-cat-title" style={{ color: '#fff' }}>
-                {selectedCategory.name}
+                {cleanShelfTitle(selectedCategory.name)}
               </h2>
               <span className="dramatube-cat-badge" style={{ background: 'rgba(255, 123, 0, 0.2)', color: '#ffb800', borderColor: 'rgba(255, 123, 0, 0.4)' }}>
                 {categoryItems.length} {categoryItems.length === 1 ? 'título' : 'títulos'}
               </span>
             </div>
             <p className="dramatube-cat-desc">
-              Catálogo de {selectedCategory.name} en audio doblado en español latino y calidad HD.
+              Catálogo de {cleanShelfTitle(selectedCategory.name)} en audio doblado en español latino y calidad HD.
             </p>
           </div>
 
@@ -367,7 +368,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
                   <div className="dramatube-shelf-header">
                     <div className="dramatube-shelf-header-left">
                       <span className="shelf-icon">{sh.icon}</span>
-                      <h2 className="dramatube-shelf-title">{sh.name}</h2>
+                      <h2 className="dramatube-shelf-title">{cleanShelfTitle(sh.name)}</h2>
                       <span className="shelf-count" style={{ borderColor: 'rgba(255, 123, 0, 0.2)', color: '#cbd5e1' }}>
                         ({totalInShelf})
                       </span>
@@ -376,7 +377,7 @@ export default function HotDramaClient({ shelves = [], allDramas = [], totalCoun
                       <button 
                         className="dramatube-shelf-more-btn hotdrama-shelf-more-btn"
                         onClick={() => handleOpenCategory(sh)}
-                        title={`Ver todos los ${totalInShelf} títulos de ${sh.name}`}
+                        title={`Ver todos los ${totalInShelf} títulos de ${cleanShelfTitle(sh.name)}`}
                       >
                         <span>Ver más + ({totalInShelf})</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
