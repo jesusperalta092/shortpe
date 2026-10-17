@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { trackVideoPlay, trackAdClick, trackLiveHeartbeat } from '../lib/analytics';
+import { trackVideoPlay, trackAdClick, trackLiveHeartbeat, reportVideoError } from '../lib/analytics';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -54,6 +54,31 @@ export default function Player({ slug, ep, title, total }) {
   const cuesRef = useRef([]);
   const idleTimer = useRef(null);
   const router = useRouter();
+
+  // Estados del sistema inteligente de reporte automático de errores
+  const [errorReportData, setErrorReportData] = useState(null);
+  const [showTechDetails, setShowTechDetails] = useState(false);
+  const reportedErrorsRef = useRef(new Set());
+
+  const dispatchAutoErrorReport = (errData = {}) => {
+    const key = `${slug}_${ep}_${errData.error_type || ''}_${errData.http_status || ''}`;
+    if (reportedErrorsRef.current.has(key)) return;
+    reportedErrorsRef.current.add(key);
+
+    const reportObj = {
+      slug,
+      ep,
+      title,
+      error_type: errData.error_type || 'PLAYBACK_FAILURE',
+      http_status: errData.http_status || null,
+      stream_url: errData.stream_url || '',
+      error_message: errData.error_message || 'Fallo al reproducir video',
+      details: errData.details || {}
+    };
+
+    setErrorReportData(reportObj);
+    reportVideoError(reportObj);
+  };
 
   // Cargar preferencia de subtítulos guardada
   useEffect(() => {
@@ -302,6 +327,12 @@ export default function Player({ slug, ep, title, total }) {
             }, 1200);
             return;
           }
+          dispatchAutoErrorReport({
+            error_type: 'HTTP_' + res.status,
+            http_status: res.status,
+            stream_url: epUrl,
+            error_message: 'Fallo al consultar endpoint de episodio (' + res.status + ')'
+          });
           throw new Error('Episodio no disponible (' + res.status + ')');
         }
         const data = await res.json();
@@ -346,6 +377,14 @@ export default function Player({ slug, ep, title, total }) {
               }, 1200);
             } else {
               setLoading(false);
+              const errCode = video.error?.code;
+              const codeMap = { 1: 'MEDIA_ABORTED', 2: 'MEDIA_NETWORK', 3: 'MEDIA_DECODE', 4: 'SRC_NOT_SUPPORTED_OR_403' };
+              dispatchAutoErrorReport({
+                error_type: codeMap[errCode] || 'VIDEO_ELEMENT_ERROR',
+                error_message: 'Fallo al reproducir video en el navegador (' + (codeMap[errCode] || ('código ' + errCode)) + ')',
+                stream_url: info?.url || video.src || '',
+                details: { code: errCode, message: video.error?.message }
+              });
               setError('No se pudo reproducir el video en el navegador');
             }
           }
@@ -406,6 +445,13 @@ export default function Player({ slug, ep, title, total }) {
                   return;
                 }
                 setLoading(false);
+                dispatchAutoErrorReport({
+                  error_type: 'HLS_NETWORK_ERROR',
+                  http_status: d.response?.code || null,
+                  stream_url: d.url || info?.url || '',
+                  error_message: 'Fallo de red al descargar segmentos o manifiesto HLS',
+                  details: { type: d.type, details: d.details, status: d.response?.code }
+                });
                 setError('Error de conexión al cargar segmentos de video');
                 return;
               }
@@ -421,6 +467,13 @@ export default function Player({ slug, ep, title, total }) {
                 }
               }
               setLoading(false);
+              dispatchAutoErrorReport({
+                error_type: 'HLS_' + (d.details || 'FORMAT_ERROR').toUpperCase(),
+                http_status: d.response?.code || null,
+                stream_url: d.url || info?.url || '',
+                error_message: 'Fallo fatal de decodificación o formato HLS (' + d.details + ')',
+                details: { type: d.type, details: d.details }
+              });
               setError('Error al procesar el formato de video');
             });
           } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -435,6 +488,12 @@ export default function Player({ slug, ep, title, total }) {
               if (!cancelled) load(true);
             }, 1200);
           } else {
+            dispatchAutoErrorReport({
+              error_type: e.message === 'ENCRYPTED' ? 'ENCRYPTED_STREAM' : 'CLIENT_PLAYBACK_EXCEPTION',
+              error_message: e.message,
+              stream_url: '/proxy/episode?slug=' + encodeURIComponent(slug) + '&ep=' + encodeURIComponent(ep),
+              details: { stack: e.stack }
+            });
             setError(e.message === 'ENCRYPTED' ? '🔒 Contenido protegido' : e.message);
             setLoading(false);
           }
@@ -656,15 +715,132 @@ export default function Player({ slug, ep, title, total }) {
       <div className="player-stage">
         {loading && <div className="player-loading"><div className="spinner" /><span>Cargando…</span></div>}
         {error && (
-          <div className="player-error">
-            <span style={{ fontSize: 36 }}>⚠️</span>
-            <p style={{ margin: '4px 0 14px', maxWidth: 360, lineHeight: 1.4, color: '#fff' }}>{error}</p>
-            <button
-              onClick={() => { setError(''); setLoading(true); setReloadKey(k => k + 1); }}
-              className="player-retry-btn"
-            >
-              🔄 Reintentar conexión
-            </button>
+          <div className="player-error" style={{
+            background: 'linear-gradient(180deg, rgba(17, 17, 24, 0.98), rgba(10, 10, 15, 0.98))',
+            border: '1px solid rgba(239, 68, 68, 0.35)',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 9, 20, 0.15)',
+            borderRadius: '16px',
+            padding: '24px 20px',
+            maxWidth: '420px',
+            margin: '0 auto',
+            backdropFilter: 'blur(12px)',
+            zIndex: 30
+          }}>
+            <div style={{
+              width: 52,
+              height: 52,
+              margin: '0 auto 12px',
+              borderRadius: '50%',
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px'
+            }}>
+              ⚠️
+            </div>
+
+            <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff', margin: '0 0 6px' }}>
+              No se pudo cargar el video
+            </h3>
+            
+            <p style={{ margin: '0 0 14px', fontSize: '13px', color: '#cbd5e1', lineHeight: 1.4 }}>
+              {error}
+            </p>
+
+            {/* Banner de reporte automático e inteligente */}
+            <div style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              borderRadius: '10px',
+              padding: '10px 12px',
+              marginBottom: '16px',
+              textAlign: 'left',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '10px'
+            }}>
+              <span style={{ fontSize: '16px', marginTop: '1px' }}>🛡️</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '12px', fontWeight: '800', color: '#4ade80', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>Reporte enviado automáticamente</span>
+                  <span style={{ fontSize: '10px', background: '#22c55e', color: '#000', padding: '1px 5px', borderRadius: '4px', fontWeight: '900' }}>OK</span>
+                </div>
+                <div style={{ fontSize: '11px', color: '#a1a1aa', lineHeight: 1.35 }}>
+                  El sistema capturó los logs técnicos y notificó al panel de soporte. No es necesario que envíes nada manualmente.
+                </div>
+              </div>
+            </div>
+
+            {errorReportData && (
+              <div style={{ marginBottom: '14px', textAlign: 'left' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowTechDetails(!showTechDetails)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#71717a',
+                    fontSize: '11px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: 0
+                  }}
+                >
+                  <span>{showTechDetails ? '▼ Ocultar detalles técnicos' : '▶ Ver detalles técnicos'}</span>
+                </button>
+                {showTechDetails && (
+                  <pre style={{
+                    margin: '8px 0 0',
+                    background: '#07070a',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '8px',
+                    padding: '8px',
+                    fontSize: '10px',
+                    color: '#e2e8f0',
+                    maxHeight: '110px',
+                    overflowX: 'auto',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-all'
+                  }}>
+                    {JSON.stringify({
+                      tipo: errorReportData.error_type,
+                      status: errorReportData.http_status,
+                      url: errorReportData.stream_url ? errorReportData.stream_url.slice(0, 90) + '...' : null
+                    }, null, 2)}
+                  </pre>
+                )}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+              <button
+                onClick={() => { setError(''); setLoading(true); setReloadKey(k => k + 1); }}
+                className="player-retry-btn"
+                style={{ flex: 1 }}
+              >
+                🔄 Reintentar conexión
+              </button>
+              <button
+                onClick={handleBack}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#e4e4e7',
+                  borderRadius: '8px',
+                  padding: '9px 14px',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Volver
+              </button>
+            </div>
           </div>
         )}
         <video

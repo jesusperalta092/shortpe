@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { authenticateAdmin, fetchAdminDashboard } from '../../lib/analytics';
+import { authenticateAdmin, fetchAdminDashboard, fetchAdminErrorLogs, resolveAdminErrorLog } from '../../lib/analytics';
 
 export default function AdminDashboardPage() {
   const [sessionToken, setSessionToken] = useState(null);
@@ -9,11 +9,18 @@ export default function AdminDashboardPage() {
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
+  const [activeTab, setActiveTab] = useState('metrics'); // 'metrics' | 'errors'
   const [timeRange, setTimeRange] = useState(7);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [serverStatus, setServerStatus] = useState('checking'); // 'live' | 'dead' | 'checking'
+
+  // Estados de errores de video
+  const [errorLogs, setErrorLogs] = useState([]);
+  const [loadingErrors, setLoadingErrors] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
+  const [resolvingId, setResolvingId] = useState(null);
 
   // Cargar token previo de sessionStorage
   useEffect(() => {
@@ -62,6 +69,62 @@ export default function AdminDashboardPage() {
       clearInterval(interval);
     };
   }, [sessionToken, timeRange]);
+
+  // Cargar lista de errores reportados cada 8 segundos
+  const loadErrorLogs = async () => {
+    if (!sessionToken) return;
+    setLoadingErrors(true);
+    try {
+      const res = await fetchAdminErrorLogs(sessionToken);
+      if (res.ok && Array.isArray(res.logs)) {
+        setErrorLogs(res.logs);
+      }
+    } catch (e) {
+    } finally {
+      setLoadingErrors(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!sessionToken) return;
+    loadErrorLogs();
+    const intv = setInterval(loadErrorLogs, 8000);
+    return () => clearInterval(intv);
+  }, [sessionToken]);
+
+  const handleCopyLogs = (item) => {
+    try {
+      const cleanDetails = {
+        id: item.id,
+        created_at: item.created_at,
+        dorama: item.title,
+        slug: item.slug,
+        episodio: item.ep,
+        error_type: item.error_type,
+        http_status: item.http_status,
+        stream_url: item.stream_url,
+        error_message: item.error_message,
+        dispositivo: item.device,
+        user_agent: item.user_agent,
+        detalles_tecnicos: item.details
+      };
+      const text = JSON.stringify(cleanDetails, null, 2);
+      navigator.clipboard.writeText(text);
+      setCopiedId(item.id);
+      setTimeout(() => setCopiedId(null), 2500);
+    } catch (e) {}
+  };
+
+  const handleResolveError = async (id) => {
+    setResolvingId(id);
+    try {
+      const res = await resolveAdminErrorLog(id, sessionToken);
+      if (res.ok) {
+        setErrorLogs(prev => prev.filter(l => String(l.id) !== String(id)));
+      }
+    } catch (e) {}
+    setResolvingId(null);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -352,6 +415,74 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
+        {/* NAVEGACIÓN ENTRE MÉTRICAS Y ERRORES REPORTADOS */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginBottom: '20px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          paddingBottom: '12px'
+        }}>
+          <button
+            onClick={() => setActiveTab('metrics')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: '700',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: activeTab === 'metrics' ? '#e50914' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'metrics' ? '#fff' : '#a1a1aa',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <span>📊</span>
+            <span>Métricas y Audiencia</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('errors')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: '700',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: activeTab === 'errors' ? '#e50914' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'errors' ? '#fff' : '#a1a1aa',
+              transition: 'all 0.15s ease',
+              position: 'relative'
+            }}
+          >
+            <span>🚨</span>
+            <span>Errores Reportados</span>
+            {errorLogs.length > 0 && (
+              <span style={{
+                background: activeTab === 'errors' ? '#fff' : '#ef4444',
+                color: activeTab === 'errors' ? '#e50914' : '#fff',
+                fontSize: '10px',
+                fontWeight: '900',
+                padding: '2px 7px',
+                borderRadius: '12px',
+                lineHeight: 1
+              }}>
+                {errorLogs.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {activeTab === 'metrics' && (
+          <>
         {/* 📊 4 TARJETAS PRINCIPALES REFINADAS Y COMPACTAS */}
         <div style={{
           display: 'grid',
@@ -726,6 +857,290 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
+        </>
+        )}
+
+        {/* ==========================================================
+            🚨 CENTRO DE GESTIÓN DE ERRORES DE VIDEO
+           ========================================================== */}
+        {activeTab === 'errors' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* BARRA DE HERRAMIENTAS Y RESUMEN */}
+            <div style={{
+              background: 'rgba(18, 18, 24, 0.95)',
+              borderRadius: '12px',
+              padding: '14px 18px',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px'
+            }}>
+              <div>
+                <h2 style={{ fontSize: '15px', fontWeight: '800', color: '#fff', margin: '0 0 3px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>🚨</span> Centro de Errores y Logs de Reproducción
+                </h2>
+                <p style={{ color: '#71717a', fontSize: '12px', margin: 0 }}>
+                  Incidentes capturados automáticamente por el sistema inteligente en Supabase (retención máx. 7 días).
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
+                  fontSize: '11px',
+                  color: '#a1a1aa',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}>
+                  <span>⏱️ Auto-purga:</span>
+                  <strong style={{ color: '#4ade80' }}>7 días</strong>
+                </div>
+
+                <button
+                  onClick={loadErrorLogs}
+                  disabled={loadingErrors}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#fff',
+                    borderRadius: '6px',
+                    padding: '6px 12px',
+                    fontSize: '11.5px',
+                    fontWeight: '700',
+                    cursor: loadingErrors ? 'wait' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px'
+                  }}
+                >
+                  <span>{loadingErrors ? '⌛' : '🔄'}</span>
+                  <span>{loadingErrors ? 'Actualizando...' : 'Refrescar'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* LISTA DE INCIDENTES */}
+            {errorLogs.length === 0 ? (
+              <div style={{
+                textAlign: 'center',
+                padding: '50px 20px',
+                background: 'rgba(18, 18, 24, 0.9)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}>
+                <div style={{ fontSize: '38px', marginBottom: '10px' }}>✨</div>
+                <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff', margin: '0 0 6px' }}>
+                  Sin incidentes reportados
+                </h3>
+                <p style={{ color: '#71717a', fontSize: '12.5px', maxWidth: '420px', margin: '0 auto', lineHeight: 1.4 }}>
+                  Todos los títulos y episodios están reproduciendo con normalidad. Los errores que ocurran se registrarán aquí automáticamente.
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {errorLogs.map((log) => {
+                  const isCopied = copiedId === log.id;
+                  const isResolving = resolvingId === log.id;
+                  const is403 = log.error_type?.includes('403') || log.http_status === 403;
+
+                  return (
+                    <div
+                      key={log.id}
+                      style={{
+                        background: 'rgba(18, 18, 24, 0.95)',
+                        border: is403 ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(255, 255, 255, 0.08)',
+                        borderRadius: '12px',
+                        padding: '16px 18px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        boxShadow: is403 ? '0 4px 20px rgba(239, 68, 68, 0.08)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {/* FILA SUPERIOR: TÍTULO, EPISODIO, ESTADO Y FECHA */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '14px', fontWeight: '800', color: '#fff' }}>
+                            {log.title || log.slug}
+                          </span>
+                          <span style={{
+                            background: '#e50914',
+                            color: '#fff',
+                            fontSize: '11px',
+                            fontWeight: '800',
+                            padding: '2px 7px',
+                            borderRadius: '5px'
+                          }}>
+                            Ep. {log.ep}
+                          </span>
+                          <Link
+                            href={`/ver/${encodeURIComponent(log.slug)}/${encodeURIComponent(log.ep)}`}
+                            target="_blank"
+                            style={{
+                              background: 'rgba(255, 255, 255, 0.06)',
+                              color: '#60a5fa',
+                              fontSize: '11px',
+                              padding: '2px 8px',
+                              borderRadius: '5px',
+                              textDecoration: 'none',
+                              fontWeight: '600'
+                            }}
+                          >
+                            Probar ▶
+                          </Link>
+                        </div>
+
+                        <div style={{ fontSize: '11.5px', color: '#71717a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>🕒</span>
+                          <span>{log.created_at ? new Date(log.created_at).toLocaleString() : 'Reciente'}</span>
+                        </div>
+                      </div>
+
+                      {/* BADGES TÉCNICOS: TIPO DE ERROR, STATUS Y DISPOSITIVO */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px' }}>
+                        <span style={{
+                          background: is403 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.18)',
+                          color: is403 ? '#f87171' : '#fbbf24',
+                          border: is403 ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(245, 158, 11, 0.3)',
+                          fontSize: '10.5px',
+                          fontWeight: '800',
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                          letterSpacing: '0.02em'
+                        }}>
+                          ⚠️ {log.error_type}
+                        </span>
+
+                        {log.http_status && (
+                          <span style={{
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            color: '#e4e4e7',
+                            fontSize: '10.5px',
+                            fontWeight: '700',
+                            padding: '2px 7px',
+                            borderRadius: '6px',
+                            border: '1px solid rgba(255, 255, 255, 0.1)'
+                          }}>
+                            HTTP {log.http_status}
+                          </span>
+                        )}
+
+                        <span style={{
+                          background: 'rgba(255, 255, 255, 0.04)',
+                          color: '#a1a1aa',
+                          fontSize: '10.5px',
+                          padding: '2px 7px',
+                          borderRadius: '6px'
+                        }}>
+                          {log.device === 'mobile' ? '📱 Móvil' : log.device === 'tablet' ? '📟 Tablet' : '💻 Desktop'}
+                        </span>
+                      </div>
+
+                      {/* MENSAJE DEL ERROR */}
+                      {log.error_message && (
+                        <div style={{ fontSize: '12px', color: '#cbd5e1', lineHeight: 1.4 }}>
+                          {log.error_message}
+                        </div>
+                      )}
+
+                      {/* URL DEL STREAM CAPTURADA */}
+                      {log.stream_url && (
+                        <div style={{
+                          background: '#07070a',
+                          border: '1px solid rgba(255, 255, 255, 0.06)',
+                          borderRadius: '6px',
+                          padding: '6px 10px',
+                          fontSize: '11px',
+                          color: '#94a3b8',
+                          fontFamily: 'monospace',
+                          overflowX: 'auto',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          URL: {log.stream_url}
+                        </div>
+                      )}
+
+                      {/* BOTONES DE ACCIÓN: COPIAR LOGS + MARCAR RESUELTO */}
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        gap: '8px',
+                        paddingTop: '6px',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.05)'
+                      }}>
+                        {/* BOTÓN COPIAR LOGS AL PORTAPAPELES */}
+                        <button
+                          type="button"
+                          onClick={() => handleCopyLogs(log)}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '7px',
+                            background: isCopied ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255, 255, 255, 0.06)',
+                            border: isCopied ? '1px solid #22c55e' : '1px solid rgba(255, 255, 255, 0.1)',
+                            color: isCopied ? '#4ade80' : '#e4e4e7',
+                            fontSize: '11.5px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          <span>{isCopied ? '✅' : '📋'}</span>
+                          <span>{isCopied ? '¡Logs Copiados!' : 'Copiar Logs'}</span>
+                        </button>
+
+                        {/* INTERRUPTOR SWITCH / BOTÓN MARCAR RESUELTO (BORRA DE SUPABASE) */}
+                        <button
+                          type="button"
+                          onClick={() => handleResolveError(log.id)}
+                          disabled={isResolving}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '7px',
+                            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(22, 101, 52, 0.3))',
+                            border: '1px solid rgba(34, 197, 94, 0.45)',
+                            color: '#4ade80',
+                            fontSize: '11.5px',
+                            fontWeight: '700',
+                            cursor: isResolving ? 'wait' : 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          <span style={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '3px',
+                            border: '1.5px solid #4ade80',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '9px',
+                            fontWeight: '900'
+                          }}>✓</span>
+                          <span>{isResolving ? 'Eliminando...' : 'Marcar Resuelto (Eliminar)'}</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
     </div>

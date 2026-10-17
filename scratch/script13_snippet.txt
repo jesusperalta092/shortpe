@@ -1,0 +1,90 @@
+refreshEpisodeSourceForPrefetchIfStale → URL basi selalu ke-refresh.
+        return urlHasTimeToken(currentSourceUrl)
+            ? BROWSER_PREFETCH_NEIGHBOR_REFRESH_TTL_MS
+            : BROWSER_PREFETCH_FORCE_REFRESH_TTL_MS;
+    }
+
+    function clearMediaPreloadEntry(key) {
+        const entry = mediaPreloadState.get(key);
+        if (!entry) return;
+        const video = entry.video;
+        const hlsInstance = entry.hls;
+        if (hlsInstance && typeof hlsInstance.destroy === 'function') {
+            try { hlsInstance.destroy(); } catch (e) { /* ignore */ }
+        }
+        if (video) {
+            try { video.pause(); } catch (e) { /* ignore */ }
+            try { video.removeAttribute('src'); } catch (e) { /* ignore */ }
+            try { video.load(); } catch (e) { /* ignore */ }
+            try { video.remove(); } catch (e) { /* ignore */ }
+        }
+        mediaPreloadState.delete(key);
+    }
+
+    function createHiddenPreloadVideo() {
+        const video = document.createElement('video');
+        video.muted = true;
+        video.preload = 'auto';
+        video.playsInline = true;
+        enforceVideoNoReferrer(video);
+        video.disablePictureInPicture = true;
+        video.setAttribute('aria-hidden', 'true');
+        video.setAttribute('tabindex', '-1');
+        video.style.position = 'absolute';
+        video.style.width = '1px';
+        video.style.height = '1px';
+        video.style.opacity = '0';
+        video.style.pointerEvents = 'none';
+        video.style.left = '-9999px';
+        video.style.top = '-9999px';
+        stage.appendChild(video);
+        return video;
+    }
+
+    function cleanupOutOfWindowPreloads(currentEp) {
+        const activeWindow = new Set();
+        for (let offset = 1; offset <= BROWSER_PREFETCH_RANGE; offset += 1) {
+            activeWindow.add(String(currentEp + offset));
+            activeWindow.add(String(currentEp - offset));
+        }
+        for (const key of mediaPreloadState.keys()) {
+            if (!activeWindow.has(String(key))) {
+                clearMediaPreloadEntry(key);
+            }
+        }
+    }
+
+    // Log diagnostik: dipanggil saat prefetch episode tetangga BERHASIL siap.
+    function logPrefetchReady(episode, mode, url) {
+        try {
+            console.log(
+                '%c[ND prefetch ✓]%c ep ' + String(episode?.route_episode_number ?? episode?.number ?? '?')
+                + ' · ' + String(movieTitle || '') + ' · mode=' + String(mode || '?'),
+                'color:#10b981;font-weight:bold', 'color:#888',
+                '\n   play_url: ' + String(url || '')
+            );
+        } catch (e) { /* ignore */ }
+    }
+
+    // Hangatkan SEGMEN AWAL MP4 (Range bytes=0..N) ke cache browser, lalu stop.
+    // Membatasi byte yang ditarik (≠ download seluruh file 2GB). Untuk source yang
+    // mendukung CORS (lokal/edge/CDN ber-CORS) — bisa dibaca & di-cap presisi.
+    async function prefetchMp4InitialSegment(url, signal) {
+        const u = String(url || '').trim();
+        if (u === '' || !/^https?:\/\//i.test(u)) return false;
+        const cap = Math.max(262144, BROWSER_PREFETCH_MP4_BYTES);
+        try {
+            const resp = await fetch(u, {
+                method: 'GET',
+                headers: { 'Range': 'bytes=0-' + (cap - 1) },
+                // 'same-origin' (bukan 'omit') agar cache-key cocok dgn request elemen <video>
+                // → segmen awal benar-benar dipakai ulang saat episode diputar.
+                credentials: 'same-origin',
+                cache: 'force-cache',
+                // no-referrer: SAMA dgn cara playback direct-CDN diputar (enforceVideoNoReferrer). CDN yg
+                // blok Referer (mis. bibishort crazytalkai) → tanpa ini prefetch 403 & warm gagal. CDN lain
+                // tak terpengaruh (Referer memang tak dibutuhkan). Wajib match playback biar cache-key sama.
+                referrerPolicy: 'no-referrer',
+                signal,
+            });
+            if (!resp || (!resp.ok && resp.status !== 206

@@ -611,6 +611,22 @@ def _dt_episode_url(dt, ep, force=False):
 NARTO_CACHE = {}
 NARTO_TTL = 1800  # 30 minutos
 
+def _unwrap_stream_url(url):
+    """Extrae la URL directa del CDN cuando viene encapsulada en wrappers (como stream.narto-drama.com/e/m/...)."""
+    if not url: return url
+    if 'stream.narto-drama.com/e/m/' in url:
+        try:
+            part = url.split('/e/m/', 1)[1].split('.', 1)[0].split('?')[0]
+            pad = len(part) % 4
+            if pad: part += '=' * (4 - pad)
+            payload = json.loads(base64.urlsafe_b64decode(part.encode('ascii')))
+            src = payload.get('src')
+            if src and src.startswith('http'):
+                return src
+        except Exception:
+            pass
+    return url
+
 def _resolve_narto_episode(slug, ep, force=False):
     """Resuelve token fresco on-demand desde edge.narto-drama.com o narto-drama.com para evitar 410 (expired)."""
     now = time.time()
@@ -635,6 +651,7 @@ def _resolve_narto_episode(slug, ep, force=False):
             if data.get('ok'):
                 fresh_url = (data.get('play_url') or data.get('direct_play_url') or '').strip()
                 if fresh_url and '${' not in fresh_url and 'decrypt-stream' not in fresh_url:
+                    fresh_url = _unwrap_stream_url(fresh_url)
                     NARTO_CACHE[cache_key] = (now, fresh_url)
                     return fresh_url
     except Exception as e:
@@ -655,6 +672,7 @@ def _resolve_narto_episode(slug, ep, force=False):
                             if str(ep_obj.get('number')) == str(ep) or str(ep_obj.get('route_episode_number')) == str(ep):
                                 cand = (ep_obj.get('play_url') or ep_obj.get('direct_play_url') or '').strip()
                                 if cand and '${' not in cand and 'decrypt-stream' not in cand:
+                                    cand = _unwrap_stream_url(cand)
                                     NARTO_CACHE[cache_key] = (now, cand)
                                     return cand
                     except Exception:
@@ -663,6 +681,7 @@ def _resolve_narto_episode(slug, ep, force=False):
                 for m in re.finditer(r'(https?://[^\s"\'<>]+(?:vigloo-stream|dramabox-stream|vividshort\.com|flextv\.cc|janzhoutec\.com)[^\s"\'<>]*)', r.text):
                     fresh_url = m.group(1).rstrip('`";,')
                     if '${' not in fresh_url and 'decrypt-stream' not in fresh_url:
+                        fresh_url = _unwrap_stream_url(fresh_url)
                         NARTO_CACHE[cache_key] = (now, fresh_url)
                         return fresh_url
             elif r.status_code == 500:
@@ -677,6 +696,7 @@ def _resolve_narto_episode(slug, ep, force=False):
 def is_hls_stream(url):
     """Determina si un video es stream HLS (m3u8) o archivo directo (mp4/webm)."""
     if not url: return False
+    url = _unwrap_stream_url(url)
     u = url.split('?')[0].lower()
     if u.endswith('.mp4') or u.endswith('.webm') or u.endswith('.mkv') or u.endswith('.mov') or u.endswith('.m4v'):
         return False
@@ -1432,6 +1452,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 fresh_vurl = _resolve_narto_episode(slug, ep, force=fresh)
                 vurl = fresh_vurl or eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
+                vurl = _unwrap_stream_url(vurl)
                 is_hls = is_hls_stream(vurl)
                 p_type = 'hls' if is_hls else 'file'
                 v_type = 'hls' if is_hls else 'mp4'
@@ -1500,6 +1521,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 fresh_vurl = _resolve_narto_episode(slug, ep, force=fresh)
                 vurl = fresh_vurl or eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
+                vurl = _unwrap_stream_url(vurl)
                 is_hls = is_hls_stream(vurl)
                 p_type = 'hls' if is_hls else 'file'
                 v_type = 'hls' if is_hls else 'mp4'

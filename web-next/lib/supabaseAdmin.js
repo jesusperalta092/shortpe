@@ -14,7 +14,8 @@ if (!global._dramapeAnalytics) {
     sessions: new Map(),       // token -> expiry
     failedAttempts: new Map(), // ip -> [timestamp]
     liveHeartbeats: new Map(), // visitorHash -> { lastSeen, isWatching, slug, ep, title, device }
-    fallbackEvents: []         // eventos locales en memoria de respaldo
+    fallbackEvents: [],        // eventos locales en memoria de respaldo
+    fallbackErrorLogs: []      // logs de errores en memoria de respaldo
   };
 }
 
@@ -254,4 +255,112 @@ export async function getDashboardData(days = 7) {
     top_dramas: topDramas,
     devices
   };
+}
+
+// ==========================================================
+// 🛡️ GESTIÓN INTELIGENTE DE ERRORES DE VIDEO (SUPABASE)
+// ==========================================================
+
+// Guardar registro de error de video en Supabase Cloud con autolimpieza de 7 días
+export async function saveVideoErrorLog(data = {}) {
+  const doc = {
+    slug: data.slug || '',
+    ep: String(data.ep || ''),
+    title: data.title || '',
+    error_type: data.error_type || 'UNKNOWN',
+    http_status: data.http_status ? parseInt(data.http_status, 10) : null,
+    stream_url: data.stream_url || '',
+    error_message: data.error_message || '',
+    details: data.details || {},
+    device: data.device || 'desktop',
+    user_agent: data.user_agent || '',
+    status: 'pending'
+  };
+
+  // Mantener copia en memoria para disponibilidad inmediata
+  if (!state.fallbackErrorLogs) state.fallbackErrorLogs = [];
+  state.fallbackErrorLogs.unshift({
+    id: 'mem_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+    created_at: new Date().toISOString(),
+    ...doc
+  });
+  if (state.fallbackErrorLogs.length > 500) state.fallbackErrorLogs.pop();
+
+  // Limpieza automática de registros mayores a 7 días en Supabase
+  try {
+    const sevenDaysAgo = new Date(Date.now() - (7 * 86400000)).toISOString();
+    fetch(`${SUPABASE_URL}/rest/v1/video_error_logs?created_at=lt.${encodeURIComponent(sevenDaysAgo)}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`
+      }
+    }).catch(() => {});
+  } catch (e) {}
+
+  // Guardar en Supabase REST
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/video_error_logs`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(doc),
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const inserted = await res.json();
+      return { ok: true, data: inserted };
+    }
+  } catch (err) {}
+
+  return { ok: true, fallback: true };
+}
+
+// Obtener la lista de errores para el panel de administración
+export async function getVideoErrorLogs() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/video_error_logs?status=eq.pending&order=created_at.desc&limit=100`, {
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`
+      },
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return { ok: true, logs: data };
+    }
+  } catch (err) {}
+
+  // Fallback a memoria si Supabase está offline
+  const memLogs = (state.fallbackErrorLogs || []).filter(l => l.status !== 'resolved');
+  return { ok: true, logs: memLogs, fallback: true };
+}
+
+// Marcar como resuelto / eliminar error de Supabase
+export async function resolveVideoErrorLog(id) {
+  if (!id) return { ok: false, error: 'ID requerido' };
+
+  // Remover de memoria
+  if (state.fallbackErrorLogs) {
+    state.fallbackErrorLogs = state.fallbackErrorLogs.filter(l => String(l.id) !== String(id));
+  }
+
+  // Eliminar de Supabase
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/video_error_logs?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`
+      }
+    });
+    return { ok: res.ok };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
 }

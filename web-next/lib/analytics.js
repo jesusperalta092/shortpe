@@ -93,3 +93,68 @@ export async function fetchAdminDashboard(days = 7, token = '') {
     return { ok: false, error: 'Error al cargar analíticas' };
   }
 }
+
+// Envío automático e inteligente de errores de video sin requerir acción del usuario
+export function reportVideoError(errorData = {}) {
+  if (typeof window === 'undefined') return;
+  try {
+    const payload = {
+      slug: errorData.slug || '',
+      ep: String(errorData.ep || ''),
+      title: errorData.title || '',
+      error_type: errorData.error_type || 'UNKNOWN_VIDEO_ERROR',
+      http_status: errorData.http_status || null,
+      stream_url: errorData.stream_url || '',
+      error_message: errorData.error_message || '',
+      details: errorData.details || {},
+      device: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : /iPad|Tablet/i.test(navigator.userAgent) ? 'tablet' : 'desktop',
+      user_agent: navigator.userAgent || ''
+    };
+
+    if (navigator.sendBeacon) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon('/api/analytics/error-report', blob);
+    } else {
+      fetch('/api/analytics/error-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
+    }
+  } catch (e) {
+    // Fail silently
+  }
+}
+
+// Consultar lista de errores para el panel administrativo
+export async function fetchAdminErrorLogs(token = '') {
+  try {
+    const headers = {};
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    const res = await fetch('/api/analytics/admin-errors', {
+      headers,
+      cache: 'no-store'
+    });
+    if (res.status === 401) return { ok: false, unauthorized: true };
+    return await res.json();
+  } catch (e) {
+    return { ok: false, error: 'Error al consultar logs de errores' };
+  }
+}
+
+// Marcar como resuelto / eliminar error de Supabase
+export async function resolveAdminErrorLog(id, token = '') {
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    const res = await fetch('/api/analytics/admin-errors', {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({ id })
+    });
+    return await res.json();
+  } catch (e) {
+    return { ok: false, error: 'Error al resolver log' };
+  }
+}
