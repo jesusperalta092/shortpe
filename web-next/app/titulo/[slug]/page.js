@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTitle, getCatalog } from '../../../lib/api';
+import TituloEpisodesClient from '../../../components/TituloEpisodesClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -111,14 +112,7 @@ export default async function TituloPage({ params }) {
             </div>
           </div>
 
-          <h2 style={{ fontSize: 18, marginBottom: 8 }}>📺 Episodios ({total})</h2>
-          <div className="ep-grid">
-            {eps.map((key) => (
-              <a key={key} className="ep-btn" href={'/ver/' + slug + '/' + key}>
-                {String(key).includes('x') ? ('T' + String(key).split('x')[0] + ' E' + String(key).split('x')[1]) : ('EP ' + key)}
-              </a>
-            ))}
-          </div>
+          <TituloEpisodesClient slug={slug} total={total} eps={eps} />
         </article>
       </main>
     </>

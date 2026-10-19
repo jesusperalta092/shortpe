@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { trackVideoPlay, trackAdClick, trackLiveHeartbeat, reportVideoError } from '../lib/analytics';
+import { recordProgress } from '../lib/watchHistory';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -35,7 +36,7 @@ export function nextEpKey(ep) {
   return String(n + 1);
 }
 
-export default function Player({ slug, ep, title, total }) {
+export default function Player({ slug, ep, title, total, poster }) {
   const videoRef = useRef(null);
   const wrapRef = useRef(null);
   const hlsRef = useRef(null);
@@ -558,6 +559,41 @@ export default function Player({ slug, ep, title, total }) {
       video.removeEventListener('ended', onPlayStop);
     };
   }, [slug, ep, title]);
+
+  // Historial inteligente: registra automáticamente tras 25 segundos o al terminar el capítulo
+  const hasRecordedProgress = useRef(false);
+
+  useEffect(() => {
+    hasRecordedProgress.current = false;
+  }, [slug, ep]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const checkAndRecord = () => {
+      if (hasRecordedProgress.current) return;
+      // Se registra si vio al menos 25 segundos O si finalizó el video
+      if (video.currentTime >= 25 || video.ended) {
+        hasRecordedProgress.current = true;
+        recordProgress({
+          slug,
+          ep,
+          title,
+          poster,
+          total_eps: total
+        });
+      }
+    };
+
+    video.addEventListener('timeupdate', checkAndRecord);
+    video.addEventListener('ended', checkAndRecord);
+
+    return () => {
+      video.removeEventListener('timeupdate', checkAndRecord);
+      video.removeEventListener('ended', checkAndRecord);
+    };
+  }, [slug, ep, title, poster, total]);
 
   const handleBack = (e) => {
     if (e) e.preventDefault();

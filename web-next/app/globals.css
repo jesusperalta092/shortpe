@@ -3309,8 +3309,255 @@ video {
   background: rgba(229, 9, 20, 0.2);
 }
 
+/* ==========================================================
+   ▶️ FILA "CONTINUAR VIENDO" (EXPERIENCIA NETFLIX)
+   ========================================================== */
+.continue-watching-section {
+  margin-bottom: 24px;
+}
 
+.continue-count-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
 
+.continue-carousel {
+  position: relative;
+}
 
+.continue-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 2px 14px;
+}
+.continue-track::-webkit-scrollbar {
+  display: none;
+}
 
+.continue-card {
+  position: relative;
+  flex: 0 0 155px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: rgba(18, 18, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
 
+@media (min-width: 768px) {
+  .continue-card {
+    flex: 0 0 175px;
+  }
+}
+
+.continue-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(239, 68, 68, 0.25);
+}
+
+.continue-card-poster-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 13;
+  overflow: hidden;
+  background: #181820;
+  display: block;
+}
+
+.continue-card-poster-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.continue-card:hover .continue-card-poster-wrap img {
+  transform: scale(1.04);
+}
+
+.continue-dismiss-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  opacity: 0.8;
+}
+
+.continue-dismiss-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.continue-ep-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.continue-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.continue-card:hover .continue-play-overlay {
+  opacity: 1;
+}
+
+.continue-play-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e50914;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.8);
+  transform: scale(0.9);
+  transition: transform 0.2s ease;
+}
+
+.continue-card:hover .continue-play-circle {
+  transform: scale(1);
+}
+
+.continue-play-text {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.continue-progress-bar-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  z-index: 3;
+}
+
+.continue-progress-bar-fill {
+  height: 100%;
+  background: #e50914;
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.9);
+  transition: width 0.3s ease;
+}
+
+.continue-card-info {
+  padding: 9px 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.continue-card-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #f4f4f5;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.continue-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.continue-card-sub {
+  color: #f87171;
+  font-weight: 600;
+}
+
+.continue-card-dot {
+  color: #52525b;
+}
+
+.continue-card-pct {
+  color: #a1a1aa;
+}
+
+/* ==========================================================
+   📺 ESTILOS PARA EPISODIOS VISTOS Y DESTACADOS
+   ========================================================== */
+.ep-btn.ep-watched {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #a7f3d0 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.ep-btn.ep-watched:hover {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: #10b981 !important;
+}
+
+.ep-btn.ep-last-watched {
+  border-color: #ef4444 !important;
+  color: #fff !important;
+  background: rgba(239, 68, 68, 0.22) !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+  font-weight: 800;
+}
+
+.ep-check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+  font-weight: 900;
+  font-size: 11px;
+  margin-right: 4px;
+}

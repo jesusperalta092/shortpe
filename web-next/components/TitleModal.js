@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, useRef, memo } from 'react';
 import Link from 'next/link';
+import { getDoramaProgress } from '../lib/watchHistory';
 
 // Cache global en memoria para persistir todos los títulos cargados
 const modalCache = new Map();
@@ -8,7 +9,16 @@ const modalCache = new Map();
 function TitleModalComponent({ slug, onClose }) {
   const [d, setD] = useState(() => (slug && modalCache.has(slug) ? modalCache.get(slug) : null));
   const [err, setErr] = useState('');
+  const [historyData, setHistoryData] = useState(null);
   const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    if (slug) {
+      setHistoryData(getDoramaProgress(slug));
+    } else {
+      setHistoryData(null);
+    }
+  }, [slug]);
 
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -98,13 +108,41 @@ function TitleModalComponent({ slug, onClose }) {
           <div className="modal-hero-overlay">
             <h2 className="modal-title">{d ? d.title : 'Cargando…'}</h2>
             {d && (
-              <div className="modal-actions">
-                <Link className="btn btn-play" href={'/ver/' + d.slug + '/1'}>
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  Reproducir
-                </Link>
+              <div className="modal-actions" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                {historyData?.last_ep ? (
+                  <>
+                    <Link className="btn btn-play" href={'/ver/' + d.slug + '/' + historyData.last_ep}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                      Continuar Cap. {historyData.last_ep}
+                    </Link>
+                    <Link
+                      className="btn"
+                      href={'/ver/' + d.slug + '/1'}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.12)',
+                        color: '#f4f4f5',
+                        border: '1px solid rgba(255, 255, 255, 0.18)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        padding: '8px 14px',
+                        borderRadius: '6px'
+                      }}
+                    >
+                      Desde el Cap. 1
+                    </Link>
+                  </>
+                ) : (
+                  <Link className="btn btn-play" href={'/ver/' + d.slug + '/1'}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    Reproducir
+                  </Link>
+                )}
               </div>
             )}
           </div>
@@ -145,13 +183,25 @@ function TitleModalComponent({ slug, onClose }) {
               <>
                 <div className="episodes-title">📺 Episodios ({d.total_episodes})</div>
                 <div className="episodes-grid">
-                  {(d.episodeKeys || []).map((k) => (
-                    <Link key={k} className="ep-btn" href={'/ver/' + d.slug + '/' + k}>
-                      {String(k).includes('x')
-                        ? ('T' + String(k).split('x')[0] + ' E' + String(k).split('x')[1])
-                        : ('EP ' + k)}
-                    </Link>
-                  ))}
+                  {(d.episodeKeys || []).map((k) => {
+                    const kStr = String(k).trim();
+                    const isWatched = historyData?.vistos && historyData.vistos.some(v => String(v).trim() === kStr);
+                    const isLast = historyData?.last_ep && String(historyData.last_ep).trim() === kStr;
+                    const label = kStr.includes('x')
+                      ? ('T' + kStr.split('x')[0] + ' E' + kStr.split('x')[1])
+                      : ('EP ' + kStr);
+
+                    return (
+                      <Link
+                        key={k}
+                        className={`ep-btn ${isLast ? 'ep-last-watched' : (isWatched ? 'ep-watched' : '')}`}
+                        href={'/ver/' + d.slug + '/' + k}
+                      >
+                        {isWatched && <span className="ep-check-icon">✓</span>}
+                        <span>{label}</span>
+                      </Link>
+                    );
+                  })}
                 </div>
               </>
             )}
