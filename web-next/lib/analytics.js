@@ -35,8 +35,8 @@ export function trackVideoPlay(slug, ep, title) {
   trackEvent('video_play', { slug, ep, title });
 }
 
-export function trackAdClick(slug, ep, network = 'ad') {
-  trackEvent('ad_click', { slug, ep, title: network });
+export function trackAdClick(slug, ep, network = 'ad', step = 1) {
+  trackEvent('ad_click', { slug, ep, title: network, network, step });
 }
 
 export function trackLiveHeartbeat(isWatching = false, slug = '', ep = '', title = '') {

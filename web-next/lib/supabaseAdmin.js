@@ -64,26 +64,82 @@ export function detectDevice(ua = '') {
   return 'desktop';
 }
 
-export function recordLiveHeartbeat(isWatching, slug = '', ep = '', title = '', ip = '127.0.0.1', ua = '') {
+export function detectOS(ua = '') {
+  const low = (ua || '').toLowerCase();
+  if (low.includes('iphone') || low.includes('ipad') || low.includes('ios')) return 'iOS';
+  if (low.includes('android')) return 'Android';
+  if (low.includes('windows')) return 'Windows';
+  if (low.includes('macintosh') || low.includes('mac os')) return 'macOS';
+  if (low.includes('linux')) return 'Linux';
+  return 'Otro';
+}
+
+export function detectBrowser(ua = '') {
+  const low = (ua || '').toLowerCase();
+  if (low.includes('edg/')) return 'Edge';
+  if (low.includes('samsungbrowser')) return 'Samsung Internet';
+  if (low.includes('chrome') && !low.includes('edg/')) return 'Chrome';
+  if (low.includes('safari') && !low.includes('chrome')) return 'Safari';
+  if (low.includes('firefox')) return 'Firefox';
+  if (low.includes('opera') || low.includes('opr/')) return 'Opera';
+  return 'Navegador Móvil';
+}
+
+export function getCountryDetails(code = 'PE') {
+  const c = (code || 'PE').toUpperCase().trim();
+  const map = {
+    'PE': { name: 'Perú', flag: '🇵🇪' },
+    'MX': { name: 'México', flag: '🇲🇽' },
+    'US': { name: 'Estados Unidos', flag: '🇺🇸' },
+    'CO': { name: 'Colombia', flag: '🇨🇴' },
+    'AR': { name: 'Argentina', flag: '🇦🇷' },
+    'CL': { name: 'Chile', flag: '🇨🇱' },
+    'ES': { name: 'España', flag: '🇪🇸' },
+    'EC': { name: 'Ecuador', flag: '🇪🇨' },
+    'BO': { name: 'Bolivia', flag: '🇧🇴' },
+    'GT': { name: 'Guatemala', flag: '🇬🇹' },
+    'DO': { name: 'Rep. Dominicana', flag: '🇩🇴' },
+    'VE': { name: 'Venezuela', flag: '🇻🇪' },
+    'CR': { name: 'Costa Rica', flag: '🇨🇷' },
+    'PA': { name: 'Panamá', flag: '🇵🇦' },
+    'UY': { name: 'Uruguay', flag: '🇺🇾' },
+    'PY': { name: 'Paraguay', flag: '🇵🇾' },
+    'HN': { name: 'Honduras', flag: '🇭🇳' },
+    'SV': { name: 'El Salvador', flag: '🇸🇻' },
+    'NI': { name: 'Nicaragua', flag: '🇳🇮' },
+    'BR': { name: 'Brasil', flag: '🇧🇷' }
+  };
+  return map[c] || { name: c || 'Desconocido', flag: '🌍' };
+}
+
+export function recordLiveHeartbeat(isWatching, slug = '', ep = '', title = '', ip = '127.0.0.1', ua = '', country = 'PE', city = '') {
   const visitorHash = hashVisitor(ip, ua);
   const device = detectDevice(ua);
+  const countryInfo = getCountryDetails(country);
   state.liveHeartbeats.set(visitorHash, {
     lastSeen: Date.now(),
     isWatching: Boolean(isWatching),
     slug: slug || '',
     ep: String(ep || ''),
     title: title || '',
-    device
+    device,
+    country: country.toUpperCase(),
+    country_name: countryInfo.name,
+    flag: countryInfo.flag,
+    city: city || ''
   });
 }
 
-// Guardar evento en Supabase Cloud con respaldo en memoria
+// Guardar evento en Supabase Cloud con respaldo en memoria y compatibilidad garantizada
 export async function saveEvent(eventData) {
   const now = Date.now();
   const dateStr = new Date(now).toISOString().slice(0, 10);
   const hourStr = new Date(now).toISOString().slice(0, 13) + ':00';
 
-  const doc = {
+  const countryCode = (eventData.country || 'PE').toUpperCase().trim();
+  const countryInfo = getCountryDetails(countryCode);
+
+  const baseDoc = {
     timestamp: Math.floor(now / 1000),
     date_str: dateStr,
     hour_str: hourStr,
@@ -95,26 +151,41 @@ export async function saveEvent(eventData) {
     visitor_hash: eventData.visitor_hash || 'anon',
     device: eventData.device || 'desktop',
     referer: eventData.referer || '',
-    country: 'PE'
+    country: countryCode
+  };
+
+  const extendedDoc = {
+    ...baseDoc,
+    city: eventData.city || '',
+    region: eventData.region || '',
+    country_name: countryInfo.name,
+    network: eventData.network || (eventData.event_type === 'ad_click' ? eventData.title : ''),
+    ad_step: eventData.ad_step || 1,
+    os: eventData.os || '',
+    browser: eventData.browser || ''
   };
 
   // Mantener copia en memoria
-  state.fallbackEvents.push(doc);
+  state.fallbackEvents.push(extendedDoc);
   if (state.fallbackEvents.length > 5000) state.fallbackEvents.shift();
 
   // Actualizar telemetría viva
-  state.liveHeartbeats.set(doc.visitor_hash, {
+  state.liveHeartbeats.set(baseDoc.visitor_hash, {
     lastSeen: now,
-    isWatching: doc.event_type === 'video_play',
-    slug: doc.slug,
-    ep: doc.ep,
-    title: doc.title,
-    device: doc.device
+    isWatching: baseDoc.event_type === 'video_play',
+    slug: baseDoc.slug,
+    ep: baseDoc.ep,
+    title: baseDoc.title,
+    device: baseDoc.device,
+    country: countryCode,
+    country_name: countryInfo.name,
+    flag: countryInfo.flag,
+    city: eventData.city || ''
   });
 
-  // Intentar guardar en Supabase REST
+  // Guardar en Supabase REST con fallback automático
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/analytics_events`, {
+    let res = await fetch(`${SUPABASE_URL}/rest/v1/analytics_events`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_SERVICE_ROLE,
@@ -122,17 +193,51 @@ export async function saveEvent(eventData) {
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify(doc),
+      body: JSON.stringify(extendedDoc),
       cache: 'no-store'
     });
+    if (!res.ok && res.status === 400) {
+      // Si el usuario aún no ejecutó el SQL para las nuevas columnas, guardar con esquema base
+      res = await fetch(`${SUPABASE_URL}/rest/v1/analytics_events`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_SERVICE_ROLE,
+          'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(baseDoc),
+        cache: 'no-store'
+      });
+    }
     return res.ok;
   } catch (err) {
-    // Si la tabla aún no se ha creado en Supabase, no rompe nada y usa memoria
     return false;
   }
 }
 
-// Obtener métricas consolidadas (Supabase + Memoria + Tiempo Real)
+// Helper para obtener conteo exacto de Supabase mediante encabezados Range (sin límite de 1000)
+async function getExactCount(filterQuery) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/analytics_events?${filterQuery}&select=id`, {
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`,
+        'Prefer': 'count=exact',
+        'Range-Unit': 'items',
+        'Range': '0-0'
+      },
+      cache: 'no-store'
+    });
+    const cr = res.headers.get('content-range') || '';
+    if (cr.includes('/')) {
+      return parseInt(cr.split('/')[1], 10) || 0;
+    }
+  } catch (e) {}
+  return 0;
+}
+
+// Obtener métricas consolidadas exactas (Supabase + Memoria + Tiempo Real)
 export async function getDashboardData(days = 7) {
   const now = Date.now();
   const sinceTs = Math.floor((now - (days * 86400000)) / 1000);
@@ -158,45 +263,61 @@ export async function getDashboardData(days = 7) {
         ep: entry.ep,
         title: entry.title || entry.slug || 'Dorama en vivo',
         device: entry.device,
+        country: entry.country || 'PE',
+        country_name: entry.country_name || 'Perú',
+        flag: entry.flag || '🇵🇪',
+        city: entry.city || '',
         seconds_ago: Math.floor(ageMs / 1000)
       });
     }
   }
 
-  // 2. Consultar eventos de Supabase o Fallback
-  let events = [];
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/analytics_events?timestamp=gte.${sinceTs}&select=*`, {
-      headers: {
-        'apikey': SUPABASE_SERVICE_ROLE,
-        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`
-      },
-      cache: 'no-store'
-    });
-    if (res.ok) {
-      events = await res.json();
-    }
-  } catch (e) {}
+  // 2. Conteo EXACTO en paralelo desde Supabase (Previene bug de truncado a 1000 filas de PostgREST)
+  const countHeaders = {
+    'apikey': SUPABASE_SERVICE_ROLE,
+    'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE}`
+  };
 
-  if (!events || events.length === 0) {
-    // Usar datos en memoria si Supabase está recién creado
-    events = state.fallbackEvents.filter(e => e.timestamp >= sinceTs);
+  const [
+    adClicksTodayCount,
+    adClicksRangeCount,
+    pageviewsTodayCount,
+    pageviewsRangeCount,
+    playsTodayCount,
+    playsRangeCount,
+    recentEventsRes
+  ] = await Promise.all([
+    getExactCount(`date_str=eq.${todayStr}&event_type=eq.ad_click`),
+    getExactCount(`timestamp=gte.${sinceTs}&event_type=eq.ad_click`),
+    getExactCount(`date_str=eq.${todayStr}&event_type=eq.pageview`),
+    getExactCount(`timestamp=gte.${sinceTs}&event_type=eq.pageview`),
+    getExactCount(`date_str=eq.${todayStr}&event_type=eq.video_play`),
+    getExactCount(`timestamp=gte.${sinceTs}&event_type=eq.video_play`),
+    fetch(`${SUPABASE_URL}/rest/v1/analytics_events?timestamp=gte.${sinceTs}&order=timestamp.desc&limit=1000`, {
+      headers: countHeaders,
+      cache: 'no-store'
+    }).catch(() => null)
+  ]);
+
+  let recentEvents = [];
+  if (recentEventsRes && recentEventsRes.ok) {
+    try {
+      recentEvents = await recentEventsRes.json();
+    } catch (_) {}
   }
 
-  // Calcular agregados
-  const uniqueVisitors = new Set(events.map(e => e.visitor_hash)).size;
-  const pageviews = events.filter(e => e.event_type === 'pageview').length;
-  const videoPlays = events.filter(e => e.event_type === 'video_play').length;
-  const adClicks = events.filter(e => e.event_type === 'ad_click').length;
+  if (!recentEvents || recentEvents.length === 0) {
+    recentEvents = state.fallbackEvents.filter(e => e.timestamp >= sinceTs);
+  }
 
-  const todayEvents = events.filter(e => e.date_str === todayStr);
+  // Métricas de Visitantes Únicos
+  const uniqueVisitors = new Set(recentEvents.map(e => e.visitor_hash)).size;
+  const todayEvents = recentEvents.filter(e => e.date_str === todayStr);
   const todayVisitors = new Set(todayEvents.map(e => e.visitor_hash)).size;
-  const todayPlays = todayEvents.filter(e => e.event_type === 'video_play').length;
-  const todayAdClicks = todayEvents.filter(e => e.event_type === 'ad_click').length;
 
-  // Timeline
+  // Timeline diario (Visitas, Plays, Anuncios)
   const timelineMap = new Map();
-  for (const ev of events) {
+  for (const ev of recentEvents) {
     const d = ev.date_str || todayStr;
     if (!timelineMap.has(d)) {
       timelineMap.set(d, { date_str: d, visitorsSet: new Set(), views: 0, plays: 0, ads: 0 });
@@ -216,9 +337,9 @@ export async function getDashboardData(days = 7) {
     ads: r.ads
   })).sort((a, b) => a.date_str.localeCompare(b.date_str));
 
-  // Top Doramas
+  // Top Doramas Más Vistos
   const dramaMap = new Map();
-  for (const ev of events) {
+  for (const ev of recentEvents) {
     if (ev.event_type === 'video_play' && ev.slug) {
       const current = dramaMap.get(ev.slug) || { slug: ev.slug, display_title: ev.title || ev.slug, play_count: 0 };
       current.play_count++;
@@ -227,11 +348,73 @@ export async function getDashboardData(days = 7) {
   }
   const topDramas = Array.from(dramaMap.values()).sort((a, b) => b.play_count - a.play_count).slice(0, 10);
 
-  // Dispositivos
+  // Desglose de Dispositivos
   const devices = { mobile: 0, desktop: 0, tablet: 0 };
-  for (const ev of events) {
+  const osBreakdown = {};
+  for (const ev of recentEvents) {
     const dev = ev.device || 'desktop';
     if (devices[dev] !== undefined) devices[dev]++;
+    const os = ev.os || (dev === 'mobile' ? 'Móvil' : 'Desktop');
+    osBreakdown[os] = (osBreakdown[os] || 0) + 1;
+  }
+
+  // Desglose Geográfico por Países
+  const countryMap = new Map();
+  const cityMap = new Map();
+  for (const ev of recentEvents) {
+    const code = (ev.country || 'PE').toUpperCase();
+    const cInfo = getCountryDetails(code);
+    const cEntry = countryMap.get(code) || { code, name: cInfo.name, flag: cInfo.flag, count: 0 };
+    cEntry.count++;
+    countryMap.set(code, cEntry);
+
+    if (ev.city && ev.city.trim()) {
+      const cityKey = `${ev.city.trim()}, ${code}`;
+      cityMap.set(cityKey, (cityMap.get(cityKey) || 0) + 1);
+    }
+  }
+
+  const totalGeoEvents = Math.max(recentEvents.length, 1);
+  const countries = Array.from(countryMap.values())
+    .map(c => ({
+      ...c,
+      pct: Math.round((c.count / totalGeoEvents) * 100)
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  const topCities = Array.from(cityMap.entries())
+    .map(([city, count]) => ({ city, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 8);
+
+  // Desglose de Redes de Anuncios y Clics Recientes
+  const adNetworks = { monetag: 0, adsterra: 0, total: 0 };
+  const recentAdClicks = [];
+  for (const ev of recentEvents) {
+    if (ev.event_type === 'ad_click') {
+      const net = (ev.network || ev.title || 'monetag').toLowerCase();
+      if (net.includes('monetag')) adNetworks.monetag++;
+      else if (net.includes('adsterra')) adNetworks.adsterra++;
+      else adNetworks.monetag++;
+      adNetworks.total++;
+
+      if (recentAdClicks.length < 12) {
+        const cInfo = getCountryDetails(ev.country);
+        recentAdClicks.push({
+          slug: ev.slug,
+          ep: ev.ep || '1',
+          title: ev.title || ev.slug || 'Dorama',
+          network: net.includes('adsterra') ? 'Adsterra' : 'Monetag',
+          device: ev.device || 'mobile',
+          country: cInfo.name,
+          flag: cInfo.flag,
+          city: ev.city || '',
+          timestamp: ev.timestamp,
+          time_str: new Date(ev.timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+    }
   }
 
   return {
@@ -245,15 +428,21 @@ export async function getDashboardData(days = 7) {
     overview: {
       unique_visitors: uniqueVisitors,
       today_visitors: todayVisitors,
-      pageviews,
-      video_plays: videoPlays,
-      today_plays: todayPlays,
-      ad_clicks: adClicks,
-      today_ad_clicks: todayAdClicks
+      pageviews: Math.max(pageviewsRangeCount, recentEvents.filter(e => e.event_type === 'pageview').length),
+      today_pageviews: Math.max(pageviewsTodayCount, todayEvents.filter(e => e.event_type === 'pageview').length),
+      video_plays: Math.max(playsRangeCount, recentEvents.filter(e => e.event_type === 'video_play').length),
+      today_plays: Math.max(playsTodayCount, todayEvents.filter(e => e.event_type === 'video_play').length),
+      ad_clicks: Math.max(adClicksRangeCount, recentEvents.filter(e => e.event_type === 'ad_click').length),
+      today_ad_clicks: Math.max(adClicksTodayCount, todayEvents.filter(e => e.event_type === 'ad_click').length)
     },
     timeline,
     top_dramas: topDramas,
-    devices
+    devices,
+    os_breakdown: osBreakdown,
+    countries,
+    cities: topCities,
+    ad_networks: adNetworks,
+    recent_ad_clicks: recentAdClicks
   };
 }
 

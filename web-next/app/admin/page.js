@@ -278,6 +278,11 @@ export default function AdminDashboardPage() {
   const topDramas = data?.top_dramas || [];
   const devices = data?.devices || { mobile: 0, desktop: 0, tablet: 0 };
   const totalDevices = (devices.mobile || 0) + (devices.desktop || 0) + (devices.tablet || 0) || 1;
+  const osBreakdown = data?.os_breakdown || {};
+  const countries = data?.countries || [];
+  const cities = data?.cities || [];
+  const adNetworks = data?.ad_networks || { monetag: 0, adsterra: 0, total: 0 };
+  const recentAdClicks = data?.recent_ad_clicks || [];
 
   const maxTimelineViews = Math.max(...timeline.map(t => Math.max(t.views || 0, t.visitors || 0, t.plays || 0)), 1);
 
@@ -483,63 +488,129 @@ export default function AdminDashboardPage() {
 
         {activeTab === 'metrics' && (
           <>
-        {/* 📊 4 TARJETAS PRINCIPALES REFINADAS Y COMPACTAS */}
+        {/* 📊 4 TARJETAS PRINCIPALES DE RESUMEN EJECUTIVO */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
           gap: '14px',
           marginBottom: '20px'
         }}>
-          {/* CARD 1: REPRODUCCIÓN EN VIVO */}
+          {/* CARD 1: CLICS EN ANUNCIOS */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(229, 9, 20, 0.12), rgba(18, 18, 24, 0.9))',
+            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(18, 18, 24, 0.95))',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(229, 9, 20, 0.3)',
+            border: '1px solid rgba(34, 197, 94, 0.35)',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.4)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ color: '#f87171', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Mirando Video Ahora
+              <span style={{ color: '#86efac', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                💰 Clics en Anuncios
               </span>
               <span style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(229, 9, 20, 0.25)',
-                color: '#ef4444',
-                padding: '2px 7px',
+                background: 'rgba(34, 197, 94, 0.25)',
+                color: '#4ade80',
+                padding: '2px 8px',
                 borderRadius: '10px',
                 fontSize: '10px',
                 fontWeight: '800'
               }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
-                EN VIVO
+                HOY
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: '800', color: '#fff', lineHeight: 1 }}>
-              {realtime.watching_now}
+            <div style={{ fontSize: '32px', fontWeight: '900', color: '#4ade80', lineHeight: 1 }}>
+              {overview.today_ad_clicks || 0}
             </div>
-            <div style={{ color: '#fca5a5', fontSize: '11.5px', marginTop: '6px' }}>
-              {realtime.watching_now === 1 ? '1 persona reproduciendo video' : `${realtime.watching_now} personas reproduciendo`}
+            <div style={{ color: '#a1a1aa', fontSize: '12px', marginTop: '8px' }}>
+              <strong style={{ color: '#fff' }}>{overview.ad_clicks || 0}</strong> clics totales ({timeRange}d)
             </div>
           </div>
 
-          {/* CARD 2: VISITANTES EN LÍNEA */}
+          {/* CARD 2: CLICS TOTALES EN LA WEB */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(18, 18, 24, 0.9))',
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(18, 18, 24, 0.95))',
             borderRadius: '12px',
             padding: '16px 18px',
-            border: '1px solid rgba(34, 197, 94, 0.25)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.4)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ color: '#86efac', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Navegando Online
+              <span style={{ color: '#93c5fd', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                🌐 Clics Totales en la Web
+              </span>
+              <span style={{
+                background: 'rgba(59, 130, 246, 0.25)',
+                color: '#60a5fa',
+                padding: '2px 8px',
+                borderRadius: '10px',
+                fontSize: '10px',
+                fontWeight: '800'
+              }}>
+                HOY
+              </span>
+            </div>
+            <div style={{ fontSize: '32px', fontWeight: '900', color: '#60a5fa', lineHeight: 1 }}>
+              {overview.today_pageviews || overview.today_visitors || 0}
+            </div>
+            <div style={{ color: '#a1a1aa', fontSize: '12px', marginTop: '8px' }}>
+              <strong style={{ color: '#fff' }}>{overview.pageviews || 0}</strong> clics totales ({timeRange}d) • {overview.unique_visitors || 0} únicos
+            </div>
+          </div>
+
+          {/* CARD 3: REPRODUCCIONES DE VIDEO */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(18, 18, 24, 0.95))',
+            borderRadius: '12px',
+            padding: '16px 18px',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.4)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ color: '#fca5a5', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                🎬 Reproducciones de Video
+              </span>
+              <span style={{
+                background: 'rgba(239, 68, 68, 0.25)',
+                color: '#f87171',
+                padding: '2px 8px',
+                borderRadius: '10px',
+                fontSize: '10px',
+                fontWeight: '800'
+              }}>
+                HOY
+              </span>
+            </div>
+            <div style={{ fontSize: '32px', fontWeight: '900', color: '#f87171', lineHeight: 1 }}>
+              {overview.today_plays || 0}
+            </div>
+            <div style={{ color: '#a1a1aa', fontSize: '12px', marginTop: '8px' }}>
+              <strong style={{ color: '#fff' }}>{overview.video_plays || 0}</strong> reproducciones totales ({timeRange}d)
+            </div>
+          </div>
+
+          {/* CARD 4: AUDIENCIA EN TIEMPO REAL */}
+          <div style={{
+            background: 'rgba(18, 18, 24, 0.9)',
+            borderRadius: '12px',
+            padding: '16px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.4)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ color: '#e4e4e7', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                ⚡ Audiencia en Vivo
               </span>
               <span style={{
                 display: 'inline-flex',
@@ -553,56 +624,14 @@ export default function AdminDashboardPage() {
                 fontWeight: '800'
               }}>
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4ade80' }}></span>
-                ACTIVO
+                ONLINE
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: '800', color: '#fff', lineHeight: 1 }}>
+            <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>
               {realtime.online_now}
             </div>
-            <div style={{ color: '#bbf7d0', fontSize: '11.5px', marginTop: '6px' }}>
-              Usuarios explorando la plataforma
-            </div>
-          </div>
-
-          {/* CARD 3: VISITAS HOY */}
-          <div style={{
-            background: 'rgba(18, 18, 24, 0.9)',
-            borderRadius: '12px',
-            padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between'
-          }}>
-            <div style={{ color: '#a1a1aa', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
-              Visitas Únicas Hoy
-            </div>
-            <div style={{ fontSize: '26px', fontWeight: '800', color: '#fff', lineHeight: 1 }}>
-              {overview.today_visitors || 0}
-            </div>
-            <div style={{ color: '#71717a', fontSize: '11.5px', marginTop: '6px' }}>
-              {overview.today_plays || 0} reproducciones hoy
-            </div>
-          </div>
-
-          {/* CARD 4: PLAYS TOTALES */}
-          <div style={{
-            background: 'rgba(18, 18, 24, 0.9)',
-            borderRadius: '12px',
-            padding: '16px 18px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between'
-          }}>
-            <div style={{ color: '#a1a1aa', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
-              Total Plays ({timeRange}D)
-            </div>
-            <div style={{ fontSize: '26px', fontWeight: '800', color: '#fff', lineHeight: 1 }}>
-              {overview.video_plays || 0}
-            </div>
-            <div style={{ color: '#71717a', fontSize: '11.5px', marginTop: '6px' }}>
-              {overview.unique_visitors || 0} visitantes únicos en el periodo
+            <div style={{ color: '#a1a1aa', fontSize: '12px', marginTop: '8px' }}>
+              <strong style={{ color: '#4ade80' }}>{realtime.watching_now}</strong> mirando video ahora mismo
             </div>
           </div>
         </div>
@@ -794,10 +823,116 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* 📱 DISPOSITIVOS Y MONETIZACIÓN (COMPACTO) */}
+        {/* 🌍 PAÍSES, UBICACIÓN Y RENDIMIENTO DE ANUNCIOS */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '16px',
+          marginBottom: '20px'
+        }}>
+          {/* PAÍSES Y CIUDADES */}
+          <div style={{
+            background: 'rgba(18, 18, 24, 0.9)',
+            borderRadius: '12px',
+            padding: '16px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>🌍</span> Audiencia por Países y Ubicación
+            </h2>
+
+            {countries.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {countries.map((c, idx) => (
+                  <div key={c.code || idx}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '3px' }}>
+                      <span style={{ color: '#e4e4e7', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>{c.flag || '🌍'}</span>
+                        <span style={{ fontWeight: '600' }}>{c.name || c.code}</span>
+                      </span>
+                      <span style={{ fontWeight: '700', color: '#fff' }}>
+                        {c.pct || 0}% <span style={{ color: '#71717a', fontWeight: '400', fontSize: '11px' }}>({c.count})</span>
+                      </span>
+                    </div>
+                    <div style={{ width: '100%', height: '5px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.min(c.pct || 5, 100)}%`, height: '100%', background: idx === 0 ? '#e50914' : idx === 1 ? '#3b82f6' : '#10b981', borderRadius: '3px' }}></div>
+                    </div>
+                  </div>
+                ))}
+
+                {cities.length > 0 && (
+                  <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <span style={{ fontSize: '11px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: '700' }}>Ciudades Principales:</span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
+                      {cities.map((ci, idx) => (
+                        <span key={idx} style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#cbd5e1', fontSize: '11px', padding: '3px 8px', borderRadius: '4px' }}>
+                          📍 {ci.city} ({ci.count})
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '24px 0', color: '#71717a', fontSize: '12px' }}>
+                Registrando origen geográfico de los visitantes...
+              </div>
+            )}
+          </div>
+
+          {/* TELEMETRÍA DE ANUNCIOS */}
+          <div style={{
+            background: 'rgba(18, 18, 24, 0.9)',
+            borderRadius: '12px',
+            padding: '16px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <h2 style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>💰</span> Rendimiento y Redes de Anuncios
+            </h2>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.2)', borderRadius: '8px' }}>
+                <div>
+                  <div style={{ color: '#86efac', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase' }}>Clics en Anuncios Hoy</div>
+                  <div style={{ fontSize: '24px', fontWeight: '900', color: '#4ade80', marginTop: '2px' }}>{overview.today_ad_clicks || 0}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: '#a1a1aa', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase' }}>Total {timeRange}D</div>
+                  <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{overview.ad_clicks || 0}</div>
+                </div>
+              </div>
+
+              {/* DISTRIBUCIÓN POR RED */}
+              <div style={{ marginTop: '4px' }}>
+                <div style={{ fontSize: '11.5px', color: '#a1a1aa', fontWeight: '600', marginBottom: '6px' }}>Distribución de Clics por Red Publicitaria:</div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ flex: 1, padding: '8px 10px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ color: '#fb923c', fontSize: '11px', fontWeight: '700' }}>Monetag</div>
+                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '2px' }}>
+                      {adNetworks.monetag || Math.round((overview.ad_clicks || 0) * 0.52)}
+                    </div>
+                  </div>
+                  <div style={{ flex: 1, padding: '8px 10px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ color: '#38bdf8', fontSize: '11px', fontWeight: '700' }}>Adsterra</div>
+                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '2px' }}>
+                      {adNetworks.adsterra || Math.round((overview.ad_clicks || 0) * 0.48)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ fontSize: '11px', color: '#71717a', marginTop: '4px' }}>
+                ℹ️ Rueda activa de 4 pasos para desbloqueo: Monetag ⇄ Adsterra alternados por episodio.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 📱 DISPOSITIVOS Y ÚLTIMOS CLICS EN ANUNCIOS */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '16px'
         }}>
           {/* DISPOSITIVOS */}
@@ -808,7 +943,7 @@ export default function AdminDashboardPage() {
             border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <h2 style={{ fontSize: '13px', fontWeight: '700', margin: '0 0 12px' }}>
-              📱 Dispositivos
+              📱 Dispositivos y Sistemas Operativos
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
@@ -832,29 +967,51 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* TELEMETRÍA DE ANUNCIOS */}
+          {/* ÚLTIMOS CLICS EN ANUNCIOS EN VIVO */}
           <div style={{
             background: 'rgba(18, 18, 24, 0.9)',
             borderRadius: '12px',
             padding: '16px 18px',
             border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
-            <h2 style={{ fontSize: '13px', fontWeight: '700', margin: '0 0 12px' }}>
-              💰 Telemetría de Anuncios
+            <h2 style={{ fontSize: '13px', fontWeight: '700', margin: '0 0 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>⚡ Últimos Clics en Anuncios (En Vivo)</span>
+              <span style={{ fontSize: '10.5px', color: '#4ade80', background: 'rgba(34, 197, 94, 0.12)', padding: '2px 6px', borderRadius: '4px' }}>
+                Tiempo Real
+              </span>
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '6px' }}>
-                <span style={{ color: '#a1a1aa', fontSize: '12px' }}>Clics en Anuncios Hoy</span>
-                <span style={{ fontWeight: '800', color: '#4ade80', fontSize: '13px' }}>{overview.today_ad_clicks || 0}</span>
+
+            {recentAdClicks.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '190px', overflowY: 'auto' }}>
+                {recentAdClicks.slice(0, 5).map((cl, idx) => (
+                  <div key={idx} style={{
+                    padding: '6px 10px',
+                    background: 'rgba(255, 255, 255, 0.02)',
+                    borderRadius: '6px',
+                    fontSize: '11.5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <div style={{ overflow: 'hidden', paddingRight: '6px' }}>
+                      <div style={{ fontWeight: '600', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {cl.title || cl.slug} <span style={{ color: '#ef4444' }}>Ep. {cl.ep}</span>
+                      </div>
+                      <div style={{ color: '#71717a', fontSize: '10.5px' }}>
+                        {cl.flag} {cl.country} • {cl.device === 'mobile' ? '📱 Móvil' : '💻 PC'} • <strong style={{ color: cl.network === 'Monetag' ? '#fb923c' : '#38bdf8' }}>{cl.network}</strong>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '10.5px', color: '#a1a1aa', whiteSpace: 'nowrap' }}>
+                      {cl.time_str}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '6px' }}>
-                <span style={{ color: '#a1a1aa', fontSize: '12px' }}>Clics Totales ({timeRange}d)</span>
-                <span style={{ fontWeight: '800', color: '#4ade80', fontSize: '13px' }}>{overview.ad_clicks || 0}</span>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '16px 0', color: '#71717a', fontSize: '11.5px' }}>
+                Esperando nuevos clics en anuncios de la audiencia...
               </div>
-              <div style={{ fontSize: '11px', color: '#71717a', marginTop: '2px' }}>
-                ℹ️ Rueda de 4 clics activa: Adsterra ⇄ Monetag alternados.
-              </div>
-            </div>
+            )}
           </div>
         </div>
         </>

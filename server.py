@@ -1921,7 +1921,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             try:
                 client_ip = self.headers.get('CF-Connecting-IP') or self.headers.get('X-Forwarded-For', '').split(',')[0].strip() or self.client_address[0]
                 user_agent = self.headers.get('User-Agent', '')
-                track_event('ad_click', slug=slug, episode=ep, client_ip=client_ip, user_agent=user_agent, metadata={'step': step, 'network': ad_network})
+                country = self.headers.get('CF-IPCountry') or self.headers.get('X-Vercel-IP-Country') or 'PE'
+                city = urllib.parse.unquote(self.headers.get('CF-IPCity') or self.headers.get('X-Vercel-IP-City') or '')
+                track_event('ad_click', slug=slug, ep=ep, client_ip=client_ip, user_agent=user_agent, country=country, city=city, metadata={'step': step, 'network': ad_network})
             except Exception as e:
                 _dlog('UNLOCK_ERR', f"analytics tracking failed: {e}")
 

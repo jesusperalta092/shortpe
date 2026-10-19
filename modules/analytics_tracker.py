@@ -137,8 +137,17 @@ def validate_admin_session(token):
 # ==========================================
 # 📡 REGISTRO DE EVENTOS Y HEARTBEATS
 # ==========================================
-def track_event(event_type, path="", slug="", ep="", title="", ip="127.0.0.1", ua="", referer=""):
-    """Registra un evento persistente en la BD de forma asíncrona."""
+def track_event(event_type, path="", slug="", ep="", title="", ip="127.0.0.1", ua="", referer="", country="PE", city="", metadata=None, **kwargs):
+    """Registra un evento persistente en SQLite y Supabase Cloud de forma asíncrona."""
+    ep = str(ep or kwargs.get('episode') or '')
+    if ip == "127.0.0.1" and 'client_ip' in kwargs:
+        ip = kwargs['client_ip']
+    ua = ua or kwargs.get('user_agent') or ''
+    country = (country if country != "PE" else (kwargs.get('country') or 'PE')).upper()
+    city = city or kwargs.get('city') or ''
+    ad_network = (metadata.get('network') if metadata else '') or kwargs.get('network') or title or ''
+    ad_step = (metadata.get('step') if metadata else 1) or kwargs.get('step') or 1
+
     now = int(time.time())
     dt = datetime.utcfromtimestamp(now)
     date_str = dt.strftime('%Y-%m-%d')
@@ -154,22 +163,60 @@ def track_event(event_type, path="", slug="", ep="", title="", ip="127.0.0.1", u
             'slug': slug,
             'ep': ep,
             'title': title,
-            'device': device
+            'device': device,
+            'country': country
         }
 
     def _worker():
+        # 1. Guardar en SQLite local
         with _DB_LOCK:
             conn = _get_db()
             try:
                 conn.execute("""
-                    INSERT INTO events (timestamp, date_str, hour_str, event_type, path, slug, ep, title, visitor_hash, device, referer)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (now, date_str, hour_str, event_type, path, slug, ep, title, visitor_hash, device, referer))
+                    INSERT INTO events (timestamp, date_str, hour_str, event_type, path, slug, ep, title, visitor_hash, device, referer, country)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (now, date_str, hour_str, event_type, path, slug, ep, title, visitor_hash, device, referer, country))
                 conn.commit()
             except Exception:
                 pass
             finally:
                 conn.close()
+
+        # 2. Sincronizar en segundo plano con Supabase Cloud
+        try:
+            import requests
+            sb_url = 'https://fpfvheperlxkbbratiqe.supabase.co/rest/v1/analytics_events'
+            sb_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwZnZoZXBlcmx4a2JicmF0aXFlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTIzMDYzMywiZXhwIjoyMTA2ODA2NjMzfQ.xv6Rmz9TZYpAq1V9V0_0ixaXLaL4vVBvA8GqbDYG5yY'
+            doc = {
+                'timestamp': now,
+                'date_str': date_str,
+                'hour_str': hour_str,
+                'event_type': event_type,
+                'path': path or '',
+                'slug': slug or '',
+                'ep': str(ep or ''),
+                'title': title or ad_network or '',
+                'visitor_hash': visitor_hash,
+                'device': device,
+                'referer': referer or '',
+                'country': country
+            }
+            ext_doc = dict(doc)
+            if city: ext_doc['city'] = city
+            if ad_network: ext_doc['network'] = ad_network
+            if ad_step: ext_doc['ad_step'] = ad_step
+
+            hdrs = {
+                'apikey': sb_key,
+                'Authorization': f'Bearer {sb_key}',
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            }
+            r_sb = requests.post(sb_url, headers=hdrs, json=ext_doc, timeout=5)
+            if r_sb.status_code == 400:
+                requests.post(sb_url, headers=hdrs, json=doc, timeout=5)
+        except Exception:
+            pass
 
     threading.Thread(target=_worker, daemon=True).start()
 

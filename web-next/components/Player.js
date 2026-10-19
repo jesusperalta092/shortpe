@@ -579,7 +579,7 @@ export default function Player({ slug, ep, title, total }) {
     const nextCount = adClicksDone + 1;
     const unlockUrl = `/api/unlock?step=${nextCount}&slug=${encodeURIComponent(slug || '')}&ep=${encodeURIComponent(ep || '1')}`;
     const adNetwork = (nextCount % 2 === 0) ? 'monetag' : 'adsterra';
-    trackAdClick(slug, ep, adNetwork);
+    trackAdClick(slug, ep, adNetwork, nextCount);
 
     setPopupBlocked(false);
     try {
