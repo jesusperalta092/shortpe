@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { authenticateAdmin, fetchAdminDashboard, fetchAdminErrorLogs, resolveAdminErrorLog } from '../../lib/analytics';
+import AdminVideoDownloader from '../../components/AdminVideoDownloader';
 
 export default function AdminDashboardPage() {
+  const [showSecretDownloader, setShowSecretDownloader] = useState(false);
+
   const [sessionToken, setSessionToken] = useState(null);
   const [pinInput, setPinInput] = useState('');
   const [authError, setAuthError] = useState('');
@@ -315,15 +318,20 @@ export default function AdminDashboardPage() {
         }}>
           {/* LOGO + ESTADO DEL SERVIDOR */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              background: '#e50914',
-              color: '#fff',
-              fontSize: '11px',
-              fontWeight: '900',
-              padding: '3px 8px',
-              borderRadius: '5px',
-              letterSpacing: '0.04em'
-            }}>PRO</div>
+            <div 
+              onClick={() => setShowSecretDownloader(true)}
+              style={{
+                background: '#e50914',
+                color: '#fff',
+                fontSize: '11px',
+                fontWeight: '900',
+                padding: '3px 8px',
+                borderRadius: '5px',
+                letterSpacing: '0.04em',
+                cursor: 'default',
+                userSelect: 'none'
+              }}
+            >PRO</div>
             
             <div style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>DramaPe</span>
@@ -1299,7 +1307,14 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
+        {/* MODAL SECRETO DE DESCARGA DE VIDEOS PARA TIKTOK */}
+        <AdminVideoDownloader 
+          isOpen={showSecretDownloader} 
+          onClose={() => setShowSecretDownloader(false)} 
+        />
+
       </div>
     </div>
   );
 }
+
