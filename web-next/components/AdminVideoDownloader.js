@@ -440,8 +440,13 @@ export default function AdminVideoDownloader({ isOpen, onClose }) {
     <div 
       style={{
         position: 'fixed',
-        inset: 0,
-        zIndex: 999999,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999999,
         backgroundColor: 'rgba(5, 5, 8, 0.88)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
@@ -449,7 +454,7 @@ export default function AdminVideoDownloader({ isOpen, onClose }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '16px',
-        animation: 'fadeInModal 0.2s ease-out'
+        boxSizing: 'border-box'
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget && !isDownloading) onClose();

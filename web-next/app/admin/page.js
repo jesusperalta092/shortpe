@@ -319,17 +319,22 @@ export default function AdminDashboardPage() {
           {/* LOGO + ESTADO DEL SERVIDOR */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div 
-              onClick={() => setShowSecretDownloader(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowSecretDownloader(true);
+              }}
               style={{
                 background: '#e50914',
                 color: '#fff',
                 fontSize: '11px',
                 fontWeight: '900',
-                padding: '3px 8px',
+                padding: '4px 9px',
                 borderRadius: '5px',
                 letterSpacing: '0.04em',
                 cursor: 'default',
-                userSelect: 'none'
+                userSelect: 'none',
+                pointerEvents: 'auto'
               }}
             >PRO</div>
             
