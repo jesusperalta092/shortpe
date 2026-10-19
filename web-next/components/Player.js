@@ -599,13 +599,48 @@ export default function Player({ slug, ep, title, total, poster }) {
     if (e) e.preventDefault();
     if (typeof window !== 'undefined') {
       const last = sessionStorage.getItem('dramia_last_section') || '/';
+      let targetPath = '/';
+      let searchParams = new URLSearchParams();
+
       try {
         const urlObj = new URL(last, window.location.origin);
-        urlObj.searchParams.set('open', slug);
-        router.push(urlObj.pathname + urlObj.search, { scroll: false });
+        const p = urlObj.pathname || '/';
+
+        // 1. Si la ruta anterior guardada era un reproductor (/ver/...), NUNCA regresar a un reproductor
+        if (p.startsWith('/ver/')) {
+          targetPath = '/';
+        }
+        // 2. Si venía de una página de detalle dedicada (/titulo/slug), volver a ella solo si coincide con el dorama actual
+        else if (p.startsWith('/titulo/')) {
+          if (p === `/titulo/${slug}`) {
+            targetPath = `/titulo/${slug}`;
+          } else {
+            targetPath = '/';
+          }
+        }
+        // 3. Si venía de una sección válida del catálogo (/seccion/..., /buscar, /)
+        else {
+          targetPath = p;
+          // Preservar parámetros de filtro o búsqueda excepto 'open' residual
+          urlObj.searchParams.forEach((val, key) => {
+            if (key !== 'open') searchParams.set(key, val);
+          });
+        }
       } catch (err) {
-        router.push('/?open=' + encodeURIComponent(slug), { scroll: false });
+        targetPath = '/';
       }
+
+      // Si no es la página de detalle dedicada, agregar ?open=slug para abrir el modal del dorama actual
+      if (!targetPath.startsWith('/titulo/')) {
+        searchParams.set('open', slug);
+      }
+
+      const queryString = searchParams.toString();
+      const finalUrl = targetPath + (queryString ? `?${queryString}` : '');
+
+      // Actualizar sessionStorage para limpiar cualquier ruta de reproductor residual
+      sessionStorage.setItem('dramia_last_section', finalUrl);
+      router.push(finalUrl, { scroll: false });
     }
   };
 

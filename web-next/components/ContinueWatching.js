@@ -96,6 +96,11 @@ export default function ContinueWatching({ onOpenModal }) {
                   href={`/ver/${item.slug}/${item.last_ep || '1'}`}
                   className="continue-card-poster-wrap"
                   scroll={false}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.setItem('dramia_last_section', '/');
+                    }
+                  }}
                 >
                   <img
                     src={getCardImg(item)}

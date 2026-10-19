@@ -12,6 +12,12 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
     }
   }, [slug]);
 
+  const recordSection = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('dramia_last_section', `/titulo/${slug}`);
+    }
+  };
+
   return (
     <div style={{ marginTop: '20px' }}>
       {/* Botón de acción principal (Continuar o Reproducir) */}
@@ -21,6 +27,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
             <Link
               className="btn btn-play"
               href={'/ver/' + slug + '/' + historyData.last_ep}
+              onClick={recordSection}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -43,6 +50,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
             <Link
               className="btn"
               href={'/ver/' + slug + '/1'}
+              onClick={recordSection}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -63,6 +71,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
           <Link
             className="btn btn-play"
             href={'/ver/' + slug + '/1'}
+            onClick={recordSection}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -109,6 +118,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
               key={key}
               className={`ep-btn ${isLast ? 'ep-last-watched' : (isWatched ? 'ep-watched' : '')}`}
               href={'/ver/' + slug + '/' + key}
+              onClick={recordSection}
             >
               {isWatched && <span className="ep-check-icon">✓</span>}
               <span>{label}</span>
