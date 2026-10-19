@@ -111,11 +111,14 @@ function TitleModalComponent({ slug, onClose }) {
               <div className="modal-actions" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                 {historyData?.last_ep ? (
                   <>
-                    <Link className="btn btn-play" href={'/ver/' + d.slug + '/' + historyData.last_ep}>
+                    <Link
+                      className="btn btn-play"
+                      href={'/ver/' + d.slug + '/' + historyData.last_ep + (historyData.last_time > 3 ? `?t=${historyData.last_time}` : '')}
+                    >
                       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
                         <path d="M8 5v14l11-7z" />
                       </svg>
-                      Continuar Cap. {historyData.last_ep}
+                      Continuar Cap. {historyData.last_ep} {historyData.last_time > 3 ? `(${Math.floor(historyData.last_time / 60)}:${Math.floor(historyData.last_time % 60) < 10 ? '0' : ''}${Math.floor(historyData.last_time % 60)})` : ''}
                     </Link>
                     <Link
                       className="btn"

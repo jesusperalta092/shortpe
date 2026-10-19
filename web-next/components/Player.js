@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { trackVideoPlay, trackAdClick, trackLiveHeartbeat, reportVideoError } from '../lib/analytics';
-import { recordProgress } from '../lib/watchHistory';
+import { recordProgress, updateWatchTime, getDoramaProgress } from '../lib/watchHistory';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -55,6 +55,38 @@ export default function Player({ slug, ep, title, total, poster }) {
   const cuesRef = useRef([]);
   const idleTimer = useRef(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Estado para toast informativo de reanudación exacta de tiempo
+  const [resumeToast, setResumeToast] = useState(null);
+  const hasAppliedSeekRef = useRef(false);
+
+  useEffect(() => {
+    hasAppliedSeekRef.current = false;
+    setResumeToast(null);
+  }, [slug, ep]);
+
+  // Obtener tiempo guardado previo para reanudar en el minuto/segundo exacto
+  const getSavedSeekTime = () => {
+    try {
+      const paramT = searchParams ? parseFloat(searchParams.get('t')) : 0;
+      if (paramT && paramT > 2) return Math.floor(paramT);
+      const prog = getDoramaProgress(slug);
+      if (prog && String(prog.last_ep).trim() === String(ep).trim() && prog.last_time > 2) {
+        return Math.floor(prog.last_time);
+      }
+    } catch (e) {}
+    return 0;
+  };
+
+  const restartFromBeginning = (e) => {
+    if (e) e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+    }
+    updateWatchTime(slug, ep, 0, videoRef.current?.duration || 0);
+    setResumeToast(null);
+  };
 
   // Estados del sistema inteligente de reporte automático de errores
   const [errorReportData, setErrorReportData] = useState(null);
@@ -364,10 +396,24 @@ export default function Player({ slug, ep, title, total, poster }) {
         if (cancelled) return;
         trackVideoPlay(slug, ep, data.title || title);
         video.muted = false;
+
+        const targetSeek = getSavedSeekTime();
+        const applySeek = () => {
+          if (targetSeek > 2 && !hasAppliedSeekRef.current) {
+            hasAppliedSeekRef.current = true;
+            try {
+              video.currentTime = targetSeek;
+              setResumeToast(targetSeek);
+              setTimeout(() => setResumeToast(null), 5000);
+            } catch (e) {}
+          }
+        };
+
         const tryPlay = () => {
           if (isEpisodeAdRestricted(ep) && isAdLocked) {
             return;
           }
+          applySeek();
           video.play().catch(() => { video.muted = true; setMuted(true); video.play().catch(() => {}); });
         };
         video.onerror = () => {
@@ -393,8 +439,8 @@ export default function Player({ slug, ep, title, total, poster }) {
 
         if (info.type === 'file') {
           video.src = info.url;
-          video.addEventListener('loadedmetadata', () => { setLoading(false); tryPlay(); }, { once: true });
-          video.addEventListener('canplay', () => { setLoading(false); }, { once: true });
+          video.addEventListener('loadedmetadata', () => { setLoading(false); applySeek(); tryPlay(); }, { once: true });
+          video.addEventListener('canplay', () => { setLoading(false); applySeek(); }, { once: true });
         } else {
           const Hls = (await import('hls.js')).default;
           if (Hls.isSupported()) {
@@ -402,6 +448,7 @@ export default function Player({ slug, ep, title, total, poster }) {
               enableWorker: true,
               lowLatencyMode: false,
               capLevelToPlayerSize: true,
+              startPosition: targetSeek > 2 ? targetSeek : -1,
               maxBufferLength: 30,
               maxMaxBufferLength: 60,
               manifestLoadingMaxRetry: 5,
@@ -416,6 +463,7 @@ export default function Player({ slug, ep, title, total, poster }) {
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
               setLoading(false);
+              applySeek();
               tryPlay();
             });
             hls.on(Hls.Events.FRAG_BUFFERED, () => {
@@ -560,38 +608,72 @@ export default function Player({ slug, ep, title, total, poster }) {
     };
   }, [slug, ep, title]);
 
-  // Historial inteligente: registra automáticamente tras 25 segundos o al terminar el capítulo
+  // Historial inteligente: registra automáticamente tras 25 segundos y guarda el minuto exacto
   const hasRecordedProgress = useRef(false);
+  const lastSavedTimeRef = useRef(0);
 
   useEffect(() => {
     hasRecordedProgress.current = false;
+    lastSavedTimeRef.current = 0;
   }, [slug, ep]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const checkAndRecord = () => {
-      if (hasRecordedProgress.current) return;
-      // Se registra si vio al menos 25 segundos O si finalizó el video
-      if (video.currentTime >= 25 || video.ended) {
+    const onTimeUpdate = () => {
+      const cur = Math.floor(video.currentTime || 0);
+      const dur = Math.floor(video.duration || 0);
+
+      // 1. Guardar hito inicial de 25 segundos (para añadir dorama al carrusel de continuar viendo y lista de vistos)
+      if (!hasRecordedProgress.current && (cur >= 25 || video.ended)) {
         hasRecordedProgress.current = true;
         recordProgress({
           slug,
           ep,
           title,
           poster,
-          total_eps: total
+          total_eps: total,
+          last_time: cur,
+          duration: dur
         });
+        lastSavedTimeRef.current = cur;
+      }
+
+      // 2. Si ya está registrado en el historial, guardar periódicamente el minuto/segundo cada 3 segundos
+      if (hasRecordedProgress.current && Math.abs(cur - lastSavedTimeRef.current) >= 3) {
+        lastSavedTimeRef.current = cur;
+        updateWatchTime(slug, ep, cur, dur);
       }
     };
 
-    video.addEventListener('timeupdate', checkAndRecord);
-    video.addEventListener('ended', checkAndRecord);
+    const onPauseOrEnd = () => {
+      if (video.ended) {
+        updateWatchTime(slug, ep, 0, video.duration);
+      } else if (hasRecordedProgress.current && video.currentTime > 0) {
+        updateWatchTime(slug, ep, video.currentTime, video.duration);
+      }
+    };
+
+    video.addEventListener('timeupdate', onTimeUpdate);
+    video.addEventListener('pause', onPauseOrEnd);
+    video.addEventListener('ended', onPauseOrEnd);
+
+    const onBeforeUnload = () => {
+      if (hasRecordedProgress.current && video.currentTime > 0 && !video.ended) {
+        updateWatchTime(slug, ep, video.currentTime, video.duration);
+      }
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
 
     return () => {
-      video.removeEventListener('timeupdate', checkAndRecord);
-      video.removeEventListener('ended', checkAndRecord);
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      video.removeEventListener('pause', onPauseOrEnd);
+      video.removeEventListener('ended', onPauseOrEnd);
+      window.removeEventListener('beforeunload', onBeforeUnload);
+      if (hasRecordedProgress.current && video && video.currentTime > 0 && !video.ended) {
+        updateWatchTime(slug, ep, video.currentTime, video.duration);
+      }
     };
   }, [slug, ep, title, poster, total]);
 
@@ -924,6 +1006,18 @@ export default function Player({ slug, ep, title, total, poster }) {
           crossOrigin="anonymous"
           onContextMenu={(e) => e.preventDefault()}
         />
+
+        {resumeToast && (
+          <div className="player-resume-toast">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#ef4444' }}>▶</span>
+              <span>Reanudando en {Math.floor(resumeToast / 60)}:{Math.floor(resumeToast % 60) < 10 ? '0' : ''}{Math.floor(resumeToast % 60)}</span>
+            </div>
+            <button onClick={restartFromBeginning} className="player-restart-btn">
+              Empezar de nuevo
+            </button>
+          </div>
+        )}
         {currentSubtitle && (
           <div className="custom-subtitle-box">
             <span className="custom-subtitle-text">{currentSubtitle}</span>

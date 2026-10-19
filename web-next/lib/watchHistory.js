@@ -75,7 +75,7 @@ export function isEpisodeWatched(slug, ep) {
  * Registra o actualiza el progreso de un dorama tras 25 segundos de reproducción.
  * Sobreescribe el último episodio y agrega a la lista de vistos sin duplicar doramas.
  */
-export function recordProgress({ slug, ep, title, poster, total_eps }) {
+export function recordProgress({ slug, ep, title, poster, total_eps, last_time = 0, duration = 0 }) {
   if (!slug || !ep) return;
 
   const store = getRawStore();
@@ -94,12 +94,19 @@ export function recordProgress({ slug, ep, title, poster, total_eps }) {
     cleanPoster = '';
   }
 
+  let timeToSave = Math.floor(last_time || 0);
+  if (timeToSave <= 0 && existing.last_ep === epStr && existing.last_time > 0) {
+    timeToSave = existing.last_time;
+  }
+
   // Actualizar entrada única para este slug
   store[slug] = {
     slug,
     title: title || existing.title || slug,
     poster: cleanPoster,
     last_ep: epStr,
+    last_time: timeToSave,
+    duration: Math.floor(duration || existing.duration || 0),
     vistos: currentVistos,
     total_eps: total_eps || existing.total_eps || 0,
     updated_at: Date.now()
@@ -116,6 +123,32 @@ export function recordProgress({ slug, ep, title, poster, total_eps }) {
     saveRawStore(trimmedStore);
     return;
   }
+
+  saveRawStore(store);
+}
+
+/**
+ * Guarda periódicamente el segundo exacto de reproducción mientras el usuario mira el video.
+ */
+export function updateWatchTime(slug, ep, time, duration) {
+  if (!slug || !ep) return;
+  const store = getRawStore();
+  const item = store[slug];
+  if (!item) return;
+
+  const epStr = String(ep).trim();
+  const sec = Math.floor(time || 0);
+  const dur = Math.floor(duration || item.duration || 0);
+
+  // Si está a punto de terminar (>95% o a menos de 4s del final), marcar como 0 para que empiece desde el inicio
+  if (dur > 0 && sec >= dur - 4) {
+    item.last_time = 0;
+  } else {
+    item.last_time = sec;
+  }
+  item.duration = dur;
+  item.last_ep = epStr;
+  item.updated_at = Date.now();
 
   saveRawStore(store);
 }

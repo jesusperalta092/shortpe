@@ -26,7 +26,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
           <>
             <Link
               className="btn btn-play"
-              href={'/ver/' + slug + '/' + historyData.last_ep}
+              href={'/ver/' + slug + '/' + historyData.last_ep + (historyData.last_time > 3 ? `?t=${historyData.last_time}` : '')}
               onClick={recordSection}
               style={{
                 display: 'inline-flex',
@@ -45,7 +45,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
               <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              Continuar viendo (Cap. {historyData.last_ep})
+              Continuar viendo (Cap. {historyData.last_ep}{historyData.last_time > 3 ? ` • ${Math.floor(historyData.last_time / 60)}:${Math.floor(historyData.last_time % 60) < 10 ? '0' : ''}${Math.floor(historyData.last_time % 60)}` : ''})
             </Link>
             <Link
               className="btn"

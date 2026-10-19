@@ -78,7 +78,20 @@ export default function ContinueWatching({ onOpenModal }) {
           {items.map((item) => {
             const total = parseInt(item.total_eps, 10) || 0;
             const seenCount = item.vistos ? item.vistos.length : 1;
-            const progressPct = total > 0 ? Math.min(100, Math.round((seenCount / total) * 100)) : 10;
+            const hasEpProgress = item.duration > 0 && item.last_time > 0;
+            const progressPct = hasEpProgress
+              ? Math.min(100, Math.max(6, Math.round((item.last_time / item.duration) * 100)))
+              : (total > 0 ? Math.min(100, Math.round((seenCount / total) * 100)) : 10);
+
+            const formatMinSec = (sec) => {
+              if (!sec || sec <= 0) return '';
+              const s = Math.floor(sec);
+              const m = Math.floor(s / 60);
+              const rem = s % 60;
+              return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+            };
+
+            const resumeLink = `/ver/${item.slug}/${item.last_ep || '1'}${item.last_time > 3 ? `?t=${item.last_time}` : ''}`;
 
             return (
               <div key={item.slug} className="continue-card">
@@ -93,7 +106,7 @@ export default function ContinueWatching({ onOpenModal }) {
                 </button>
 
                 <Link
-                  href={`/ver/${item.slug}/${item.last_ep || '1'}`}
+                  href={resumeLink}
                   className="continue-card-poster-wrap"
                   scroll={false}
                   onClick={() => {
@@ -111,9 +124,9 @@ export default function ContinueWatching({ onOpenModal }) {
                     }}
                   />
 
-                  {/* Badge de último episodio */}
+                  {/* Badge de último episodio con minuto si existe */}
                   <div className="continue-ep-badge">
-                    Cap. {item.last_ep}
+                    Cap. {item.last_ep} {item.last_time > 3 ? `• ${formatMinSec(item.last_time)}` : ''}
                   </div>
 
                   {/* Overlay con icono de Play animado */}
@@ -123,14 +136,16 @@ export default function ContinueWatching({ onOpenModal }) {
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     </div>
-                    <span className="continue-play-text">Continuar</span>
+                    <span className="continue-play-text">
+                      {item.last_time > 3 ? `Reanudar (${formatMinSec(item.last_time)})` : 'Continuar'}
+                    </span>
                   </div>
 
                   {/* Barra de progreso estilo Netflix al pie del póster */}
                   <div className="continue-progress-bar-bg">
                     <div
                       className="continue-progress-bar-fill"
-                      style={{ width: `${Math.max(12, progressPct)}%` }}
+                      style={{ width: `${Math.max(8, progressPct)}%` }}
                     />
                   </div>
                 </Link>
@@ -141,11 +156,11 @@ export default function ContinueWatching({ onOpenModal }) {
                   </h3>
                   <div className="continue-card-meta">
                     <span className="continue-card-sub">
-                      Episodio {item.last_ep} {total > 0 ? `de ${total}` : ''}
+                      Cap. {item.last_ep} {item.last_time > 3 ? `• en ${formatMinSec(item.last_time)}` : (total > 0 ? `de ${total}` : '')}
                     </span>
                     <span className="continue-card-dot">•</span>
                     <span className="continue-card-pct">
-                      {progressPct}% visto
+                      {hasEpProgress ? `${progressPct}% cap.` : `${progressPct}% visto`}
                     </span>
                   </div>
                 </div>
