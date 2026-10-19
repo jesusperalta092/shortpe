@@ -21,6 +21,7 @@ export default async function VerPage({ params }) {
   const { slug, ep } = await params;
   const d = await getTitle(slug);
   if (!d) notFound();
+  const total = d.total_episodes || 0;
   const poster = d.poster_local ? '/' + d.poster_local : (d.poster || '');
   return (
     <Player slug={slug} ep={ep} title={d.title} total={total} poster={poster} />
