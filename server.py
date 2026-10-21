@@ -720,12 +720,14 @@ def is_hls_stream(url):
 
 
 
-def _hd_episodes(slug):
+def _hd_episodes(slug, force=False):
     """Resuelve episodios on-demand desde shortmax.org (mp4 con firma temporal, gratis)."""
     now = time.time()
     c = HD_CACHE.get(slug)
-    if c and (now - c['t']) < HD_TTL:
-        return c['eps']
+    if not force and c and (now - c['t']) < HD_TTL:
+        first_u = next(iter(c['eps'].values()), None) if c['eps'] else None
+        if not is_url_expired(first_u):
+            return c['eps']
     d = HD_BY_SLUG.get(slug)
     if not d:
         return {}
@@ -773,15 +775,17 @@ DV_CACHE = {}
 DV_TTL = 900  # 15 minutos
 
 
-def _dv_episodes(drama_id, source_book_id=None):
+def _dv_episodes(drama_id, source_book_id=None, force=False):
     """Resuelve episodios on-demand frescos con tokens validos desde chartdrama.com."""
     if not drama_id and not source_book_id:
         return {}
     key = str(drama_id or source_book_id)
     now = time.time()
     c = DV_CACHE.get(key)
-    if c and (now - c['t']) < DV_TTL:
-        return c['eps']
+    if not force and c and (now - c['t']) < DV_TTL:
+        first_u = next(iter(c['eps'].values()), None) if c['eps'] else None
+        if not is_url_expired(first_u):
+            return c['eps']
 
     # Si hay source_book_id, calentamos la sesion de chartdrama para firmar tokens S3 validos
     if source_book_id:
@@ -792,22 +796,27 @@ def _dv_episodes(drama_id, source_book_id=None):
         except Exception:
             pass
 
-    try:
-        r = requests.get(f'https://chartdrama.com/api/drama/{urllib.parse.quote(str(drama_id or source_book_id))}/episodes?_t={int(now*1000)}',
-                         headers={'User-Agent': UA, 'Accept': 'application/json', 'Referer': 'https://chartdrama.com/', 'Cache-Control': 'no-cache'},
-                         verify=False, timeout=12)
-        if r.status_code == 200:
-            items = r.json().get('items', [])
-            out = {}
-            for e in items:
-                n = e.get('ep'); u = e.get('url')
-                if n and u:
-                    out[str(n)] = u if u.startswith('http') else ('https://chartdrama.com' + u)
-            if out:
-                DV_CACHE[key] = {'t': now, 'eps': out}
-                return out
-    except Exception as e:
-        _dlog('DV', 'episodes err %s: %s' % (drama_id, str(e)[:80]))
+    target_ids = []
+    if drama_id: target_ids.append(str(drama_id))
+    if source_book_id and str(source_book_id) not in target_ids: target_ids.append(str(source_book_id))
+
+    for tid in target_ids:
+        try:
+            r = requests.get(f'https://chartdrama.com/api/drama/{urllib.parse.quote(tid)}/episodes?_t={int(now*1000)}',
+                             headers={'User-Agent': UA, 'Accept': 'application/json', 'Referer': 'https://chartdrama.com/', 'Cache-Control': 'no-cache'},
+                             verify=False, timeout=12)
+            if r.status_code == 200:
+                items = r.json().get('items', [])
+                out = {}
+                for e in items:
+                    n = e.get('ep'); u = e.get('url')
+                    if n and u:
+                        out[str(n)] = u if u.startswith('http') else ('https://chartdrama.com' + u)
+                if out:
+                    DV_CACHE[key] = {'t': now, 'eps': out}
+                    return out
+        except Exception as e:
+            _dlog('DV', 'episodes err %s: %s' % (tid, str(e)[:80]))
     return {}
 
 
@@ -1302,10 +1311,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     if m: d_id = m.group(1)
                 sb_id = dv.get('sourceBookId') or ''
                 # Priorizar resolucion fresca on-demand para evitar enlaces S3 vencidos
-                eps_dict = _dv_episodes(d_id or '', sb_id)
-                if not eps_dict:
-                    eps_dict = dv.get('episodes') or {}
-                vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                eps_dict = _dv_episodes(d_id or '', sb_id, force=fresh)
+                vurl = eps_dict.get(str(ep)) if eps_dict else None
+                if not vurl or is_url_expired(vurl):
+                    eps_dict = _dv_episodes(d_id or '', sb_id, force=True)
+                    vurl = eps_dict.get(str(ep)) if eps_dict else None
+                if not vurl or is_url_expired(vurl):
+                    raw_eps = dv.get('episodes') or {}
+                    cand = raw_eps.get(str(ep)) or (list(raw_eps.values())[0] if raw_eps else None)
+                    if cand and not is_url_expired(cand):
+                        vurl = cand
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
                 is_hls = vurl.split('?')[0].lower().endswith('.m3u8')
                 if is_hls:
@@ -1325,7 +1340,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 load_hotdrama()
                 hd = HD_BY_SLUG.get(slug)
                 if not hd: return self._send(404,'text/plain',b'no encontrado')
-                eps_dict = _hd_episodes(slug)
+                eps_dict = _hd_episodes(slug, force=fresh)
                 vurl = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
                 is_hls = vurl.split('?')[0].lower().endswith('.m3u8')
