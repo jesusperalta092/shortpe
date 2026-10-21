@@ -611,6 +611,20 @@ def _dt_episode_url(dt, ep, force=False):
 NARTO_CACHE = {}
 NARTO_TTL = 1800  # 30 minutos
 
+def is_url_expired(u):
+    """Verifica si la URL upstream tiene una firma temporal (auth_key) ya vencida."""
+    if not u or not isinstance(u, str):
+        return True
+    m = re.search(r'auth_key=(\d+)', u)
+    if m:
+        try:
+            exp_ts = int(m.group(1))
+            # Margen de seguridad de 60 segundos antes de expirar
+            return (time.time() + 60) > exp_ts
+        except Exception:
+            pass
+    return False
+
 def _unwrap_stream_url(url):
     """Extrae la URL directa del CDN cuando viene encapsulada en wrappers (como stream.narto-drama.com/e/m/...)."""
     if not url: return url
@@ -632,7 +646,7 @@ def _resolve_narto_episode(slug, ep, force=False):
     now = time.time()
     cache_key = (slug, str(ep))
     c = NARTO_CACHE.get(cache_key)
-    if not force and c and (now - c[0]) < NARTO_TTL:
+    if not force and c and (now - c[0]) < NARTO_TTL and not is_url_expired(c[1]):
         return c[1]
 
     narto_slug = slug[3:] if slug.startswith('nt-') else slug
@@ -1265,6 +1279,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if not fresh:
                 _c = _stream_get(slug, ep)
                 if _c:
+                    try:
+                        _obj = json.loads(_c)
+                        _purl = _obj.get('player_url', '')
+                        _raw_u = resolve_requested_url(urllib.parse.parse_qs(urllib.parse.urlparse(_purl).query))
+                        if is_url_expired(_raw_u):
+                            _c = None
+                    except Exception:
+                        pass
+                if _c:
                     return self._send(200,'application/json; charset=utf-8', _c)
 
 
@@ -1449,8 +1472,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             # ===== NARTO (DramaShorts / HotDrama) - HLS o MP4 directo =====
             if _d and (_d.get('source')=='narto' or slug.startswith('nt-')):
                 eps_dict = _d.get('episodes') or {}
-                fresh_vurl = _resolve_narto_episode(slug, ep, force=fresh)
-                vurl = fresh_vurl or eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                cached_url = eps_dict.get(str(ep)) or (list(eps_dict.values())[0] if eps_dict else None)
+                force_fresh = fresh or is_url_expired(cached_url)
+                fresh_vurl = _resolve_narto_episode(slug, ep, force=force_fresh)
+                vurl = fresh_vurl or (cached_url if not is_url_expired(cached_url) else None)
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
                 vurl = _unwrap_stream_url(vurl)
                 is_hls = is_hls_stream(vurl)
