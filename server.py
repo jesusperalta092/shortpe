@@ -773,6 +773,18 @@ def slugify_title(s):
 
 DV_CACHE = {}
 DV_TTL = 900  # 15 minutos
+DV_SESSION = requests.Session()
+DV_SESSION.verify = False
+
+DV_HEADERS = {
+    'User-Agent': UA,
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+    'Referer': 'https://chartdrama.com/',
+    'Origin': 'https://chartdrama.com',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+}
 
 
 def _dv_episodes(drama_id, source_book_id=None, force=False):
@@ -790,11 +802,11 @@ def _dv_episodes(drama_id, source_book_id=None, force=False):
     # Si hay source_book_id, calentamos la sesion de chartdrama para firmar tokens S3 validos
     if source_book_id:
         try:
-            requests.get('https://chartdrama.com/api/watch/' + urllib.parse.quote(str(source_book_id)),
-                         headers={'User-Agent': UA, 'Accept': 'application/json', 'Referer': 'https://chartdrama.com/'},
-                         verify=False, timeout=8)
-        except Exception:
-            pass
+            DV_SESSION.get('https://chartdrama.com/api/watch/' + urllib.parse.quote(str(source_book_id)),
+                           headers=DV_HEADERS,
+                           verify=False, timeout=8)
+        except Exception as e:
+            _dlog('DV', 'watch warmup err %s: %s' % (source_book_id, str(e)[:60]))
 
     target_ids = []
     if drama_id: target_ids.append(str(drama_id))
@@ -802,9 +814,9 @@ def _dv_episodes(drama_id, source_book_id=None, force=False):
 
     for tid in target_ids:
         try:
-            r = requests.get(f'https://chartdrama.com/api/drama/{urllib.parse.quote(tid)}/episodes?_t={int(now*1000)}',
-                             headers={'User-Agent': UA, 'Accept': 'application/json', 'Referer': 'https://chartdrama.com/', 'Cache-Control': 'no-cache'},
-                             verify=False, timeout=12)
+            r = DV_SESSION.get(f'https://chartdrama.com/api/drama/{urllib.parse.quote(tid)}/episodes?_t={int(now*1000)}',
+                               headers=DV_HEADERS,
+                               verify=False, timeout=12)
             if r.status_code == 200:
                 items = r.json().get('items', [])
                 out = {}
@@ -814,7 +826,11 @@ def _dv_episodes(drama_id, source_book_id=None, force=False):
                         out[str(n)] = u if u.startswith('http') else ('https://chartdrama.com' + u)
                 if out:
                     DV_CACHE[key] = {'t': now, 'eps': out}
+                    if str(tid) != key:
+                        DV_CACHE[str(tid)] = {'t': now, 'eps': out}
                     return out
+            else:
+                _dlog('DV', 'episodes HTTP %s for tid=%s: %s' % (r.status_code, tid, r.text[:100]))
         except Exception as e:
             _dlog('DV', 'episodes err %s: %s' % (tid, str(e)[:80]))
     return {}
@@ -1310,19 +1326,34 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     m = re.search(r'dv-(\d+)-', slug)
                     if m: d_id = m.group(1)
                 sb_id = dv.get('sourceBookId') or ''
-                # Priorizar resolucion fresca on-demand para evitar enlaces S3 vencidos
-                eps_dict = _dv_episodes(d_id or '', sb_id, force=fresh)
-                vurl = eps_dict.get(str(ep)) if eps_dict else None
-                if not vurl or is_url_expired(vurl):
-                    eps_dict = _dv_episodes(d_id or '', sb_id, force=True)
+                raw_eps = dv.get('episodes') or {}
+                cached_ep_url = raw_eps.get(str(ep)) or (list(raw_eps.values())[0] if raw_eps else None)
+                vurl = None
+
+                # 1. Si no se pide fresh explícito y tenemos URL en catálogo que NO está vencida, usarla directo
+                if not fresh and cached_ep_url and not is_url_expired(cached_ep_url):
+                    vurl = cached_ep_url
+
+                # 2. Si no hay URL, o está vencida, o se forzó 'fresh', resolver on-demand desde upstream
+                if not vurl:
+                    eps_dict = _dv_episodes(d_id or '', sb_id, force=fresh)
                     vurl = eps_dict.get(str(ep)) if eps_dict else None
-                if not vurl or is_url_expired(vurl):
-                    raw_eps = dv.get('episodes') or {}
-                    cand = raw_eps.get(str(ep)) or (list(raw_eps.values())[0] if raw_eps else None)
-                    if cand and not is_url_expired(cand):
-                        vurl = cand
+                    if vurl and not is_url_expired(vurl):
+                        dv['episodes'] = eps_dict
+                        dv['total_episodes'] = max(dv.get('total_episodes', 0), len(eps_dict))
+                    elif not vurl or is_url_expired(vurl):
+                        eps_dict = _dv_episodes(d_id or '', sb_id, force=True)
+                        vurl = eps_dict.get(str(ep)) if eps_dict else None
+                        if eps_dict and vurl:
+                            dv['episodes'] = eps_dict
+                            dv['total_episodes'] = max(dv.get('total_episodes', 0), len(eps_dict))
+
+                # 3. Respaldo final: si upstream falló pero teníamos una URL registrada, usarla
+                if not vurl and cached_ep_url:
+                    vurl = cached_ep_url
+
                 if not vurl: return self._send(404,'text/plain',b'sin episodio')
-                is_hls = vurl.split('?')[0].lower().endswith('.m3u8')
+                is_hls = is_hls_stream(vurl)
                 if is_hls:
                     obj={'title':dv.get('title',''),'type':'hls','player_type':'hls',
                          'player_url':'/proxy/manifest?t=' + encode_url_token(vurl),
@@ -1736,6 +1767,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if not total:
                 eps = _dv_episodes(d.get('dramaId') or d.get('sourceBookId') or '', d.get('sourceBookId') or '')
                 total = len(eps)
+                if total:
+                    d['total_episodes'] = total
+                    d['episodes'] = eps
             item['total_episodes'] = total
             return self._send(200,'application/json; charset=utf-8', json.dumps(item, ensure_ascii=False).encode('utf-8'), cache_header='no-store')
 
