@@ -7,7 +7,6 @@ import ContinueWatching from './ContinueWatching';
 import TitleModal from './TitleModal';
 import Header from './Header';
 import Footer from './Footer';
-import SectionAdBanner from './SectionAdBanner';
 import { checkAndTriggerPlayPopunder } from '../lib/adsterraAds';
 
 export default function HomeClient({ catalog, sections, hotdramaItems, dramavibeItems, dramatubeItems }) {
@@ -212,7 +211,6 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
 
         <div className="rows">
           <ContinueWatching onOpenModal={handleOpenModal} />
-          <SectionAdBanner />
           <Carousel title="🔥 Tendencias ahora" items={sections.drama?.slice(0, 24) || []} onOpen={handleOpenModal} />
           {dramatubeItems?.length > 0 && <Carousel title="🔴 DramaTube · Estrenos Exclusivos" items={dramatubeItems.slice(0, 24)} onOpen={handleOpenModal} />}
           {sections.dramashorts?.length > 0 && <Carousel title="⚡ DramaShorts · Estreno Exclusivo" items={sections.dramashorts} onOpen={handleOpenModal} />}

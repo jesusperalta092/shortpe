@@ -6,6 +6,7 @@ export const AD_SOCIALBAR_SRC = 'https://bancadeltempoidea.org/14/6b62f8318c3bb0
 
 export const BANNER_300x250_KEY = '116abd6ac1277c130835a8324f016ae8';
 export const BANNER_728x90_KEY = '72b268d72853630bdffceba2f3f04daa';
+export const BANNER_320x50_KEY = '00bec15fdeb8d0166ed91555227aa32b';
 
 const POPUNDER_STORAGE_KEY = 'dramape_pop_last_ts';
 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;

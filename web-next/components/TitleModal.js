@@ -2,8 +2,8 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import Link from 'next/link';
 import { getDoramaProgress } from '../lib/watchHistory';
-import AdsterraBanner from './AdsterraBanner';
-import { checkAndTriggerPlayPopunder, BANNER_300x250_KEY } from '../lib/adsterraAds';
+import ModalAdBanner from './ModalAdBanner';
+import { checkAndTriggerPlayPopunder } from '../lib/adsterraAds';
 
 // Cache global en memoria para persistir todos los títulos cargados
 const modalCache = new Map();
@@ -184,11 +184,8 @@ function TitleModalComponent({ slug, onClose }) {
                 </div>
                 <p className="modal-desc">{d.description}</p>
 
-                {/* Banner Adsterra 300x250 (Espacio vacío del Modal - Foto 2) */}
-                <div className="modal-ad-banner-slot">
-                  <div className="ad-badge-label">PUBLICIDAD</div>
-                  <AdsterraBanner zoneKey={BANNER_300x250_KEY} width={300} height={250} />
-                </div>
+                {/* Banner Adsterra Adaptable (300x250 en desktop, 320x50 en móviles/tablets) */}
+                <ModalAdBanner />
               </>
             ) : !err ? (
               <div style={{ color: 'var(--muted)', padding: '20px 0' }}>Cargando información del drama...</div>
