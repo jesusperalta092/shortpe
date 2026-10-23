@@ -2,6 +2,7 @@ import { getCatalog } from '../../lib/api';
 import Header from '../../components/Header';
 import GridClient from '../../components/GridClient';
 import Footer from '../../components/Footer';
+import SectionAdBanner from '../../components/SectionAdBanner';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export default async function BuscarPage({ searchParams }) {
     <>
       <Header stats={cat.length} />
       <main className="con-header">
+        <SectionAdBanner />
         <section className="row">
           <h2 className="row-title"><span className="bar" />Resultados para “{sp.q}” ({items.length})</h2>
           {items.length === 0

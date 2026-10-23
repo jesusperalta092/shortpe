@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { trackVideoPlay, trackAdClick, trackLiveHeartbeat, reportVideoError } from '../lib/analytics';
 import { recordProgress, updateWatchTime, getDoramaProgress } from '../lib/watchHistory';
+import { checkAndTriggerPlayPopunder } from '../lib/adsterraAds';
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
@@ -64,6 +65,7 @@ export default function Player({ slug, ep, title, total, poster }) {
   useEffect(() => {
     hasAppliedSeekRef.current = false;
     setResumeToast(null);
+    checkAndTriggerPlayPopunder();
   }, [slug, ep]);
 
   // Obtener tiempo guardado previo para reanudar en el minuto/segundo exacto

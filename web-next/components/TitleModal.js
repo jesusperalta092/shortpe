@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import Link from 'next/link';
 import { getDoramaProgress } from '../lib/watchHistory';
+import AdsterraBanner from './AdsterraBanner';
+import { checkAndTriggerPlayPopunder, BANNER_300x250_KEY } from '../lib/adsterraAds';
 
 // Cache global en memoria para persistir todos los títulos cargados
 const modalCache = new Map();
@@ -114,6 +116,7 @@ function TitleModalComponent({ slug, onClose }) {
                     <Link
                       className="btn btn-play"
                       href={'/ver/' + d.slug + '/' + historyData.last_ep + (historyData.last_time > 3 ? `?t=${historyData.last_time}` : '')}
+                      onClick={() => checkAndTriggerPlayPopunder()}
                     >
                       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
                         <path d="M8 5v14l11-7z" />
@@ -123,6 +126,7 @@ function TitleModalComponent({ slug, onClose }) {
                     <Link
                       className="btn"
                       href={'/ver/' + d.slug + '/1'}
+                      onClick={() => checkAndTriggerPlayPopunder()}
                       style={{
                         background: 'rgba(255, 255, 255, 0.12)',
                         color: '#f4f4f5',
@@ -139,7 +143,11 @@ function TitleModalComponent({ slug, onClose }) {
                     </Link>
                   </>
                 ) : (
-                  <Link className="btn btn-play" href={'/ver/' + d.slug + '/1'}>
+                  <Link 
+                    className="btn btn-play" 
+                    href={'/ver/' + d.slug + '/1'}
+                    onClick={() => checkAndTriggerPlayPopunder()}
+                  >
                     <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style={{ marginRight: 6 }}>
                       <path d="M8 5v14l11-7z" />
                     </svg>
@@ -175,6 +183,12 @@ function TitleModalComponent({ slug, onClose }) {
                   </div>
                 </div>
                 <p className="modal-desc">{d.description}</p>
+
+                {/* Banner Adsterra 300x250 (Espacio vacío del Modal - Foto 2) */}
+                <div className="modal-ad-banner-slot">
+                  <div className="ad-badge-label">PUBLICIDAD</div>
+                  <AdsterraBanner zoneKey={BANNER_300x250_KEY} width={300} height={250} />
+                </div>
               </>
             ) : !err ? (
               <div style={{ color: 'var(--muted)', padding: '20px 0' }}>Cargando información del drama...</div>
@@ -199,6 +213,7 @@ function TitleModalComponent({ slug, onClose }) {
                         key={k}
                         className={`ep-btn ${isLast ? 'ep-last-watched' : (isWatched ? 'ep-watched' : '')}`}
                         href={'/ver/' + d.slug + '/' + k}
+                        onClick={() => checkAndTriggerPlayPopunder()}
                       >
                         {isWatched && <span className="ep-check-icon">✓</span>}
                         <span>{label}</span>

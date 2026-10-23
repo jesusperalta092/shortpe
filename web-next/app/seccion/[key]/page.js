@@ -8,6 +8,7 @@ import HotDramaClient from '../../../components/HotDramaClient';
 import DramaShortsClient from '../../../components/DramaShortsClient';
 import DramasClient from '../../../components/DramasClient';
 import Footer from '../../../components/Footer';
+import SectionAdBanner from '../../../components/SectionAdBanner';
 
 export const dynamic = 'force-dynamic';
 
@@ -77,6 +78,7 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
+          <SectionAdBanner />
           <DramaTubeClient 
             shelves={shelves} 
             allDramas={allDramas} 
@@ -99,6 +101,7 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
+          <SectionAdBanner />
           <section className="row">
             <h2 className="row-title theme-vibe"><span className="bar" />{label} ({first.total.toLocaleString('es')})</h2>
             <CatalogGrid initial={first} apiPath="/api/dramavibe" label="DramaVibe" fireTag={false} />
@@ -130,6 +133,7 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
+          <SectionAdBanner />
           <HotDramaClient 
             shelves={shelves} 
             allDramas={allDramas} 
@@ -163,6 +167,7 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
+          <SectionAdBanner />
           <DramaShortsClient 
             shelves={shelves} 
             allDramas={allDramas} 
@@ -196,6 +201,7 @@ export default async function SeccionPage({ params }) {
       <>
         <Header />
         <main className="con-header">
+          <SectionAdBanner />
           <DramasClient 
             shelves={shelves} 
             allDramas={allDramas} 
@@ -217,6 +223,7 @@ export default async function SeccionPage({ params }) {
     <>
       <Header stats={cat.length} />
       <main className="con-header">
+        <SectionAdBanner />
         <section className="row">
           <h2 className={'row-title ' + themeClass}><span className="bar" />{label} ({items.length})</h2>
           <GridClient items={items} label={label} />

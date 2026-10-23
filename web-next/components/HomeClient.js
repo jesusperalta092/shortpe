@@ -7,6 +7,8 @@ import ContinueWatching from './ContinueWatching';
 import TitleModal from './TitleModal';
 import Header from './Header';
 import Footer from './Footer';
+import SectionAdBanner from './SectionAdBanner';
+import { checkAndTriggerPlayPopunder } from '../lib/adsterraAds';
 
 export default function HomeClient({ catalog, sections, hotdramaItems, dramavibeItems, dramatubeItems }) {
   const [modalSlug, setModalSlug] = useState(null);
@@ -156,7 +158,12 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
                 </div>
                 <p className="hero-desc">{getHeroDesc(currentHero.description)}</p>
                 <div className="hero-btns">
-                  <Link className="btn btn-play" href={'/ver/' + currentHero.slug + '/1'} scroll={false}>
+                  <Link 
+                    className="btn btn-play" 
+                    href={'/ver/' + currentHero.slug + '/1'} 
+                    scroll={false}
+                    onClick={() => checkAndTriggerPlayPopunder()}
+                  >
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg> Reproducir
                   </Link>
                   <button className="btn btn-info" onClick={() => handleOpenModal(currentHero.slug)}>
@@ -205,6 +212,7 @@ export default function HomeClient({ catalog, sections, hotdramaItems, dramavibe
 
         <div className="rows">
           <ContinueWatching onOpenModal={handleOpenModal} />
+          <SectionAdBanner />
           <Carousel title="🔥 Tendencias ahora" items={sections.drama?.slice(0, 24) || []} onOpen={handleOpenModal} />
           {dramatubeItems?.length > 0 && <Carousel title="🔴 DramaTube · Estrenos Exclusivos" items={dramatubeItems.slice(0, 24)} onOpen={handleOpenModal} />}
           {sections.dramashorts?.length > 0 && <Carousel title="⚡ DramaShorts · Estreno Exclusivo" items={sections.dramashorts} onOpen={handleOpenModal} />}

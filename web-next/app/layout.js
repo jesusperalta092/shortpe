@@ -1,6 +1,7 @@
 import './globals.css';
 import { Suspense } from 'react';
 import AnalyticsBeacon from '../components/AnalyticsBeacon';
+import AdsterraSocialBar from '../components/AdsterraSocialBar';
 
 const SITE_URL = process.env.SITE_URL || 'https://dramape.com';
 
@@ -167,6 +168,7 @@ export default function RootLayout({ children }) {
         />
         <Suspense fallback={null}>
           <AnalyticsBeacon />
+          <AdsterraSocialBar />
         </Suspense>
         {children}
       </body>

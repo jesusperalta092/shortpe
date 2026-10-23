@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getDoramaProgress } from '../lib/watchHistory';
+import { checkAndTriggerPlayPopunder } from '../lib/adsterraAds';
 
 export default function TituloEpisodesClient({ slug, total, eps }) {
   const [historyData, setHistoryData] = useState(null);
@@ -16,6 +17,7 @@ export default function TituloEpisodesClient({ slug, total, eps }) {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('dramia_last_section', `/titulo/${slug}`);
     }
+    checkAndTriggerPlayPopunder();
   };
 
   return (
