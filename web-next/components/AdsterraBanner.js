@@ -4,12 +4,21 @@ import { useEffect, useRef } from 'react';
 /**
  * Componente de Banner Adsterra aislado mediante iframe sandbox.
  * Evita bloqueos de document.write() en React/Next.js y aísla atOptions de colisiones.
+ * Soporta callback onBlocked para auto-colapsar el espacio si un adblocker (como Brave) bloquea el anuncio.
  */
-export default function AdsterraBanner({ zoneKey, width = 300, height = 250, className = '' }) {
+export default function AdsterraBanner({ zoneKey, width = 300, height = 250, className = '', onBlocked }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current || !zoneKey) return;
+
+    // Escuchar si el adblocker bloquea el recurso
+    const handleMsg = (e) => {
+      if (e.data && e.data.type === 'adsterra_blocked' && e.data.key === zoneKey) {
+        if (onBlocked) onBlocked();
+      }
+    };
+    window.addEventListener('message', handleMsg);
 
     const iframe = document.createElement('iframe');
     iframe.width = String(width);
@@ -50,7 +59,11 @@ export default function AdsterraBanner({ zoneKey, width = 300, height = 250, cla
               'params' : {}
             };
           </script>
-          <script type="text/javascript" src="https://bancadeltempoidea.org/22/${zoneKey}"></script>
+          <script 
+            type="text/javascript" 
+            src="https://bancadeltempoidea.org/22/${zoneKey}"
+            onerror="try { window.parent.postMessage({type:'adsterra_blocked', key:'${zoneKey}'}, '*'); } catch(e){}"
+          ></script>
         </body>
       </html>
     `;
@@ -73,12 +86,26 @@ export default function AdsterraBanner({ zoneKey, width = 300, height = 250, cla
       iframe.srcdoc = html;
     }
 
+    // Verificación de respaldo: si tras 3s no hay contenido renderizado en el iframe
+    const fallbackTimer = setTimeout(() => {
+      try {
+        const idoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (idoc && idoc.body && idoc.body.innerHTML.trim() === '') {
+          if (onBlocked) onBlocked();
+        }
+      } catch (e) {
+        // Si hay cross-origin, significa que el iframe cargó un ad externo con éxito
+      }
+    }, 3000);
+
     return () => {
+      window.removeEventListener('message', handleMsg);
+      clearTimeout(fallbackTimer);
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
       }
     };
-  }, [zoneKey, width, height]);
+  }, [zoneKey, width, height, onBlocked]);
 
   return (
     <div 
