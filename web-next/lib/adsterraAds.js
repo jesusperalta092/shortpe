@@ -1,6 +1,7 @@
 // Adsterra Unified Advertising & Frequency Controller for DramaPe
 
-export const AD_POPUNDER_SRC = 'https://aarems.org/1/6096dad751c2b0243362aa0d3d0501f4';
+// Smartlink de Adsterra (usado para el popunder limpio de 1 vez cada 24 horas y desbloqueo)
+export const AD_SMARTLINK_URL = 'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0';
 export const AD_SOCIALBAR_SRC = 'https://bancadeltempoidea.org/14/6b62f8318c3bb05ca3f63b5933ef1e34';
 
 export const BANNER_300x250_KEY = '116abd6ac1277c130835a8324f016ae8';
@@ -10,9 +11,11 @@ const POPUNDER_STORAGE_KEY = 'dramape_pop_last_ts';
 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
 /**
- * Control inteligente de Popunder:
- * Solo se activa en el PRIMER PLAY del día (1 vez cada 24 horas por usuario).
- * Mientras navega por el catálogo o busca doramas, el popunder permanece 100% inactivo.
+ * Control 100% nativo de Popunder (Estrictamente 1 vez cada 24 horas por usuario):
+ * - NO inyecta scripts invasores externos (como aarems.org) que secuestran los clics de la ventana.
+ * - Solo se ejecuta mediante un clic intencional de play del usuario.
+ * - Si ya se activó en las últimas 24 horas, NO hace nada (0 pestañas, 0 interrupciones).
+ * - Cero interferencia al cerrar modales, buscar doramas o navegar por el catálogo.
  */
 export function checkAndTriggerPlayPopunder() {
   if (typeof window === 'undefined') return false;
@@ -24,7 +27,7 @@ export function checkAndTriggerPlayPopunder() {
     if (last) {
       const diff = now - parseInt(last, 10);
       if (!isNaN(diff) && diff < TWENTY_FOUR_HOURS_MS) {
-        // Ya vio su único popunder del día. No molestamos al usuario.
+        // Ya vio su anuncio del día. Cero popups.
         return false;
       }
     }
@@ -32,17 +35,9 @@ export function checkAndTriggerPlayPopunder() {
     // Registrar nueva marca de tiempo de 24 horas
     localStorage.setItem(POPUNDER_STORAGE_KEY, String(now));
 
-    // Inyectar el script de Adsterra Popunder solo para este primer play
-    const existing = document.getElementById('adsterra-popunder-script');
-    if (!existing) {
-      const script = document.createElement('script');
-      script.id = 'adsterra-popunder-script';
-      script.setAttribute('data-cfasync', 'false');
-      script.src = AD_POPUNDER_SRC;
-      script.async = true;
-      document.head.appendChild(script);
-    }
-
+    // Abrir directamente el anuncio en pestaña nueva en el clic de reproducir
+    // Sin listeners globales que capturen otros clics ni botones de cerrar
+    window.open(AD_SMARTLINK_URL, '_blank');
     return true;
   } catch (e) {
     return false;
