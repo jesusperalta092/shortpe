@@ -393,10 +393,10 @@ export async function getDashboardData(days = 7) {
   const recentAdClicks = [];
   for (const ev of recentEvents) {
     if (ev.event_type === 'ad_click') {
-      const net = (ev.network || ev.title || 'monetag').toLowerCase();
-      if (net.includes('monetag')) adNetworks.monetag++;
-      else if (net.includes('adsterra')) adNetworks.adsterra++;
-      else adNetworks.monetag++;
+      const net = (ev.network || ev.title || 'adsterra').toLowerCase();
+      if (net.includes('adsterra')) adNetworks.adsterra++;
+      else if (net.includes('monetag')) adNetworks.monetag++;
+      else adNetworks.adsterra++;
       adNetworks.total++;
 
       if (recentAdClicks.length < 12) {

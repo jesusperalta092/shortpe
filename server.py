@@ -1979,9 +1979,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             
             ad_targets = [
                 'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0',  # 1. Adsterra
-                'https://omg10.com/4/11963834',                              # 2. Monetag
+                'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0',  # 2. Adsterra
                 'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0',  # 3. Adsterra
-                'https://omg10.com/4/11963834'                               # 4. Monetag
+                'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0'   # 4. Adsterra
             ]
             try:
                 step_idx = (int(step) - 1) % len(ad_targets)
@@ -1990,7 +1990,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 step_idx = 0
             
             target_ad = ad_targets[step_idx]
-            ad_network = 'monetag' if ('omg10' in target_ad or 'monetag' in target_ad) else 'adsterra'
+            ad_network = 'adsterra'
             
             try:
                 client_ip = self.headers.get('CF-Connecting-IP') or self.headers.get('X-Forwarded-For', '').split(',')[0].strip() or self.client_address[0]

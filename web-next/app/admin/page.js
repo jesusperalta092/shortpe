@@ -920,23 +920,26 @@ export default function AdminDashboardPage() {
               <div style={{ marginTop: '4px' }}>
                 <div style={{ fontSize: '11.5px', color: '#a1a1aa', fontWeight: '600', marginBottom: '6px' }}>Distribución de Clics por Red Publicitaria:</div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <div style={{ flex: 1, padding: '8px 10px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ color: '#fb923c', fontSize: '11px', fontWeight: '700' }}>Monetag</div>
+                  <div style={{ flex: 1, padding: '8px 10px', background: 'rgba(56, 189, 248, 0.08)', borderRadius: '6px', border: '1px solid rgba(56, 189, 248, 0.25)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ color: '#38bdf8', fontSize: '11px', fontWeight: '700' }}>Adsterra</div>
+                      <span style={{ fontSize: '9px', background: '#0284c7', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: '700' }}>100% ACTIVA</span>
+                    </div>
                     <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '2px' }}>
-                      {adNetworks.monetag || Math.round((overview.ad_clicks || 0) * 0.52)}
+                      {adNetworks.adsterra || overview.ad_clicks || 0}
                     </div>
                   </div>
                   <div style={{ flex: 1, padding: '8px 10px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ color: '#38bdf8', fontSize: '11px', fontWeight: '700' }}>Adsterra</div>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '2px' }}>
-                      {adNetworks.adsterra || Math.round((overview.ad_clicks || 0) * 0.48)}
+                    <div style={{ color: '#71717a', fontSize: '11px', fontWeight: '700' }}>Monetag (Inactivo)</div>
+                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#a1a1aa', marginTop: '2px' }}>
+                      {adNetworks.monetag || 0}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div style={{ fontSize: '11px', color: '#71717a', marginTop: '4px' }}>
-                ℹ️ Rueda activa de 4 pasos para desbloqueo: Monetag ⇄ Adsterra alternados por episodio.
+              <div style={{ fontSize: '11px', color: '#38bdf8', marginTop: '4px' }}>
+                ℹ️ Rueda activa de 4 pasos para desbloqueo: 100% Adsterra Smartlink (4 clics por episodio).
               </div>
             </div>
           </div>

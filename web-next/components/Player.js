@@ -7,9 +7,9 @@ import { recordProgress, updateWatchTime, getDoramaProgress } from '../lib/watch
 
 export const AD_LINKS_ROTATION = [
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 1. Adsterra
-  'https://omg10.com/4/11963834',                             // 2. Monetag
+  'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 2. Adsterra
   'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0', // 3. Adsterra
-  'https://omg10.com/4/11963834'                              // 4. Monetag
+  'https://asiafilm.org/4/422780c437bf41678b7ed041ce2360a0'  // 4. Adsterra
 ];
 export const AD_LINK = AD_LINKS_ROTATION[0];
 export const REQUIRED_AD_CLICKS = AD_LINKS_ROTATION.length;
@@ -731,7 +731,7 @@ export default function Player({ slug, ep, title, total, poster }) {
 
     const nextCount = adClicksDone + 1;
     const unlockUrl = `/api/unlock?step=${nextCount}&slug=${encodeURIComponent(slug || '')}&ep=${encodeURIComponent(ep || '1')}`;
-    const adNetwork = (nextCount % 2 === 0) ? 'monetag' : 'adsterra';
+    const adNetwork = 'adsterra';
     trackAdClick(slug, ep, adNetwork, nextCount);
 
     setPopupBlocked(false);
@@ -1024,7 +1024,7 @@ export default function Player({ slug, ep, title, total, poster }) {
           </div>
         )}
 
-        {/* Modal Emergente de Anuncios Adsterra & Monetag Cloaked */}
+        {/* Modal Emergente de Anuncios Adsterra Cloaked (100% Adsterra) */}
         {isAdLocked && (
           <div className="ad-modal-backdrop">
             <div className="ad-modal-card" onClick={(e) => e.stopPropagation()}>
